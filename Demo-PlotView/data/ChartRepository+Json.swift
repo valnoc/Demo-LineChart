@@ -8,16 +8,7 @@
 
 import Foundation
 
-class ChartDataRepository {
-    func loadCharts() -> [Chart] {
-        do {
-            let json = try readJson()
-            return []
-        } catch {
-            return []
-        }
-    }
-    
+extension ChartRepository {
     // MARK: - read json
     struct JsonDataNotFound: Error {}
     struct InvalidJsonData: Error {}
@@ -33,5 +24,3 @@ class ChartDataRepository {
         return result
     }
 }
-
-

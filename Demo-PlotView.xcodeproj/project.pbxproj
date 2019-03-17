@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		5B4D7935223E81DE007F733C /* chart_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B4D7931223E81DE007F733C /* chart_data.json */; };
-		5B4D7936223E81DE007F733C /* ChartDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7932223E81DE007F733C /* ChartDataRepository.swift */; };
 		5B4D7937223E81DE007F733C /* ChartLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7933223E81DE007F733C /* ChartLine.swift */; };
 		5B4D7938223E81DE007F733C /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7934223E81DE007F733C /* Chart.swift */; };
+		5B4D793B223E8245007F733C /* ChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7939223E8245007F733C /* ChartRepository.swift */; };
+		5B4D793C223E8245007F733C /* ChartRepository+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793A223E8245007F733C /* ChartRepository+Json.swift */; };
+		5B4D793E223E83EA007F733C /* ChartMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793D223E83EA007F733C /* ChartMapper.swift */; };
 		5BBD11C8223E3714002CC6DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C7223E3714002CC6DE /* AppDelegate.swift */; };
 		5BBD11CA223E3714002CC6DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C9223E3714002CC6DE /* ViewController.swift */; };
 		5BBD11CD223E3714002CC6DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD11CB223E3714002CC6DE /* Main.storyboard */; };
@@ -20,9 +22,11 @@
 
 /* Begin PBXFileReference section */
 		5B4D7931223E81DE007F733C /* chart_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chart_data.json; sourceTree = "<group>"; };
-		5B4D7932223E81DE007F733C /* ChartDataRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartDataRepository.swift; sourceTree = "<group>"; };
 		5B4D7933223E81DE007F733C /* ChartLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartLine.swift; sourceTree = "<group>"; };
 		5B4D7934223E81DE007F733C /* Chart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		5B4D7939223E8245007F733C /* ChartRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartRepository.swift; sourceTree = "<group>"; };
+		5B4D793A223E8245007F733C /* ChartRepository+Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartRepository+Json.swift"; sourceTree = "<group>"; };
+		5B4D793D223E83EA007F733C /* ChartMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMapper.swift; sourceTree = "<group>"; };
 		5BBD11C4223E3714002CC6DE /* Demo-PlotView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-PlotView.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BBD11C7223E3714002CC6DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BBD11C9223E3714002CC6DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,9 +51,11 @@
 			isa = PBXGroup;
 			children = (
 				5B4D7931223E81DE007F733C /* chart_data.json */,
-				5B4D7932223E81DE007F733C /* ChartDataRepository.swift */,
-				5B4D7933223E81DE007F733C /* ChartLine.swift */,
+				5B4D793A223E8245007F733C /* ChartRepository+Json.swift */,
+				5B4D7939223E8245007F733C /* ChartRepository.swift */,
+				5B4D793D223E83EA007F733C /* ChartMapper.swift */,
 				5B4D7934223E81DE007F733C /* Chart.swift */,
+				5B4D7933223E81DE007F733C /* ChartLine.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -158,8 +164,10 @@
 			files = (
 				5B4D7938223E81DE007F733C /* Chart.swift in Sources */,
 				5B4D7937223E81DE007F733C /* ChartLine.swift in Sources */,
-				5B4D7936223E81DE007F733C /* ChartDataRepository.swift in Sources */,
+				5B4D793E223E83EA007F733C /* ChartMapper.swift in Sources */,
+				5B4D793C223E8245007F733C /* ChartRepository+Json.swift in Sources */,
 				5BBD11CA223E3714002CC6DE /* ViewController.swift in Sources */,
+				5B4D793B223E8245007F733C /* ChartRepository.swift in Sources */,
 				5BBD11C8223E3714002CC6DE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
