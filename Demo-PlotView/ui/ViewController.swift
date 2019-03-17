@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .lightGray
         
         chartView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(chartView)
