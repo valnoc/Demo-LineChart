@@ -24,6 +24,8 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
+        view.backgroundColor = .white
+        
         chartView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(chartView)
         let constr = [chartView.topAnchor.constraint(equalTo: view.topAnchor),
