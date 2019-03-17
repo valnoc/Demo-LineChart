@@ -13,6 +13,7 @@
 		5B4D793B223E8245007F733C /* ChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7939223E8245007F733C /* ChartRepository.swift */; };
 		5B4D793C223E8245007F733C /* ChartRepository+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793A223E8245007F733C /* ChartRepository+Json.swift */; };
 		5B4D793E223E83EA007F733C /* ChartMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793D223E83EA007F733C /* ChartMapper.swift */; };
+		5B4D7940223E9047007F733C /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793F223E9047007F733C /* UIColor+Hex.swift */; };
 		5BBD11C8223E3714002CC6DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C7223E3714002CC6DE /* AppDelegate.swift */; };
 		5BBD11CA223E3714002CC6DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C9223E3714002CC6DE /* ViewController.swift */; };
 		5BBD11CD223E3714002CC6DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD11CB223E3714002CC6DE /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 		5B4D7939223E8245007F733C /* ChartRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartRepository.swift; sourceTree = "<group>"; };
 		5B4D793A223E8245007F733C /* ChartRepository+Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartRepository+Json.swift"; sourceTree = "<group>"; };
 		5B4D793D223E83EA007F733C /* ChartMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMapper.swift; sourceTree = "<group>"; };
+		5B4D793F223E9047007F733C /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		5BBD11C4223E3714002CC6DE /* Demo-PlotView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-PlotView.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BBD11C7223E3714002CC6DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BBD11C9223E3714002CC6DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			children = (
 				5BBD11C7223E3714002CC6DE /* AppDelegate.swift */,
 				5BBD11C9223E3714002CC6DE /* ViewController.swift */,
+				5B4D793F223E9047007F733C /* UIColor+Hex.swift */,
 				5B4D7930223E81DE007F733C /* data */,
 				5BBD11CB223E3714002CC6DE /* Main.storyboard */,
 				5BBD11CE223E3716002CC6DE /* Assets.xcassets */,
@@ -163,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B4D7938223E81DE007F733C /* Chart.swift in Sources */,
+				5B4D7940223E9047007F733C /* UIColor+Hex.swift in Sources */,
 				5B4D7937223E81DE007F733C /* ChartLine.swift in Sources */,
 				5B4D793E223E83EA007F733C /* ChartMapper.swift in Sources */,
 				5B4D793C223E8245007F733C /* ChartRepository+Json.swift in Sources */,

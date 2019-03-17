@@ -14,10 +14,10 @@ class ChartLine {
     let name: String
     
     init(values: [Double],
-         color: UIColor,
+         colorHex: String,
          name: String) {
         self.values = values
-        self.color = color
+        self.color = UIColor(hex: colorHex)
         self.name = name
     }
 }
