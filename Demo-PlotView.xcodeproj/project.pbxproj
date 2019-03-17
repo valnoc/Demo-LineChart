@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		5B4D7927223E765B007F733C /* chart_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B4D7926223E765B007F733C /* chart_data.json */; };
+		5B4D7929223E7BCA007F733C /* ChartDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7928223E7BCA007F733C /* ChartDataRepository.swift */; };
+		5B4D792B223E7C04007F733C /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D792A223E7C04007F733C /* Chart.swift */; };
+		5B4D792D223E7D43007F733C /* ChartLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D792C223E7D43007F733C /* ChartLine.swift */; };
 		5BBD11C8223E3714002CC6DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C7223E3714002CC6DE /* AppDelegate.swift */; };
 		5BBD11CA223E3714002CC6DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD11C9223E3714002CC6DE /* ViewController.swift */; };
 		5BBD11CD223E3714002CC6DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD11CB223E3714002CC6DE /* Main.storyboard */; };
@@ -17,6 +20,9 @@
 
 /* Begin PBXFileReference section */
 		5B4D7926223E765B007F733C /* chart_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chart_data.json; sourceTree = "<group>"; };
+		5B4D7928223E7BCA007F733C /* ChartDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataRepository.swift; sourceTree = "<group>"; };
+		5B4D792A223E7C04007F733C /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		5B4D792C223E7D43007F733C /* ChartLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLine.swift; sourceTree = "<group>"; };
 		5BBD11C4223E3714002CC6DE /* Demo-PlotView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-PlotView.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BBD11C7223E3714002CC6DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BBD11C9223E3714002CC6DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +65,9 @@
 				5B4D7926223E765B007F733C /* chart_data.json */,
 				5BBD11C7223E3714002CC6DE /* AppDelegate.swift */,
 				5BBD11C9223E3714002CC6DE /* ViewController.swift */,
+				5B4D7928223E7BCA007F733C /* ChartDataRepository.swift */,
+				5B4D792A223E7C04007F733C /* Chart.swift */,
+				5B4D792C223E7D43007F733C /* ChartLine.swift */,
 				5BBD11CB223E3714002CC6DE /* Main.storyboard */,
 				5BBD11CE223E3716002CC6DE /* Assets.xcassets */,
 				5BBD11D0223E3716002CC6DE /* LaunchScreen.storyboard */,
@@ -139,8 +148,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B4D792B223E7C04007F733C /* Chart.swift in Sources */,
+				5B4D7929223E7BCA007F733C /* ChartDataRepository.swift in Sources */,
 				5BBD11CA223E3714002CC6DE /* ViewController.swift in Sources */,
 				5BBD11C8223E3714002CC6DE /* AppDelegate.swift in Sources */,
+				5B4D792D223E7D43007F733C /* ChartLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
