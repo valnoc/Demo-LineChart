@@ -10,6 +10,21 @@ import Foundation
 
 class ChartMapper {
     func map(from json: [[AnyHashable: Any]]) throws -> [Chart] {
-        return []
+        var result: [Chart] = []
+        
+        for object in json {
+            //  columns
+            guard let objectColumns = object["columns"] as? [[Any]] else { continue }
+            var columns: [String: [Int]] = [:]
+            for item in objectColumns {
+                guard let key = item.first as? String,
+                    let value = Array(item.dropFirst()) as? [Int] else { continue }
+                columns[key] = value
+            }
+            
+            guard let objectTypes = object["types"] as? [String: String] else { continue }
+        }
+        
+        return result
     }
 }
