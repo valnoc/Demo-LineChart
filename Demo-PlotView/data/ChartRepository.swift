@@ -12,7 +12,7 @@ class ChartRepository {
     func loadCharts() -> [Chart] {
         do {
             let json = try readJson()
-            let result = try ChartMapper().map(from: json)
+            let result = ChartMapper().map(from: json)
             return result
         } catch {
             return []
