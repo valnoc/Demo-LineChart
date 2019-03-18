@@ -13,6 +13,21 @@ class ChartRepository {
         do {
             let json = try readJson()
             let result = LinedChartMapper().map(from: json)
+            
+            ///
+            do {
+                let mock = [
+                    LinedChart(lines: [
+                        LinedChart.Line(x: [0, 50, 100, 200, 250, 500, 700],
+                                        y: [0, 100, 300, 150, 80, 500, 20],
+                                        colorHex: "#FF0000",
+                                        name: "line1")
+                    ])
+                ]
+                return mock
+            }
+            ///
+            
             return result
         } catch {
             return []
