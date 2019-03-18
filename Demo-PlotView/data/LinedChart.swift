@@ -8,13 +8,13 @@
 
 import Foundation
 
-class Chart {
-    let x: [TimeInterval]
-    let lines: [ChartLine]
+struct LinedChart {
+    let lines: [Line]
     
-    init(x: [TimeInterval],
-         lines: [ChartLine]) {
-        self.x = x
-        self.lines = lines
+    struct Line {
+        let x: [Double]
+        let y: [Double]
+        let colorHex: String
+        let name: String
     }
 }

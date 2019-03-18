@@ -9,10 +9,10 @@
 import Foundation
 
 class ChartRepository {
-    func loadCharts() -> [Chart] {
+    func loadCharts() -> [LinedChart] {
         do {
             let json = try readJson()
-            let result = ChartMapper().map(from: json)
+            let result = LinedChartMapper().map(from: json)
             return result
         } catch {
             return []
