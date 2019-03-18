@@ -8,8 +8,11 @@
 
 import UIKit
 
-class ChartView: UIView {
-    init() {
+class LinedChartView: UIView {
+    let chart: LinedChart
+    
+    init(chart: LinedChart) {
+        self.chart = chart
         super.init(frame: .zero)
         
         backgroundColor = .white
@@ -18,4 +21,6 @@ class ChartView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+
 }

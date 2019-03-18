@@ -8,12 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class StatisticsViewController: UIViewController {
 
-    let chartView: ChartView
+    let chartView: LinedChartView
     
-    init() {
-        chartView = ChartView()
+    init(chart: LinedChart) {
+        chartView = LinedChartView(chart: chart)
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,10 +39,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        let charts = ChartRepository().loadCharts()
     }
-
-
+    
 }
-
