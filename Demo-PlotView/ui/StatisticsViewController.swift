@@ -43,7 +43,7 @@ class StatisticsViewController: UIViewController {
         do {
             xRangeControl.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(xRangeControl)
-            let constr = [xRangeControl.topAnchor.constraint(equalTo: chartView.bottomAnchor),
+            let constr = [xRangeControl.topAnchor.constraint(equalTo: chartView.bottomAnchor, constant: 20),
                           xRangeControl.leftAnchor.constraint(equalTo: view.leftAnchor),
                           xRangeControl.rightAnchor.constraint(equalTo: view.rightAnchor),
                           xRangeControl.heightAnchor.constraint(equalToConstant: 44)]
