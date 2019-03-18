@@ -15,18 +15,23 @@ extension LineChart.Line {
     }
     
     var path: CGPath {
-        var points = self.points
-        
         let path = CGMutablePath()
-        if let firstPoint = points.first {
-            path.move(to: firstPoint)
-            points = Array(points.dropFirst())
-        }
-        
-        for p in points {
-            path.addLine(to: p)
-        }
-        
+        path.addLines(between: points)
         return path
+    }
+    
+    func boundingRect(for xRange: ClosedRange<CGFloat>) -> CGRect {
+        let pointsInRange = points.filter({ $0.x >= xRange.lowerBound && $0.x <= xRange.upperBound })
+        
+        let xs = pointsInRange.map({ $0.x })
+        let xMin = xs.min() ?? 0
+        let xMax = xs.max() ?? 0
+        
+        let ys = pointsInRange.map({ $0.y })
+        var yMin = ys.min() ?? 0
+        if yMin > 0 { yMin = 0 }
+        let yMax = ys.max() ?? 0
+       
+        return CGRect(x: xMin, y: yMin, width: xMax - xMin, height: yMax - yMin)
     }
 }
