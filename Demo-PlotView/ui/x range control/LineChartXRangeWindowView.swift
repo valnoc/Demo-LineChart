@@ -60,15 +60,26 @@ class LineChartXRangeWindowView: UIView {
         let arrowWidth: CGFloat = 4
         let arrowHeight: CGFloat = 11
         
-        let point1 = CGPoint(x: horizontalBorderWidth / 2 + arrowWidth / 2,
-                             y: rect.height / 2 - arrowHeight / 2)
-        let point2 = CGPoint(x: horizontalBorderWidth / 2 - arrowWidth / 2,
-                             y: rect.height / 2)
-        let point3 = CGPoint(x: horizontalBorderWidth / 2 + arrowWidth / 2,
-                             y: rect.height / 2 + arrowHeight / 2)
+        let borderWidth = horizontalBorderWidth
+        let borderHeight = rect.height
+        
+        let p1 = CGPoint(x: borderWidth / 2 + arrowWidth / 2,
+                         y: borderHeight / 2 - arrowHeight / 2)
+        let p2 = CGPoint(x: borderWidth / 2 - arrowWidth / 2,
+                         y: borderHeight / 2)
+        let p3 = CGPoint(x: borderWidth / 2 + arrowWidth / 2,
+                         y: borderHeight / 2 + arrowHeight / 2)
+        
+        let p4 = CGPoint(x: rect.width - p1.x,
+                         y: p1.y)
+        let p5 = CGPoint(x: rect.width - p2.x,
+                         y: p2.y)
+        let p6 = CGPoint(x: rect.width - p3.x,
+                         y: p3.y)
         
         let path = CGMutablePath()
-        path.addLines(between: [point1, point2, point3])
+        path.addLines(between: [p1, p2, p3])
+        path.addLines(between: [p4, p5, p6])
         
         ctx.addPath(path)
         ctx.setLineWidth(2)
