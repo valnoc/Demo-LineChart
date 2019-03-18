@@ -19,6 +19,7 @@
 		5BBD11D2223E3716002CC6DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD11D0223E3716002CC6DE /* LaunchScreen.storyboard */; };
 		5BEDE0C0223F98F900A24D8D /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEDE0BE223F98F900A24D8D /* LineChartView.swift */; };
 		5BEDE0C1223F98F900A24D8D /* LineChartLine+CG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEDE0BF223F98F900A24D8D /* LineChartLine+CG.swift */; };
+		5BEDE0C3223F994200A24D8D /* LineChartXRangeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEDE0C2223F994200A24D8D /* LineChartXRangeControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		5BBD11D3223E3716002CC6DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BEDE0BE223F98F900A24D8D /* LineChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		5BEDE0BF223F98F900A24D8D /* LineChartLine+CG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LineChartLine+CG.swift"; sourceTree = "<group>"; };
+		5BEDE0C2223F994200A24D8D /* LineChartXRangeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartXRangeControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		5BEDE0BC223F98F900A24D8D /* x range control */ = {
 			isa = PBXGroup;
 			children = (
+				5BEDE0C2223F994200A24D8D /* LineChartXRangeControl.swift */,
 			);
 			path = "x range control";
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				5B4D7946223E9577007F733C /* StatisticsViewController.swift in Sources */,
 				5BEDE0C0223F98F900A24D8D /* LineChartView.swift in Sources */,
 				5B4D7938223E81DE007F733C /* LineChart.swift in Sources */,
+				5BEDE0C3223F994200A24D8D /* LineChartXRangeControl.swift in Sources */,
 				5B4D7945223E9577007F733C /* UIColor+Hex.swift in Sources */,
 				5B4D793E223E83EA007F733C /* LineChartMapper.swift in Sources */,
 				5B4D793C223E8245007F733C /* ChartRepository+Json.swift in Sources */,
