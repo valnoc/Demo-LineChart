@@ -46,6 +46,7 @@ class LineChartView: UIView {
     func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.lineWidth = 5
+        layer.fillColor = UIColor.clear.cgColor
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
         layer.path = line.path
         return layer

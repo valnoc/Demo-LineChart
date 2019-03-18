@@ -24,7 +24,7 @@ extension LineChart.Line {
         }
         
         for p in points {
-            path.move(to: p)
+            path.addLine(to: p)
         }
         
         return path
