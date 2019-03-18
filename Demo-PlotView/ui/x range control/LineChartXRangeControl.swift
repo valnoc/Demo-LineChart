@@ -17,9 +17,9 @@ class LineChartXRangeControl : UIControl {
         case isMoving(lastPoint: CGPoint)
     }
     
-    var windowLeftX: CGFloat = 50
-    var windowRightX: CGFloat = 200
-    var panState: PanState = .notChanging
+    var windowMinX: CGFloat = 50
+    var windowMaxX: CGFloat = 200
+    var panState: PanState = .none
     
     let chartView: LineChartView
     var windowView: LineChartXRangeWindowView
@@ -48,9 +48,9 @@ class LineChartXRangeControl : UIControl {
     override func layoutSubviews() {
         super.layoutSubviews()
         chartView.frame = bounds.insetBy(dx: 0, dy: 3)
-        windowView.frame = CGRect(x: windowLeftX,
+        windowView.frame = CGRect(x: windowMinX,
                                    y: 0,
-                                   width: windowRightX - windowLeftX,
+                                   width: windowMaxX - windowMinX,
                                    height: bounds.height)
     }
     
@@ -58,9 +58,9 @@ class LineChartXRangeControl : UIControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let leftBorderArea = CGRect(x: windowLeftX - 22, y: 0, width: 44, height: bounds.height)
-        let rightBorderArea = CGRect(x: windowRightX - 22, y: 0, width: 44, height: bounds.height)
-        let windowArea = CGRect(x: windowLeftX, y: 0, width: windowRightX - windowLeftX, height: bounds.height)
+        let leftBorderArea = CGRect(x: windowMinX - 22, y: 0, width: 44, height: bounds.height)
+        let rightBorderArea = CGRect(x: windowMaxX - 22, y: 0, width: 44, height: bounds.height)
+        let windowArea = CGRect(x: windowMinX, y: 0, width: windowMaxX - windowMinX, height: bounds.height)
         
         if leftBorderArea.contains(point) {
             panState = .isChangingLeftBorder(lastPoint: point)
@@ -84,18 +84,18 @@ class LineChartXRangeControl : UIControl {
         switch panState {
         case .isChangingLeftBorder(let prevPoint):
             let diff = point.x - prevPoint.x
-            windowLeftX += diff
+            windowMinX += diff
             panState = .isChangingLeftBorder(lastPoint: point)
             
         case .isChangingRightBorder(let prevPoint):
             let diff = point.x - prevPoint.x
-            windowRightX += diff
+            windowMaxX += diff
             panState = .isChangingRightBorder(lastPoint: point)
             
         case .isMoving(let prevPoint):
             let diff = point.x - prevPoint.x
-            windowLeftX += diff
-            windowRightX += diff
+            windowMinX += diff
+            windowMaxX += diff
             panState = .isChangingLeftBorder(lastPoint: point)
             
         default:
