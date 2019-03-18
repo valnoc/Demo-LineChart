@@ -8,9 +8,9 @@
 
 import Foundation
 
-class LinedChartMapper {
-    func map(from json: [[AnyHashable: Any]]) -> [LinedChart] {
-        var result: [LinedChart] = []
+class LineChartMapper {
+    func map(from json: [[AnyHashable: Any]]) -> [LineChart] {
+        var result: [LineChart] = []
         
         for object in json {
             //  columns
@@ -41,15 +41,15 @@ class LinedChartMapper {
             guard let colorsHex = object["colors"] as? [String: String] else { continue }
             
             //  create charts
-            let lines: [LinedChart.Line] = yValues.compactMap({
+            let lines: [LineChart.Line] = yValues.compactMap({
                 guard let name = names[$0.key],
                     let hex = colorsHex[$0.key] else { return nil }
-                return LinedChart.Line(x: xValues,
+                return LineChart.Line(x: xValues,
                                        y: $0.value,
                                        colorHex: hex,
                                        name: name)
             })
-            let chart = LinedChart(lines: lines)
+            let chart = LineChart(lines: lines)
             result.append(chart)
         }
         

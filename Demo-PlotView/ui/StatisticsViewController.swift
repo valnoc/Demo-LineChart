@@ -10,10 +10,10 @@ import UIKit
 
 class StatisticsViewController: UIViewController {
 
-    let chartView: LinedChartView
+    let chartView: LineChartView
     
-    init(chart: LinedChart) {
-        chartView = LinedChartView(chart: chart)
+    init(chart: LineChart) {
+        chartView = LineChartView(chart: chart)
         
         super.init(nibName: nil, bundle: nil)
     }

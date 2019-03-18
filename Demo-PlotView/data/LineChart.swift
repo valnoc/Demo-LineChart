@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct LinedChart {
+struct LineChart {
     let lines: [Line]
     
     struct Line {

@@ -8,10 +8,10 @@
 
 import UIKit
 
-class LinedChartView: UIView {
-    let chart: LinedChart
+class LineChartView: UIView {
+    let chart: LineChart
     
-    init(chart: LinedChart) {
+    init(chart: LineChart) {
         self.chart = chart
         super.init(frame: .zero)
         

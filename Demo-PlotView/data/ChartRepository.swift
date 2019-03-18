@@ -9,16 +9,16 @@
 import Foundation
 
 class ChartRepository {
-    func loadCharts() -> [LinedChart] {
+    func loadCharts() -> [LineChart] {
         do {
             let json = try readJson()
-            let result = LinedChartMapper().map(from: json)
+            let result = LineChartMapper().map(from: json)
             
             ///
             do {
                 let mock = [
-                    LinedChart(lines: [
-                        LinedChart.Line(x: [0, 50, 100, 200, 250, 500, 700],
+                    LineChart(lines: [
+                        LineChart.Line(x: [0, 50, 100, 200, 250, 500, 700],
                                         y: [0, 100, 300, 150, 80, 500, 20],
                                         colorHex: "#FF0000",
                                         name: "line1")
