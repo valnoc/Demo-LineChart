@@ -13,6 +13,8 @@ class LineChartView: UIView {
     
     var lineLayers: [CAShapeLayer] = []
     
+    var range: ClosedRange = 0.0...1.0
+    
     init(chart: LineChart) {
         self.chart = chart
         super.init(frame: .zero)
@@ -31,6 +33,7 @@ class LineChartView: UIView {
         
         for sublayer in lineLayers {
             sublayer.frame = bounds
+            sublayer.setAffineTransform(CGAffineTransform(scaleX: CGFloat(range.lowerBound * 10), y: 1))
         }
     }
     
@@ -50,5 +53,13 @@ class LineChartView: UIView {
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
         layer.path = line.path
         return layer
+    }
+
+    func show(range: ClosedRange<Double>) {
+        guard range.lowerBound >= 0.0,
+            range.upperBound <= 1.0 else { return }
+        self.range = range
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }

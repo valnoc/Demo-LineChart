@@ -39,6 +39,30 @@ class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.chartView.show(range: 0.1...1.0)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.chartView.show(range: 0.2...1.0)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    self?.chartView.show(range: 0.3...1.0)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                        self?.chartView.show(range: 0.1...1.0)
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                            self?.chartView.show(range: 0.13...1.0)
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                                self?.chartView.show(range: 0.05...1.0)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }
