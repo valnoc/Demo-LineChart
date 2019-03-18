@@ -11,15 +11,13 @@ import UIKit
 class LineChartXRangeControl : UIControl {
     
     enum PanState {
-        case notChanging
-        case isChangingLeftBorder(lastPoint: CGPoint)
-        case isChangingRightBorder(lastPoint: CGPoint)
-        case isMoving(lastPoint: CGPoint)
+        case none, isChangingMinX, isChangingMaxX, isMoving
     }
     
     var windowMinX: CGFloat = 50
     var windowMaxX: CGFloat = 200
     var panState: PanState = .none
+    var lastPanPoint: CGPoint = .zero
     
     let chartView: LineChartView
     var windowView: LineChartXRangeWindowView
@@ -54,66 +52,59 @@ class LineChartXRangeControl : UIControl {
                                    height: bounds.height)
     }
     
-    // MARK: - move
+    // MARK: - pan
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let leftBorderArea = CGRect(x: windowMinX - 22, y: 0, width: 44, height: bounds.height)
-        let rightBorderArea = CGRect(x: windowMaxX - 22, y: 0, width: 44, height: bounds.height)
-        let windowArea = CGRect(x: windowMinX, y: 0, width: windowMaxX - windowMinX, height: bounds.height)
+        let minXArea = CGRect(x: windowMinX - 22, y: 0, width: 44, height: bounds.height)
+        let maxXArea = CGRect(x: windowMaxX - 22, y: 0, width: 44, height: bounds.height)
+        let insideArea = CGRect(x: windowMinX, y: 0, width: windowMaxX - windowMinX, height: bounds.height)
         
-        if leftBorderArea.contains(point) {
-            panState = .isChangingLeftBorder(lastPoint: point)
-            return true
+        if minXArea.contains(point) {
+            panState = .isChangingMinX
         
-        } else if rightBorderArea.contains(point) {
-            panState = .isChangingRightBorder(lastPoint: point)
-            return true
+        } else if maxXArea.contains(point) {
+            panState = .isChangingMaxX
         
-        } else if windowArea.contains(point) {
-            panState = .isMoving(lastPoint: point)
-            return true
+        } else if insideArea.contains(point) {
+            panState = .isMoving
         }
-        
-        return false
+
+        lastPanPoint = point
+        return panState != .none
     }
     
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
+        let xDiff = point.x - lastPanPoint.x
         
         switch panState {
-        case .isChangingLeftBorder(let prevPoint):
-            let diff = point.x - prevPoint.x
-            windowMinX += diff
-            panState = .isChangingLeftBorder(lastPoint: point)
+        case .isChangingMinX:
+            windowMinX += xDiff
             
-        case .isChangingRightBorder(let prevPoint):
-            let diff = point.x - prevPoint.x
-            windowMaxX += diff
-            panState = .isChangingRightBorder(lastPoint: point)
+        case .isChangingMaxX:
+            windowMaxX += xDiff
             
-        case .isMoving(let prevPoint):
-            let diff = point.x - prevPoint.x
-            windowMinX += diff
-            windowMaxX += diff
-            panState = .isChangingLeftBorder(lastPoint: point)
+        case .isMoving:
+            windowMinX += xDiff
+            windowMaxX += xDiff
             
         default:
             break
         }
         
         setNeedsLayout()
-        windowView.setNeedsDisplay()
         layoutIfNeeded()
-        
+
+        lastPanPoint = point
         return true
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        panState = .notChanging
+        panState = .none
     }
     
     override func cancelTracking(with event: UIEvent?) {
-        panState = .notChanging
+        panState = .none
     }
 }
