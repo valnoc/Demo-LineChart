@@ -21,7 +21,10 @@ extension LineChart.Line {
     }
     
     func boundingRect(for xRange: ClosedRange<CGFloat>) -> CGRect {
-        let pointsInRange = points.filter({ $0.x >= xRange.lowerBound && $0.x <= xRange.upperBound })
+        let points = self.points
+        let lowerIndex = Int(CGFloat(points.count - 1) * xRange.lowerBound)
+        let upperIndex = Int(CGFloat(points.count - 1) * xRange.upperBound)
+        let pointsInRange = points[lowerIndex...upperIndex]
         
         let xs = pointsInRange.map({ $0.x })
         let xMin = xs.min() ?? 0
