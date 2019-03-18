@@ -76,18 +76,47 @@ class LineChartXRangeControl : UIControl {
     
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
+        
         let xDiff = point.x - lastPanPoint.x
+        
+        let windowMinXPossibleMin: CGFloat = 0
+        let windowMinXPossibleMax: CGFloat = windowMaxX - windowView.horizontalBorderWidth * 2
+        
+        let windowMaxXPossibleMin: CGFloat = windowMinX + windowView.horizontalBorderWidth * 2
+        let windowMaxXPossibleMax: CGFloat = bounds.width
+        
+        let newMinX = windowMinX + xDiff
+        let newMaxX = windowMaxX + xDiff
         
         switch panState {
         case .isChangingMinX:
-            windowMinX += xDiff
+            if newMinX < windowMinXPossibleMin {
+                windowMinX = windowMinXPossibleMin
+            
+            } else if newMinX > windowMinXPossibleMax {
+                windowMinX = windowMinXPossibleMax
+                
+            } else {
+                windowMinX = newMinX
+            }
             
         case .isChangingMaxX:
-            windowMaxX += xDiff
+            if newMaxX < windowMaxXPossibleMin {
+                windowMaxX = windowMaxXPossibleMin
+                
+            } else if newMaxX > windowMaxXPossibleMax {
+                windowMaxX = windowMaxXPossibleMax
+                
+            } else {
+                windowMaxX = newMaxX
+            }
             
         case .isMoving:
-            windowMinX += xDiff
-            windowMaxX += xDiff
+            if newMinX >= windowMinXPossibleMin, newMinX <= windowMinXPossibleMax,
+                newMaxX >= windowMaxXPossibleMin, newMaxX <= windowMaxXPossibleMax {
+                windowMinX = newMinX
+                windowMaxX = newMaxX
+            }
             
         default:
             break
@@ -95,6 +124,7 @@ class LineChartXRangeControl : UIControl {
         
         setNeedsLayout()
         layoutIfNeeded()
+        windowView.setNeedsDisplay()
 
         lastPanPoint = point
         return true
