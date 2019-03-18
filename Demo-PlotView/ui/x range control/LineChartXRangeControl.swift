@@ -10,20 +10,25 @@ import UIKit
 
 class LineChartXRangeControl : UIControl {
     
-    let chartView: LineChartView
+    let windowLeftX: CGFloat = 50
+    let windowRightX: CGFloat = 200
     
-    let windowVerticalBorderWidth: CGFloat = 3
-    let windowHorizontalBorderWidth: CGFloat = 11
-    let windowLeftX: CGFloat = 10
-    let windowRightX: CGFloat = 50
+    let chartView: LineChartView
+    var windowView: LineChartXRangeWindowView
     
     init(chart: LineChart) {
         self.chartView = LineChartView(chart: chart)
+        windowView = LineChartXRangeWindowView()
         super.init(frame: .zero)
         
         chartView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(chartView)
+
+        windowView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(windowView)
+        
         backgroundColor = .yellow
+        windowView.backgroundColor = .gray
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,31 +38,10 @@ class LineChartXRangeControl : UIControl {
     //MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
-        chartView.frame = bounds.insetBy(dx: 0, dy: windowVerticalBorderWidth)
-    }
- 
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        guard let ctx = UIGraphicsGetCurrentContext() else { return }
-        
-        drawWindow(rect, ctx)
-    }
-    
-    func drawWindow(_ rect: CGRect, _ ctx: CGContext) {
-        ctx.saveGState()
-        
-        ctx.setFillColor(UIColor(red: 195.0 / 255.0,
-                                 green: 206.0 / 255.0,
-                                 blue: 217.0 / 255.0,
-                                 alpha: 1).cgColor)
-        ctx.addPath(CGPath(roundedRect: CGRect(x: windowLeftX,
-                                               y: 0,
-                                               width: windowRightX - windowLeftX,
-                                               height: rect.height),
-                           cornerWidth: 1,
-                           cornerHeight: 1,
-                           transform: nil))
-        ctx.fillPath()
-        ctx.restoreGState()
+        chartView.frame = bounds.insetBy(dx: 0, dy: windowView.verticalBorderWidth)
+        windowView.frame = CGRect(x: windowLeftX,
+                                   y: 0,
+                                   width: windowRightX - windowLeftX,
+                                   height: bounds.height)
     }
 }
