@@ -124,7 +124,6 @@ class LineChartXRangeControl : UIControl {
         
         setNeedsLayout()
         layoutIfNeeded()
-        windowView.setNeedsDisplay()
 
         lastPanPoint = point
         return true
