@@ -57,6 +57,7 @@ class StatisticsViewController: UIViewController {
     func onXRangeChanged(_ sender: LineChartXRangeControl) {
         let value = sender.value
         chartView.show(xRangePercents: value)
+//        chartView.show(xRangePercents: 0.0...1.0)
     }
     
 }

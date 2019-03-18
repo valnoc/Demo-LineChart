@@ -34,9 +34,14 @@ class LineChartView: UIView {
         let rect = chart.boundingRect(for: xRangePercents)
         print(rect)
         
+        let affine = CGAffineTransform(scaleX: 1, y: -1)
+            .scaledBy(x: bounds.width / rect.width, y: bounds.height / rect.height)
+            .translatedBy(x: rect.minX, y: rect.minY)
+        print(affine)
+        
         for sublayer in lineLayers {
             sublayer.frame = bounds
-            sublayer.setAffineTransform(CGAffineTransform(scaleX: 1, y: -1))
+            sublayer.setAffineTransform(affine)
         }
     }
     

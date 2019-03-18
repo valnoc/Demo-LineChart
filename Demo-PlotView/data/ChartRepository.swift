@@ -18,8 +18,8 @@ class ChartRepository {
             do {
                 let mock = [
                     LineChart(lines: [
-                        LineChart.Line(x: [0, 50, 100, 200, 250, 500, 700],
-                                        y: [0, 100, 300, 150, 80, 500, 20],
+                        LineChart.Line(x: [0, 50, 100, 200, 250, 500, 700, 750, 800, 900, 950, 1000],
+                                        y: [0, 100, 300, 150, 80, 500, 20, 300, 700, 50,  150, 10],
                                         colorHex: "#FF0000",
                                         name: "line1")
                     ])
