@@ -28,7 +28,6 @@ class LineChartXRangeControl : UIControl {
         addSubview(windowView)
         
         backgroundColor = .yellow
-        windowView.backgroundColor = .gray
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,7 +37,7 @@ class LineChartXRangeControl : UIControl {
     //MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
-        chartView.frame = bounds.insetBy(dx: 0, dy: windowView.verticalBorderWidth)
+        chartView.frame = bounds.insetBy(dx: 0, dy: 3)
         windowView.frame = CGRect(x: windowLeftX,
                                    y: 0,
                                    width: windowRightX - windowLeftX,
