@@ -33,8 +33,7 @@ class LineChartView: UIView {
         
         for sublayer in lineLayers {
             sublayer.frame = bounds
-//            sublayer.setAffineTransform(CGAffineTransform(scaleX: xRangePercents.lowerBound * 10, y: 1))
-            sublayer.setAffineTransform(CGAffineTransform(scaleX: 1, y: 1))
+            sublayer.setAffineTransform(CGAffineTransform(scaleX: 1, y: -1))
         }
     }
     
