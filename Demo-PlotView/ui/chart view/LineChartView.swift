@@ -13,7 +13,7 @@ class LineChartView: UIView {
     
     var lineLayers: [CAShapeLayer] = []
     
-    var xRangePercents: ClosedRange = 0.0...1.0
+    var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
     
     init(chart: LineChart) {
         self.chart = chart
@@ -33,6 +33,7 @@ class LineChartView: UIView {
         
         for sublayer in lineLayers {
             sublayer.frame = bounds
+//            sublayer.setAffineTransform(CGAffineTransform(scaleX: xRangePercents.lowerBound * 10, y: 1))
             sublayer.setAffineTransform(CGAffineTransform(scaleX: 1, y: 1))
         }
     }
@@ -56,7 +57,7 @@ class LineChartView: UIView {
     }
 
     // MARK: - scaling the x range
-    func show(xRangePercents: ClosedRange<Double>) {
+    func show(xRangePercents: ClosedRange<CGFloat>) {
         guard xRangePercents.lowerBound >= 0.0,
             xRangePercents.upperBound <= 1.0 else { return }
         self.xRangePercents = xRangePercents

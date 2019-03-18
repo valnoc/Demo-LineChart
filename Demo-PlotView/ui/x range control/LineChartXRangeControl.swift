@@ -52,6 +52,13 @@ class LineChartXRangeControl : UIControl {
                                    height: bounds.height)
     }
     
+    // MARK: - value
+    var value: ClosedRange<CGFloat> {
+        let left = windowMinX / bounds.width
+        let right = windowMaxX / bounds.width
+        return left...right
+    }
+    
     // MARK: - pan
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
@@ -126,14 +133,17 @@ class LineChartXRangeControl : UIControl {
         layoutIfNeeded()
 
         lastPanPoint = point
+        sendActions(for: .valueChanged)
         return true
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         panState = .none
+        sendActions(for: .valueChanged)
     }
     
     override func cancelTracking(with event: UIEvent?) {
         panState = .none
+        sendActions(for: .valueChanged)
     }
 }

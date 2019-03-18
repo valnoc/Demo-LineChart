@@ -18,6 +18,8 @@ class StatisticsViewController: UIViewController {
         xRangeControl = LineChartXRangeControl(chart: chart)
         
         super.init(nibName: nil, bundle: nil)
+        
+        xRangeControl.addTarget(self, action: #selector(onXRangeChanged), for: .valueChanged)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -49,30 +51,12 @@ class StatisticsViewController: UIViewController {
                           xRangeControl.heightAnchor.constraint(equalToConstant: 44)]
             constr.forEach({ $0.isActive = true })
         }
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//            self?.chartView.show(xRangePercents: 0.1...1.0)
-//            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//                self?.chartView.show(xRangePercents: 0.2...1.0)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//                    self?.chartView.show(xRangePercents: 0.3...1.0)
-//                    
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//                        self?.chartView.show(xRangePercents: 0.1...1.0)
-//                        
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//                            self?.chartView.show(xRangePercents: 0.13...1.0)
-//                            
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-//                                self?.chartView.show(xRangePercents: 0.05...1.0)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+    }
+    
+    @objc
+    func onXRangeChanged(_ sender: LineChartXRangeControl) {
+        let value = sender.value
+        chartView.show(xRangePercents: value)
     }
     
 }
