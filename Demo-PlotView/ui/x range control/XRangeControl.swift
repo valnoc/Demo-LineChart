@@ -26,12 +26,14 @@ class XRangeControl : UIControl {
     let windowView: XRangeControlWindow
     let leftOverlay: UIView
     let rightOverlay: UIView
+    let overlay: CAShapeLayer
     
     init(chart: LineChart) {
         self.chartView = LineChartView(chart: chart)
         windowView = XRangeControlWindow()
         leftOverlay = UIView()
         rightOverlay = UIView()
+        overlay = CAShapeLayer()
         super.init(frame: .zero)
         
         addAllSubviews()
@@ -67,6 +69,12 @@ class XRangeControl : UIControl {
                                    y: 0,
                                    width: rangeRightX - rangeLeftX,
                                    height: bounds.height)
+        
+        overlay.frame = chartFrame
+        let path = CGMutablePath()
+        path.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
+        path.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
+        overlay.path = path
     }
     
     // MARK: - value
@@ -83,10 +91,18 @@ class XRangeControl : UIControl {
         insertSubview(chartView, at: 0)
         
         leftOverlay.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(leftOverlay)
+        leftOverlay.isHidden = true
+//        addSubview(leftOverlay)
         
         rightOverlay.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(rightOverlay)
+        rightOverlay.isHidden = true
+//        addSubview(rightOverlay)
+
+        overlay.backgroundColor = nil
+        overlay.opacity = 0.9
+        overlay.fillRule = .evenOdd
+        overlay.fillColor = UIColor(red: 245.0/255.0, green: 247.0/255.0, blue: 249.0/255.0, alpha: 1).cgColor
+        layer.addSublayer(overlay)
         
         windowView.isUserInteractionEnabled = false
         windowView.translatesAutoresizingMaskIntoConstraints = false
