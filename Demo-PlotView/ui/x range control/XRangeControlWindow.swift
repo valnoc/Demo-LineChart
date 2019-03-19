@@ -9,8 +9,8 @@
 import UIKit
 
 class XRangeControlWindow: UIView {
-    let verticalBorderWidth: CGFloat = 1
-    let horizontalBorderWidth: CGFloat = 11
+    let verticalBorder: CGFloat = 1
+    let horizontalBorder: CGFloat = 11
     
     init() {
         super.init(frame: .zero)
@@ -43,10 +43,10 @@ class XRangeControlWindow: UIView {
         path.addRoundedRect(in: rect, cornerWidth: 1, cornerHeight: 1)
         path.addRect(
             rect.inset(by:
-                UIEdgeInsets(top: verticalBorderWidth,
-                             left: horizontalBorderWidth,
-                             bottom: verticalBorderWidth,
-                             right: horizontalBorderWidth)
+                UIEdgeInsets(top: verticalBorder,
+                             left: horizontalBorder,
+                             bottom: verticalBorder,
+                             right: horizontalBorder)
             )
         )
         ctx.setFillColor(UIColor(red: 195.0 / 255.0,
@@ -65,7 +65,7 @@ class XRangeControlWindow: UIView {
         let arrowWidth: CGFloat = 4
         let arrowHeight: CGFloat = 11
         
-        let borderWidth = horizontalBorderWidth
+        let borderWidth = horizontalBorder
         let borderHeight = rect.height
         
         let p1 = CGPoint(x: borderWidth / 2 + arrowWidth / 2,

@@ -124,6 +124,6 @@ class XRangeControl : UIControl {
     }
     
     func minWindowWidth() -> CGFloat {
-        return windowView.horizontalBorderWidth * 2
+        return windowView.horizontalBorder * 2
     }
 }

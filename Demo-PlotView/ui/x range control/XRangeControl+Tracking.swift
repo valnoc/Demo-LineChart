@@ -14,7 +14,7 @@ extension XRangeControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let borderWidth = windowView.horizontalBorderWidth
+        let borderWidth = windowView.horizontalBorder
         let borderCenterX = borderWidth / 2
         
         let leftXArea = CGRect(x: leftX + borderCenterX - 22, y: 0, width: 44, height: bounds.height)
