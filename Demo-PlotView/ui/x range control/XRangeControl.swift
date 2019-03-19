@@ -49,20 +49,14 @@ class XRangeControl : UIControl {
     //MARK: - subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
+        guard bounds.width > minWindowWidth() else { return }
         
-        if rangeLeftX < 0,
-            rangeRightX < 0 {
-            rangeLeftX = bounds.minX // 0
-            rangeRightX = bounds.maxX
-        }
+        checkAndFixRangeLeftRightXValues()
+        
+        windowView.frame = makeWindowFrame()
         
         let chartFrame = makeChartFrame()
         chartView.frame = chartFrame
-        windowView.frame = CGRect(x: rangeLeftX,
-                                   y: 0,
-                                   width: rangeRightX - rangeLeftX,
-                                   height: bounds.height)
         
         overlay.frame = chartFrame
         overlay.path = makeOverlayPath()
@@ -73,7 +67,6 @@ class XRangeControl : UIControl {
         chartView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(chartView)
 
-        overlay.backgroundColor = nil
         overlay.opacity = 0.9
         overlay.fillRule = .evenOdd
         overlay.fillColor = UIColor(red: 245.0/255.0, green: 247.0/255.0, blue: 249.0/255.0, alpha: 1).cgColor
@@ -85,12 +78,27 @@ class XRangeControl : UIControl {
     }
     
     // MARK: - calculations
+    func checkAndFixRangeLeftRightXValues() {
+        if rangeLeftX < 0, rangeRightX < 0 {
+            rangeLeftX = bounds.minX // 0
+            rangeRightX = bounds.maxX
+        }
+        
+        if rangeRightX > bounds.maxX {
+            rangeRightX = bounds.maxX
+        }
+        
+        let maxLeftX = rangeRightX - minWindowWidth()
+        if rangeLeftX > maxLeftX { rangeLeftX = maxLeftX }
+    }
+    
     func makeChartFrame() -> CGRect {
         return bounds.insetBy(dx: 0, dy: 3)
     }
     
     func makeOverlayPath() -> CGPath {
         let chartFrame = makeChartFrame()
+        let windowFrame = makeWindowFrame()
         
         let path = CGMutablePath()
         path.addRect(
@@ -100,11 +108,22 @@ class XRangeControl : UIControl {
                    height: chartFrame.height)
         )
         path.addRect(
-            CGRect(x: rangeLeftX,
+            CGRect(x: windowFrame.minX,
                    y: 0,
-                   width: rangeRightX - rangeLeftX,
+                   width: windowFrame.width,
                    height: chartFrame.height)
         )
         return path
+    }
+    
+    func makeWindowFrame() -> CGRect {
+        return CGRect(x: rangeLeftX,
+                      y: 0,
+                      width: rangeRightX - rangeLeftX,
+                      height: bounds.height)
+    }
+    
+    func minWindowWidth() -> CGFloat {
+        return windowView.horizontalBorderWidth * 2
     }
 }
