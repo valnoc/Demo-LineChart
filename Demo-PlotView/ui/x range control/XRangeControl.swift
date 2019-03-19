@@ -10,6 +10,12 @@ import UIKit
 
 class XRangeControl : UIControl {
     
+    // MARK: - value
+    var value: ClosedRange<CGFloat> {
+        let left = rangeLeftX / bounds.width
+        let right = rangeRightX / bounds.width
+        return left...right
+    }
     var rangeLeftX: CGFloat = -1
     var rangeRightX: CGFloat = -1
     
@@ -17,7 +23,6 @@ class XRangeControl : UIControl {
     enum TrackingState {
         case none, isChangingLeftX, isChangingRightX, isMovingRange
     }
-    
     var trackingState: TrackingState = .none
     var lastTrackingPoint: CGPoint = .zero
     
@@ -30,6 +35,7 @@ class XRangeControl : UIControl {
         self.chartView = LineChartView(chart: chart)
         windowView = XRangeControlWindow()
         overlay = CAShapeLayer()
+        
         super.init(frame: .zero)
         
         addAllSubviews()
@@ -40,7 +46,7 @@ class XRangeControl : UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: -
+    //MARK: - subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
@@ -51,7 +57,7 @@ class XRangeControl : UIControl {
             rangeRightX = bounds.maxX
         }
         
-        let chartFrame = bounds.insetBy(dx: 0, dy: 3)
+        let chartFrame = makeChartFrame()
         chartView.frame = chartFrame
         windowView.frame = CGRect(x: rangeLeftX,
                                    y: 0,
@@ -59,20 +65,9 @@ class XRangeControl : UIControl {
                                    height: bounds.height)
         
         overlay.frame = chartFrame
-        let overlayPath = CGMutablePath()
-        overlayPath.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
-        overlayPath.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
-        overlay.path = overlayPath
+        overlay.path = makeOverlayPath()
     }
-    
-    // MARK: - value
-    var value: ClosedRange<CGFloat> {
-        let left = rangeLeftX / bounds.width
-        let right = rangeRightX / bounds.width
-        return left...right
-    }
-  
-    // MARK: - subviews
+
     func addAllSubviews() {
         chartView.isUserInteractionEnabled = false
         chartView.translatesAutoresizingMaskIntoConstraints = false
@@ -87,5 +82,19 @@ class XRangeControl : UIControl {
         windowView.isUserInteractionEnabled = false
         windowView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(windowView)
+    }
+    
+    // MARK: - calculations
+    func makeChartFrame() -> CGRect {
+        return bounds.insetBy(dx: 0, dy: 3)
+    }
+    
+    func makeOverlayPath() -> CGPath {
+        let chartFrame = makeChartFrame()
+        
+        let path = CGMutablePath()
+        path.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
+        path.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
+        return path
     }
 }
