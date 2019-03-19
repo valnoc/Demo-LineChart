@@ -35,7 +35,7 @@ class LineChartXRangeControl : UIControl {
         windowView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(windowView)
         
-        backgroundColor = .yellow
+        backgroundColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
