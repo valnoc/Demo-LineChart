@@ -37,10 +37,15 @@ class LineChartView: UIView {
         let yScale = bounds.height / chartRect.height
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
+            .translatedBy(x: -chartRect.minX, y: -chartRect.height)
         
-        for sublayer in lineLayers {
+        for (index, sublayer) in lineLayers.enumerated() {
             sublayer.frame = bounds
-            sublayer.setAffineTransform(affine)
+            
+            let linePoints = chart.lines[index].points
+            let path = CGMutablePath()
+            path.addLines(between: linePoints, transform: affine)
+            sublayer.path = path
         }
     }
     
@@ -56,9 +61,10 @@ class LineChartView: UIView {
     func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.lineWidth = 5
-        layer.fillColor = UIColor.clear.cgColor
+        layer.fillColor = nil
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
         layer.path = line.path
+        layer.lineJoin = .round
         return layer
     }
 
