@@ -31,13 +31,12 @@ class LineChartView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let rect = chart.boundingRect(for: xRangePercents)
-        print(rect)
+        let chartRect = chart.boundingRect(for: xRangePercents)
         
-        let affine = CGAffineTransform(scaleX: 1, y: -1)
-            .scaledBy(x: bounds.width / rect.width, y: bounds.height / rect.height)
-            .translatedBy(x: rect.minX, y: rect.minY)
-        print(affine)
+        let xScale = bounds.width / chartRect.width
+        let yScale = bounds.height / chartRect.height
+        
+        let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
         
         for sublayer in lineLayers {
             sublayer.frame = bounds
