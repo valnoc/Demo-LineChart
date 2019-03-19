@@ -62,7 +62,7 @@ class XRangeControl : UIControl {
         let overlayPath = CGMutablePath()
         overlayPath.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
         overlayPath.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
-        overlay.path = path
+        overlay.path = overlayPath
     }
     
     // MARK: - value
@@ -76,7 +76,7 @@ class XRangeControl : UIControl {
     func addAllSubviews() {
         chartView.isUserInteractionEnabled = false
         chartView.translatesAutoresizingMaskIntoConstraints = false
-        insertSubview(chartView, at: 0)
+        addSubview(chartView)
 
         overlay.backgroundColor = nil
         overlay.opacity = 0.9
