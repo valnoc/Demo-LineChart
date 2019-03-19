@@ -12,12 +12,12 @@ class XRangeControl : UIControl {
     
     // MARK: - value
     var value: ClosedRange<CGFloat> {
-        let left = rangeLeftX / bounds.width
-        let right = rangeRightX / bounds.width
+        let left = leftX / bounds.width
+        let right = rightX / bounds.width
         return left...right
     }
-    var rangeLeftX: CGFloat = -1
-    var rangeRightX: CGFloat = -1
+    var leftX: CGFloat = -1
+    var rightX: CGFloat = -1
     
     // MARK: - tracking
     enum TrackingState {
@@ -79,17 +79,17 @@ class XRangeControl : UIControl {
     
     // MARK: - calculations
     func checkAndFixRangeLeftRightXValues() {
-        if rangeLeftX < 0, rangeRightX < 0 {
-            rangeLeftX = bounds.minX // 0
-            rangeRightX = bounds.maxX
+        if leftX < 0, rightX < 0 {
+            leftX = bounds.minX // 0
+            rightX = bounds.maxX
         }
         
-        if rangeRightX > bounds.maxX {
-            rangeRightX = bounds.maxX
+        if rightX > bounds.maxX {
+            rightX = bounds.maxX
         }
         
-        let maxLeftX = rangeRightX - minWindowWidth()
-        if rangeLeftX > maxLeftX { rangeLeftX = maxLeftX }
+        let maxLeftX = rightX - minWindowWidth()
+        if leftX > maxLeftX { leftX = maxLeftX }
     }
     
     func makeChartFrame() -> CGRect {
@@ -117,9 +117,9 @@ class XRangeControl : UIControl {
     }
     
     func makeWindowFrame() -> CGRect {
-        return CGRect(x: rangeLeftX,
+        return CGRect(x: leftX,
                       y: 0,
-                      width: rangeRightX - rangeLeftX,
+                      width: rightX - leftX,
                       height: bounds.height)
     }
     

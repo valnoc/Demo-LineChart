@@ -17,11 +17,11 @@ extension XRangeControl {
         let borderWidth = windowView.horizontalBorderWidth
         let borderCenterX = borderWidth / 2
         
-        let leftXArea = CGRect(x: rangeLeftX + borderCenterX - 22, y: 0, width: 44, height: bounds.height)
-        let rightXArea = CGRect(x: rangeRightX - borderCenterX - 22, y: 0, width: 44, height: bounds.height)
-        let insideArea = CGRect(x: rangeLeftX + borderWidth,
+        let leftXArea = CGRect(x: leftX + borderCenterX - 22, y: 0, width: 44, height: bounds.height)
+        let rightXArea = CGRect(x: rightX - borderCenterX - 22, y: 0, width: 44, height: bounds.height)
+        let insideArea = CGRect(x: leftX + borderWidth,
                                 y: 0,
-                                width: rangeRightX - rangeLeftX - borderWidth * 2,
+                                width: rightX - leftX - borderWidth * 2,
                                 height: bounds.height)
         
         switch (leftXArea.contains(point), insideArea.contains(point), rightXArea.contains(point)) {
@@ -41,7 +41,7 @@ extension XRangeControl {
             } else if rightXArea.maxX > bounds.maxX {
                 trackingState = .isChangingLeftX
             
-            } else if abs(point.x - rangeLeftX) < abs(point.x - rangeRightX) {
+            } else if abs(point.x - leftX) < abs(point.x - rightX) {
                 trackingState = .isChangingLeftX
             } else {
                 trackingState = .isChangingRightX
@@ -64,42 +64,42 @@ extension XRangeControl {
         let xDiff = point.x - lastTrackingPoint.x
         
         let leftXMin: CGFloat = 0
-        let leftXMax: CGFloat = rangeRightX - windowView.horizontalBorderWidth * 2
+        let leftXMax: CGFloat = rightX - windowView.horizontalBorderWidth * 2
         
-        let rightXMin: CGFloat = rangeLeftX + windowView.horizontalBorderWidth * 2
+        let rightXMin: CGFloat = leftX + windowView.horizontalBorderWidth * 2
         let rightXMax: CGFloat = bounds.width
         
-        let newLeftX = rangeLeftX + xDiff
-        let newRightX = rangeRightX + xDiff
+        let newLeftX = leftX + xDiff
+        let newRightX = rightX + xDiff
         
         switch trackingState {
         case .isChangingLeftX:
             if newLeftX < leftXMin {
-                rangeLeftX = leftXMin
+                leftX = leftXMin
                 
             } else if newLeftX > leftXMax {
-                rangeLeftX = leftXMax
+                leftX = leftXMax
                 
             } else {
-                rangeLeftX = newLeftX
+                leftX = newLeftX
             }
             
         case .isChangingRightX:
             if newRightX < rightXMin {
-                rangeRightX = rightXMin
+                rightX = rightXMin
                 
             } else if newRightX > rightXMax {
-                rangeRightX = rightXMax
+                rightX = rightXMax
                 
             } else {
-                rangeRightX = newRightX
+                rightX = newRightX
             }
             
         case .isMovingRange:
             if newLeftX >= leftXMin, newLeftX <= leftXMax,
                 newRightX >= rightXMin, newRightX <= rightXMax {
-                rangeLeftX = newLeftX
-                rangeRightX = newRightX
+                leftX = newLeftX
+                rightX = newRightX
             }
             
         default:
