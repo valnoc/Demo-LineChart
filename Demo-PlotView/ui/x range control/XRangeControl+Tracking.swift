@@ -14,18 +14,44 @@ extension XRangeControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let leftXArea = CGRect(x: rangeLeftX - 22, y: 0, width: 44, height: bounds.height)
-        let rightXArea = CGRect(x: rangeRightX - 22, y: 0, width: 44, height: bounds.height)
-        let insideArea = CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: bounds.height)
+        let borderWidth = windowView.horizontalBorderWidth
+        let borderCenterX = borderWidth / 2
         
-        if leftXArea.contains(point) {
-            trackingState = .isChangingMinX
+        let leftXArea = CGRect(x: rangeLeftX + borderCenterX - 22, y: 0, width: 44, height: bounds.height)
+        let rightXArea = CGRect(x: rangeRightX - borderCenterX - 22, y: 0, width: 44, height: bounds.height)
+        let insideArea = CGRect(x: rangeLeftX + borderWidth,
+                                y: 0,
+                                width: rangeRightX - rangeLeftX - borderWidth * 2,
+                                height: bounds.height)
+        
+        switch (leftXArea.contains(point), insideArea.contains(point), rightXArea.contains(point)) {
+        case (true, _, false):
+            trackingState = .isChangingLeftX
+        
+        case (false, _, true):
+            trackingState = .isChangingRightX
             
-        } else if rightXArea.contains(point) {
-            trackingState = .isChangingMaxX
+        case (false, true, false):
+            trackingState = .isMovingRange
             
-        } else if insideArea.contains(point) {
-            trackingState = .isMoving
+        case (true, false, true):
+            if leftXArea.minX < 0 {
+                trackingState = .isChangingRightX
+            
+            } else if rightXArea.maxX > bounds.maxX {
+                trackingState = .isChangingLeftX
+            
+            } else if abs(point.x - rangeLeftX) < abs(point.x - rangeRightX) {
+                trackingState = .isChangingLeftX
+            } else {
+                trackingState = .isChangingRightX
+            }
+            
+        case (true, true, true):
+            trackingState = .isMovingRange
+            
+        case (false, false, false):
+            trackingState = .none
         }
         
         lastTrackingPoint = point
