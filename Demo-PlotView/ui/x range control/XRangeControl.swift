@@ -23,21 +23,18 @@ class XRangeControl : UIControl {
     
     // MARK: - views
     let chartView: LineChartView
-    var windowView: XRangeControlWindow
+    let windowView: XRangeControlWindow
+    let leftOverlay: UIView
+    let rightOverlay: UIView
     
     init(chart: LineChart) {
         self.chartView = LineChartView(chart: chart)
         windowView = XRangeControlWindow()
+        leftOverlay = UIView()
+        rightOverlay = UIView()
         super.init(frame: .zero)
         
-        chartView.isUserInteractionEnabled = false
-        chartView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(chartView)
-
-        windowView.isUserInteractionEnabled = false
-        windowView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(windowView)
-        
+        addAllSubviews()
         backgroundColor = .white
     }
     
@@ -57,7 +54,15 @@ class XRangeControl : UIControl {
             rangeRightX = bounds.maxX
         }
         
-        chartView.frame = bounds.insetBy(dx: 0, dy: 3)
+        let chartFrame = bounds.insetBy(dx: 0, dy: 3)
+        
+        chartView.frame = chartFrame
+        leftOverlay.frame = CGRect(x: 0, y: chartFrame.minY,
+                                   width: rangeLeftX,
+                                   height: chartFrame.height)
+        rightOverlay.frame = CGRect(x: rangeRightX, y: chartFrame.minY,
+                                   width: bounds.width - rangeRightX,
+                                   height: chartFrame.height)
         windowView.frame = CGRect(x: rangeLeftX,
                                    y: 0,
                                    width: rangeRightX - rangeLeftX,
@@ -71,5 +76,30 @@ class XRangeControl : UIControl {
         return left...right
     }
   
-
+    // MARK: - subviews
+    func addAllSubviews() {
+        chartView.isUserInteractionEnabled = false
+        chartView.translatesAutoresizingMaskIntoConstraints = false
+        insertSubview(chartView, at: 0)
+        
+        leftOverlay.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(leftOverlay)
+        
+        rightOverlay.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(rightOverlay)
+        
+        windowView.isUserInteractionEnabled = false
+        windowView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(windowView)
+        
+        customize(overlayView: leftOverlay)
+        customize(overlayView: rightOverlay)
+    }
+    
+    // MARK: - overlay
+    func customize(overlayView: UIView) {
+        overlayView.isUserInteractionEnabled = false
+        overlayView.backgroundColor = UIColor(red: 245.0/255.0, green: 247.0/255.0, blue: 249.0/255.0, alpha: 1)
+        overlayView.alpha = 0.9
+    }
 }
