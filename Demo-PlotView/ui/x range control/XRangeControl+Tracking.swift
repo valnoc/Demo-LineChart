@@ -47,7 +47,7 @@ extension XRangeControl {
         let newRightX = rangeRightX + xDiff
         
         switch trackingState {
-        case .isChangingMinX:
+        case .isChangingLeftX:
             if newLeftX < leftXMin {
                 rangeLeftX = leftXMin
                 
@@ -58,7 +58,7 @@ extension XRangeControl {
                 rangeLeftX = newLeftX
             }
             
-        case .isChangingMaxX:
+        case .isChangingRightX:
             if newRightX < rightXMin {
                 rangeRightX = rightXMin
                 
@@ -69,7 +69,7 @@ extension XRangeControl {
                 rangeRightX = newRightX
             }
             
-        case .isMoving:
+        case .isMovingRange:
             if newLeftX >= leftXMin, newLeftX <= leftXMax,
                 newRightX >= rightXMin, newRightX <= rightXMax {
                 rangeLeftX = newLeftX

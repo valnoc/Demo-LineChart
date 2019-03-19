@@ -15,7 +15,7 @@ class XRangeControl : UIControl {
     
     // MARK: - tracking
     enum TrackingState {
-        case none, isChangingMinX, isChangingMaxX, isMoving
+        case none, isChangingLeftX, isChangingRightX, isMovingRange
     }
     
     var trackingState: TrackingState = .none
