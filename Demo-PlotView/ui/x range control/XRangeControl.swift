@@ -10,8 +10,8 @@ import UIKit
 
 class XRangeControl : UIControl {
     
-    var rangeMinX: CGFloat = -1
-    var rangeMaxX: CGFloat = -1
+    var rangeLeftX: CGFloat = -1
+    var rangeRightX: CGFloat = -1
     
     // MARK: - tracking
     enum TrackingState {
@@ -51,23 +51,23 @@ class XRangeControl : UIControl {
         
         guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
         
-        if rangeMinX < 0,
-            rangeMaxX < 0 {
-            rangeMinX = bounds.minX // 0
-            rangeMaxX = bounds.maxX
+        if rangeLeftX < 0,
+            rangeRightX < 0 {
+            rangeLeftX = bounds.minX // 0
+            rangeRightX = bounds.maxX
         }
         
         chartView.frame = bounds.insetBy(dx: 0, dy: 3)
-        windowView.frame = CGRect(x: rangeMinX,
+        windowView.frame = CGRect(x: rangeLeftX,
                                    y: 0,
-                                   width: rangeMaxX - rangeMinX,
+                                   width: rangeRightX - rangeLeftX,
                                    height: bounds.height)
     }
     
     // MARK: - value
     var value: ClosedRange<CGFloat> {
-        let left = rangeMinX / bounds.width
-        let right = rangeMaxX / bounds.width
+        let left = rangeLeftX / bounds.width
+        let right = rangeRightX / bounds.width
         return left...right
     }
   

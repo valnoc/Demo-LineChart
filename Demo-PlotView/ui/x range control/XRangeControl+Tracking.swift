@@ -14,14 +14,14 @@ extension XRangeControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let minXArea = CGRect(x: rangeMinX - 22, y: 0, width: 44, height: bounds.height)
-        let maxXArea = CGRect(x: rangeMaxX - 22, y: 0, width: 44, height: bounds.height)
-        let insideArea = CGRect(x: rangeMinX, y: 0, width: rangeMaxX - rangeMinX, height: bounds.height)
+        let leftXArea = CGRect(x: rangeLeftX - 22, y: 0, width: 44, height: bounds.height)
+        let rightXArea = CGRect(x: rangeRightX - 22, y: 0, width: 44, height: bounds.height)
+        let insideArea = CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: bounds.height)
         
-        if minXArea.contains(point) {
+        if leftXArea.contains(point) {
             trackingState = .isChangingMinX
             
-        } else if maxXArea.contains(point) {
+        } else if rightXArea.contains(point) {
             trackingState = .isChangingMaxX
             
         } else if insideArea.contains(point) {
@@ -37,43 +37,43 @@ extension XRangeControl {
         
         let xDiff = point.x - lastTrackingPoint.x
         
-        let windowMinXPossibleMin: CGFloat = 0
-        let windowMinXPossibleMax: CGFloat = rangeMaxX - windowView.horizontalBorderWidth * 2
+        let leftXMin: CGFloat = 0
+        let leftXMax: CGFloat = rangeRightX - windowView.horizontalBorderWidth * 2
         
-        let windowMaxXPossibleMin: CGFloat = rangeMinX + windowView.horizontalBorderWidth * 2
-        let windowMaxXPossibleMax: CGFloat = bounds.width
+        let rightXMin: CGFloat = rangeLeftX + windowView.horizontalBorderWidth * 2
+        let rightXMax: CGFloat = bounds.width
         
-        let newMinX = rangeMinX + xDiff
-        let newMaxX = rangeMaxX + xDiff
+        let newLeftX = rangeLeftX + xDiff
+        let newRightX = rangeRightX + xDiff
         
         switch trackingState {
         case .isChangingMinX:
-            if newMinX < windowMinXPossibleMin {
-                rangeMinX = windowMinXPossibleMin
+            if newLeftX < leftXMin {
+                rangeLeftX = leftXMin
                 
-            } else if newMinX > windowMinXPossibleMax {
-                rangeMinX = windowMinXPossibleMax
+            } else if newLeftX > leftXMax {
+                rangeLeftX = leftXMax
                 
             } else {
-                rangeMinX = newMinX
+                rangeLeftX = newLeftX
             }
             
         case .isChangingMaxX:
-            if newMaxX < windowMaxXPossibleMin {
-                rangeMaxX = windowMaxXPossibleMin
+            if newRightX < rightXMin {
+                rangeRightX = rightXMin
                 
-            } else if newMaxX > windowMaxXPossibleMax {
-                rangeMaxX = windowMaxXPossibleMax
+            } else if newRightX > rightXMax {
+                rangeRightX = rightXMax
                 
             } else {
-                rangeMaxX = newMaxX
+                rangeRightX = newRightX
             }
             
         case .isMoving:
-            if newMinX >= windowMinXPossibleMin, newMinX <= windowMinXPossibleMax,
-                newMaxX >= windowMaxXPossibleMin, newMaxX <= windowMaxXPossibleMax {
-                rangeMinX = newMinX
-                rangeMaxX = newMaxX
+            if newLeftX >= leftXMin, newLeftX <= leftXMax,
+                newRightX >= rightXMin, newRightX <= rightXMax {
+                rangeLeftX = newLeftX
+                rangeRightX = newRightX
             }
             
         default:
