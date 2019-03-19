@@ -23,11 +23,11 @@ class XRangeControl : UIControl {
     
     // MARK: - views
     let chartView: LineChartView
-    var windowView: LineChartXRangeWindowView
+    var windowView: XRangeControlWindow
     
     init(chart: LineChart) {
         self.chartView = LineChartView(chart: chart)
-        windowView = LineChartXRangeWindowView()
+        windowView = XRangeControlWindow()
         super.init(frame: .zero)
         
         chartView.isUserInteractionEnabled = false

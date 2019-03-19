@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LineChartXRangeWindowView: UIView {
+class XRangeControlWindow: UIView {
     let verticalBorderWidth: CGFloat = 1
     let horizontalBorderWidth: CGFloat = 11
     
