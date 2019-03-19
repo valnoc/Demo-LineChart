@@ -14,7 +14,7 @@ class ChartRepository {
             let json = try readJson()
             let result = LineChartMapper().map(from: json)
             
-            ///
+            //  >>>>
             do {
                 let mock = [
                     LineChart(lines: [
@@ -26,7 +26,7 @@ class ChartRepository {
                 ]
                 return mock
             }
-            ///
+            //  <<<<
             
             return result
         } catch {
