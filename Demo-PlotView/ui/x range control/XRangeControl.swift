@@ -8,18 +8,18 @@
 
 import UIKit
 
-class LineChartXRangeControl : UIControl {
+class XRangeControl : UIControl {
     
-    var windowMinX: CGFloat = -1
-    var windowMaxX: CGFloat = -1
+    var rangeMinX: CGFloat = -1
+    var rangeMaxX: CGFloat = -1
     
     // MARK: - tracking
-    enum PanState {
+    enum TrackingState {
         case none, isChangingMinX, isChangingMaxX, isMoving
     }
     
-    var panState: PanState = .none
-    var lastPanPoint: CGPoint = .zero
+    var trackingState: TrackingState = .none
+    var lastTrackingPoint: CGPoint = .zero
     
     // MARK: - views
     let chartView: LineChartView
@@ -51,23 +51,23 @@ class LineChartXRangeControl : UIControl {
         
         guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
         
-        if windowMinX < 0,
-            windowMaxX < 0 {
-            windowMinX = bounds.minX // 0
-            windowMaxX = bounds.maxX
+        if rangeMinX < 0,
+            rangeMaxX < 0 {
+            rangeMinX = bounds.minX // 0
+            rangeMaxX = bounds.maxX
         }
         
         chartView.frame = bounds.insetBy(dx: 0, dy: 3)
-        windowView.frame = CGRect(x: windowMinX,
+        windowView.frame = CGRect(x: rangeMinX,
                                    y: 0,
-                                   width: windowMaxX - windowMinX,
+                                   width: rangeMaxX - rangeMinX,
                                    height: bounds.height)
     }
     
     // MARK: - value
     var value: ClosedRange<CGFloat> {
-        let left = windowMinX / bounds.width
-        let right = windowMaxX / bounds.width
+        let left = rangeMinX / bounds.width
+        let right = rangeMaxX / bounds.width
         return left...right
     }
   

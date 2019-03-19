@@ -8,72 +8,72 @@
 
 import UIKit
 
-extension LineChartXRangeControl {
+extension XRangeControl {
     
     // MARK: - pan
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let minXArea = CGRect(x: windowMinX - 22, y: 0, width: 44, height: bounds.height)
-        let maxXArea = CGRect(x: windowMaxX - 22, y: 0, width: 44, height: bounds.height)
-        let insideArea = CGRect(x: windowMinX, y: 0, width: windowMaxX - windowMinX, height: bounds.height)
+        let minXArea = CGRect(x: rangeMinX - 22, y: 0, width: 44, height: bounds.height)
+        let maxXArea = CGRect(x: rangeMaxX - 22, y: 0, width: 44, height: bounds.height)
+        let insideArea = CGRect(x: rangeMinX, y: 0, width: rangeMaxX - rangeMinX, height: bounds.height)
         
         if minXArea.contains(point) {
-            panState = .isChangingMinX
+            trackingState = .isChangingMinX
             
         } else if maxXArea.contains(point) {
-            panState = .isChangingMaxX
+            trackingState = .isChangingMaxX
             
         } else if insideArea.contains(point) {
-            panState = .isMoving
+            trackingState = .isMoving
         }
         
-        lastPanPoint = point
-        return panState != .none
+        lastTrackingPoint = point
+        return trackingState != .none
     }
     
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: self)
         
-        let xDiff = point.x - lastPanPoint.x
+        let xDiff = point.x - lastTrackingPoint.x
         
         let windowMinXPossibleMin: CGFloat = 0
-        let windowMinXPossibleMax: CGFloat = windowMaxX - windowView.horizontalBorderWidth * 2
+        let windowMinXPossibleMax: CGFloat = rangeMaxX - windowView.horizontalBorderWidth * 2
         
-        let windowMaxXPossibleMin: CGFloat = windowMinX + windowView.horizontalBorderWidth * 2
+        let windowMaxXPossibleMin: CGFloat = rangeMinX + windowView.horizontalBorderWidth * 2
         let windowMaxXPossibleMax: CGFloat = bounds.width
         
-        let newMinX = windowMinX + xDiff
-        let newMaxX = windowMaxX + xDiff
+        let newMinX = rangeMinX + xDiff
+        let newMaxX = rangeMaxX + xDiff
         
-        switch panState {
+        switch trackingState {
         case .isChangingMinX:
             if newMinX < windowMinXPossibleMin {
-                windowMinX = windowMinXPossibleMin
+                rangeMinX = windowMinXPossibleMin
                 
             } else if newMinX > windowMinXPossibleMax {
-                windowMinX = windowMinXPossibleMax
+                rangeMinX = windowMinXPossibleMax
                 
             } else {
-                windowMinX = newMinX
+                rangeMinX = newMinX
             }
             
         case .isChangingMaxX:
             if newMaxX < windowMaxXPossibleMin {
-                windowMaxX = windowMaxXPossibleMin
+                rangeMaxX = windowMaxXPossibleMin
                 
             } else if newMaxX > windowMaxXPossibleMax {
-                windowMaxX = windowMaxXPossibleMax
+                rangeMaxX = windowMaxXPossibleMax
                 
             } else {
-                windowMaxX = newMaxX
+                rangeMaxX = newMaxX
             }
             
         case .isMoving:
             if newMinX >= windowMinXPossibleMin, newMinX <= windowMinXPossibleMax,
                 newMaxX >= windowMaxXPossibleMin, newMaxX <= windowMaxXPossibleMax {
-                windowMinX = newMinX
-                windowMaxX = newMaxX
+                rangeMinX = newMinX
+                rangeMaxX = newMaxX
             }
             
         default:
@@ -83,18 +83,18 @@ extension LineChartXRangeControl {
         setNeedsLayout()
         layoutIfNeeded()
         
-        lastPanPoint = point
+        lastTrackingPoint = point
         sendActions(for: .valueChanged)
         return true
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        panState = .none
+        trackingState = .none
         sendActions(for: .valueChanged)
     }
     
     override func cancelTracking(with event: UIEvent?) {
-        panState = .none
+        trackingState = .none
         sendActions(for: .valueChanged)
     }
     

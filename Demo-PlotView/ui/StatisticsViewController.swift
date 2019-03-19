@@ -11,11 +11,11 @@ import UIKit
 class StatisticsViewController: UIViewController {
 
     let chartView: LineChartView
-    let xRangeControl: LineChartXRangeControl
+    let xRangeControl: XRangeControl
     
     init(chart: LineChart) {
         chartView = LineChartView(chart: chart)
-        xRangeControl = LineChartXRangeControl(chart: chart)
+        xRangeControl = XRangeControl(chart: chart)
         
         super.init(nibName: nil, bundle: nil)
         
@@ -54,7 +54,7 @@ class StatisticsViewController: UIViewController {
     }
     
     @objc
-    func onXRangeChanged(_ sender: LineChartXRangeControl) {
+    func onXRangeChanged(_ sender: XRangeControl) {
         let value = sender.value
         chartView.show(xRangePercents: value)
 //        chartView.show(xRangePercents: 0.0...1.0)
