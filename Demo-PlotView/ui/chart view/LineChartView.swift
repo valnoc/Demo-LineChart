@@ -37,7 +37,7 @@ class LineChartView: UIView {
         let yScale = bounds.height / chartRect.height
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
-            .translatedBy(x: -chartRect.minX, y: -chartRect.height)
+            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
         for (index, sublayer) in lineLayers.enumerated() {
             sublayer.frame = bounds
