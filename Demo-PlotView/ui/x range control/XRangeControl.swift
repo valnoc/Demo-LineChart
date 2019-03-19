@@ -24,15 +24,11 @@ class XRangeControl : UIControl {
     // MARK: - views
     let chartView: LineChartView
     let windowView: XRangeControlWindow
-    let leftOverlay: UIView
-    let rightOverlay: UIView
     let overlay: CAShapeLayer
     
     init(chart: LineChart) {
         self.chartView = LineChartView(chart: chart)
         windowView = XRangeControlWindow()
-        leftOverlay = UIView()
-        rightOverlay = UIView()
         overlay = CAShapeLayer()
         super.init(frame: .zero)
         
@@ -47,7 +43,6 @@ class XRangeControl : UIControl {
     //MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
         
         if rangeLeftX < 0,
@@ -57,23 +52,16 @@ class XRangeControl : UIControl {
         }
         
         let chartFrame = bounds.insetBy(dx: 0, dy: 3)
-        
         chartView.frame = chartFrame
-        leftOverlay.frame = CGRect(x: 0, y: chartFrame.minY,
-                                   width: rangeLeftX,
-                                   height: chartFrame.height)
-        rightOverlay.frame = CGRect(x: rangeRightX, y: chartFrame.minY,
-                                   width: bounds.width - rangeRightX,
-                                   height: chartFrame.height)
         windowView.frame = CGRect(x: rangeLeftX,
                                    y: 0,
                                    width: rangeRightX - rangeLeftX,
                                    height: bounds.height)
         
         overlay.frame = chartFrame
-        let path = CGMutablePath()
-        path.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
-        path.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
+        let overlayPath = CGMutablePath()
+        overlayPath.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
+        overlayPath.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
         overlay.path = path
     }
     
@@ -89,14 +77,6 @@ class XRangeControl : UIControl {
         chartView.isUserInteractionEnabled = false
         chartView.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(chartView, at: 0)
-        
-        leftOverlay.translatesAutoresizingMaskIntoConstraints = false
-        leftOverlay.isHidden = true
-//        addSubview(leftOverlay)
-        
-        rightOverlay.translatesAutoresizingMaskIntoConstraints = false
-        rightOverlay.isHidden = true
-//        addSubview(rightOverlay)
 
         overlay.backgroundColor = nil
         overlay.opacity = 0.9
@@ -107,15 +87,5 @@ class XRangeControl : UIControl {
         windowView.isUserInteractionEnabled = false
         windowView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(windowView)
-        
-        customize(overlayView: leftOverlay)
-        customize(overlayView: rightOverlay)
-    }
-    
-    // MARK: - overlay
-    func customize(overlayView: UIView) {
-        overlayView.isUserInteractionEnabled = false
-        overlayView.backgroundColor = UIColor(red: 245.0/255.0, green: 247.0/255.0, blue: 249.0/255.0, alpha: 1)
-        overlayView.alpha = 0.9
     }
 }
