@@ -64,9 +64,9 @@ extension XRangeControl {
         let xDiff = point.x - lastTrackingPoint.x
         
         let leftXMin: CGFloat = 0
-        let leftXMax: CGFloat = rightX - windowView.horizontalBorderWidth * 2
+        let leftXMax: CGFloat = rightX - minWindowWidth()
         
-        let rightXMin: CGFloat = leftX + windowView.horizontalBorderWidth * 2
+        let rightXMin: CGFloat = leftX + minWindowWidth()
         let rightXMax: CGFloat = bounds.width
         
         let newLeftX = leftX + xDiff
