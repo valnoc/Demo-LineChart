@@ -63,7 +63,6 @@ class LineChartView: UIView {
         layer.lineWidth = 5
         layer.fillColor = nil
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
-        layer.path = line.path
         layer.lineJoin = .round
         return layer
     }
