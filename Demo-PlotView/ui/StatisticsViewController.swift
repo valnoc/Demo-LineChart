@@ -30,7 +30,7 @@ class StatisticsViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         
         do {
             chartView.translatesAutoresizingMaskIntoConstraints = false
