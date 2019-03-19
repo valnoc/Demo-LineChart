@@ -22,19 +22,24 @@ extension LineChart.Line {
     
     func boundingRect(for xRange: ClosedRange<CGFloat>) -> CGRect {
         let points = self.points
-        let lowerIndex = Int(CGFloat(points.count - 1) * xRange.lowerBound)
-        let upperIndex = Int(CGFloat(points.count - 1) * xRange.upperBound)
-        let pointsInRange = points[lowerIndex...upperIndex]
-        
-        let xs = pointsInRange.map({ $0.x })
-        let xMin = xs.min() ?? 0
-        let xMax = xs.max() ?? 0
-        
-        let ys = pointsInRange.map({ $0.y })
-        var yMin = ys.min() ?? 0
-        if yMin > 0 { yMin = 0 }
-        let yMax = ys.max() ?? 0
+        let xMin = x.min() ?? 0
+        let xMax = x.max() ?? 0
+        let xDiff = xMax - xMin
        
-        return CGRect(x: xMin, y: yMin, width: xMax - xMin, height: yMax - yMin)
+        let xMinInRange = CGFloat(xMin + xDiff * Double(xRange.lowerBound))
+        let xMaxInRange = CGFloat(xMin + xDiff * Double(xRange.upperBound))
+        
+        let ysInRange = points
+            .filter({ $0.x >= xMinInRange && $0.x <= xMaxInRange })
+            .map({ $0.y })
+        
+        var yMinInRange = ysInRange.min() ?? 0
+        if yMinInRange > 0 { yMinInRange = 0 }
+        let yMaxInRange = ysInRange.max() ?? 0
+       
+        return CGRect(x: xMinInRange,
+                      y: yMinInRange,
+                      width: xMaxInRange - xMinInRange,
+                      height: yMaxInRange - yMinInRange)
     }
 }
