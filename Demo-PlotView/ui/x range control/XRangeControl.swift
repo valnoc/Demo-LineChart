@@ -93,8 +93,18 @@ class XRangeControl : UIControl {
         let chartFrame = makeChartFrame()
         
         let path = CGMutablePath()
-        path.addRect(CGRect(x: 0, y: 0, width: chartFrame.width, height: chartFrame.height))
-        path.addRect(CGRect(x: rangeLeftX, y: 0, width: rangeRightX - rangeLeftX, height: chartFrame.height))
+        path.addRect(
+            CGRect(x: 0,
+                   y: 0,
+                   width: chartFrame.width,
+                   height: chartFrame.height)
+        )
+        path.addRect(
+            CGRect(x: rangeLeftX,
+                   y: 0,
+                   width: rangeRightX - rangeLeftX,
+                   height: chartFrame.height)
+        )
         return path
     }
 }
