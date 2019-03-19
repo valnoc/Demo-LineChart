@@ -10,15 +10,18 @@ import UIKit
 
 class LineChartXRangeControl : UIControl {
     
+    var windowMinX: CGFloat = -1
+    var windowMaxX: CGFloat = -1
+    
+    // MARK: - tracking
     enum PanState {
         case none, isChangingMinX, isChangingMaxX, isMoving
     }
     
-    var windowMinX: CGFloat = 50
-    var windowMaxX: CGFloat = 200
     var panState: PanState = .none
     var lastPanPoint: CGPoint = .zero
     
+    // MARK: - views
     let chartView: LineChartView
     var windowView: LineChartXRangeWindowView
     
@@ -45,6 +48,15 @@ class LineChartXRangeControl : UIControl {
     //MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        guard bounds.width > windowView.horizontalBorderWidth * 2 else { return }
+        
+        if windowMinX < 0,
+            windowMaxX < 0 {
+            windowMinX = bounds.minX // 0
+            windowMaxX = bounds.maxX
+        }
+        
         chartView.frame = bounds.insetBy(dx: 0, dy: 3)
         windowView.frame = CGRect(x: windowMinX,
                                    y: 0,
