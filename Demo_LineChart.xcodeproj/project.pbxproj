@@ -71,9 +71,9 @@
 			isa = PBXGroup;
 			children = (
 				5B0A5C5B22427283007C2C1E /* StatisticsViewController.swift */,
+				5B0A5C6422427283007C2C1E /* StatisticsViewController+Table.swift */,
 				5B0A5C5C22427283007C2C1E /* x range control */,
 				5B0A5C6022427283007C2C1E /* chart view */,
-				5B0A5C6422427283007C2C1E /* StatisticsViewController+Table.swift */,
 			);
 			path = statistics;
 			sourceTree = "<group>";

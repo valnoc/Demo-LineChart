@@ -16,6 +16,7 @@ extension StatisticsViewController {
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.bounces = false
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.chart.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.range.rawValue)
