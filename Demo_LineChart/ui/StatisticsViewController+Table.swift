@@ -65,7 +65,7 @@ extension StatisticsViewController {
         return cell
     }
     
-    func makeNameCell(_ line: LineChart.Line) -> UITableViewCell {
+    func makeNameCell(_ line: LineChart.Line, isEnabled: Bool) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.name.rawValue) else {
             return UITableViewCell(frame: .zero)
         }
@@ -77,6 +77,8 @@ extension StatisticsViewController {
                                         size: CGSize(width: 13, height: 13))
         cell.imageView?.layer.cornerRadius = 3
         cell.imageView?.layer.masksToBounds = true
+        
+        cell.accessoryType = isEnabled ? .checkmark: .none
         
         return cell
     }
@@ -101,7 +103,9 @@ extension StatisticsViewController: UITableViewDataSource {
             case 1:
                 return makeRangeCell()
             default:
-                return makeNameCell(chartView.chart.lines[indexPath.row - 2])
+                let index = indexPath.row - 2
+                return makeNameCell(chartView.chart.lines[index],
+                                    isEnabled: chartView.isLineEnabled(at: index))
             }
         default:
             break
@@ -117,5 +121,7 @@ extension StatisticsViewController: UITableViewDelegate {
         let index = indexPath.row - 2
         chartView.toggleLine(at: index)
         xRangeControl.chartView.toggleLine(at: index)
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }

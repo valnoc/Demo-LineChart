@@ -50,6 +50,12 @@ class LineChartView: UIView {
         setNeedsLayout()
         layoutIfNeeded()
     }
+    func isLineEnabled(at index: Int) -> Bool {
+        guard var value = linesIndexToEnabled[index] else {
+            return false
+        }
+        return value
+    }
     
     // MARK: - size
     override func layoutSubviews() {
