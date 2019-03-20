@@ -39,6 +39,26 @@ extension StatisticsViewController {
         constr.forEach({ $0.isActive = true })
         return cell
     }
+    
+    func makeRangeCell() -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.range.rawValue) else {
+            return UITableViewCell(frame: .zero)
+        }
+        let contentView = cell.contentView
+        
+        guard xRangeControl.superview != contentView else { return cell }
+        xRangeControl.removeFromSuperview()
+        
+        xRangeControl.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(xRangeControl)
+        let constr = [xRangeControl.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+                      xRangeControl.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+                      xRangeControl.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+                      xRangeControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+                      xRangeControl.heightAnchor.constraint(equalToConstant: 44)]
+        constr.forEach({ $0.isActive = true })
+        return cell
+    }
 }
 
 extension StatisticsViewController: UITableViewDataSource {
@@ -48,13 +68,23 @@ extension StatisticsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        if section == 0 { return 2 + chartView.chart.lines.count }
-        if section == 0 { return 1 }
+        if section == 0 { return 2 }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            return makeChartCell()
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                return makeChartCell()
+            case 1:
+                return makeRangeCell()
+            default:
+                break
+            }
+        default:
+            break
         }
         return UITableViewCell(frame: .zero)
     }
