@@ -10,7 +10,7 @@ import UIKit
 
 extension StatisticsViewController {
     enum Cell: String {
-        case chart, range, name
+        case chart, range, name, night
     }
     
     func setupTableView() {
@@ -20,6 +20,7 @@ extension StatisticsViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.chart.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.range.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.name.rawValue)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.night.rawValue)
     }
     
     func makeChartCell() -> UITableViewCell {
@@ -82,16 +83,30 @@ extension StatisticsViewController {
         
         return cell
     }
+    
+    func makeNightModeCell() -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.night.rawValue) else {
+            return UITableViewCell(frame: .zero)
+        }
+        
+        cell.textLabel?.text = "Switch to Night Mode"
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+        cell.textLabel?.textColor = UIColor(red: 0, green: 78.0 / 255.0, blue: 221.0 / 255.0, alpha: 1)
+        
+        cell.textLabel?.textAlignment = .center
+        
+        return cell
+    }
 }
 
 extension StatisticsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return chartView.chart.lines.isEmpty ? 0: 1
+        return chartView.chart.lines.isEmpty ? 0: 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 { return 2 + chartView.chart.lines.count }
-        return 0
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,9 +123,8 @@ extension StatisticsViewController: UITableViewDataSource {
                                     isEnabled: chartView.isLineEnabled(at: index))
             }
         default:
-            break
+            return makeNightModeCell()
         }
-        return UITableViewCell(frame: .zero)
     }
 }
 
@@ -118,9 +132,11 @@ extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let index = indexPath.row - 2
-        chartView.toggleLine(at: index)
-        xRangeControl.chartView.toggleLine(at: index)
+        if indexPath.section == 0 {
+            let index = indexPath.row - 2
+            chartView.toggleLine(at: index)
+            xRangeControl.chartView.toggleLine(at: index)
+        }
         
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
