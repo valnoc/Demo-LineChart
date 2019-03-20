@@ -59,6 +59,22 @@ extension StatisticsViewController {
         constr.forEach({ $0.isActive = true })
         return cell
     }
+    
+    func makeNameCell(_ line: LineChart.Line) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.name.rawValue) else {
+            return UITableViewCell(frame: .zero)
+        }
+
+        cell.textLabel?.text = line.name
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 13)
+        
+        cell.imageView?.image = UIImage(color: UIColor(hex: line.colorHex),
+                                        size: CGSize(width: 13, height: 13))
+        cell.imageView?.layer.cornerRadius = 3
+        cell.imageView?.layer.masksToBounds = true
+        
+        return cell
+    }
 }
 
 extension StatisticsViewController: UITableViewDataSource {
@@ -67,8 +83,7 @@ extension StatisticsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if section == 0 { return 2 + chartView.chart.lines.count }
-        if section == 0 { return 2 }
+        if section == 0 { return 2 + chartView.chart.lines.count }
         return 0
     }
     
@@ -81,7 +96,7 @@ extension StatisticsViewController: UITableViewDataSource {
             case 1:
                 return makeRangeCell()
             default:
-                break
+                return makeNameCell(chartView.chart.lines[indexPath.row - 2])
             }
         default:
             break
@@ -89,5 +104,3 @@ extension StatisticsViewController: UITableViewDataSource {
         return UITableViewCell(frame: .zero)
     }
 }
-
-

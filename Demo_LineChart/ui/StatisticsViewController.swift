@@ -43,26 +43,6 @@ class StatisticsViewController: UIViewController {
                           tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)]
             constr.forEach({ $0.isActive = true })
         }
-        
-//        do {
-//            chartView.translatesAutoresizingMaskIntoConstraints = false
-//            view.addSubview(chartView)
-//            let constr = [chartView.topAnchor.constraint(equalTo: view.topAnchor),
-//                          chartView.leftAnchor.constraint(equalTo: view.leftAnchor),
-//                          chartView.rightAnchor.constraint(equalTo: view.rightAnchor),
-//                          chartView.heightAnchor.constraint(equalToConstant: 320)]
-//            constr.forEach({ $0.isActive = true })
-//        }
-//
-//        do {
-//            xRangeControl.translatesAutoresizingMaskIntoConstraints = false
-//            view.addSubview(xRangeControl)
-//            let constr = [xRangeControl.topAnchor.constraint(equalTo: chartView.bottomAnchor, constant: 20),
-//                          xRangeControl.leftAnchor.constraint(equalTo: view.leftAnchor),
-//                          xRangeControl.rightAnchor.constraint(equalTo: view.rightAnchor),
-//                          xRangeControl.heightAnchor.constraint(equalToConstant: 44)]
-//            constr.forEach({ $0.isActive = true })
-//        }
     }
     
     @objc

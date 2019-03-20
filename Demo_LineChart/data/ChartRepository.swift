@@ -21,11 +21,11 @@ class ChartRepository {
                         LineChart.Line(x: [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550],
                                        y: [0, 200, 120, 300, 50, 100, 10,  0,   200, 120, 300, 50],
                                        colorHex: "#FF0000",
-                                       name: "line1"),
+                                       name: "Line1"),
                         LineChart.Line(x: [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550],
                                        y: [50, 0, 200, 300, 100, 145, 100,  0,  50,  0,   200, 300],
                                        colorHex: "#00FF00",
-                                       name: "line2")
+                                       name: "Line2")
                         ])
                 ]
                 return mock
