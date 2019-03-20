@@ -29,6 +29,7 @@ class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = "Statistics"
         view.backgroundColor = .white
 
         xRangeControl.addTarget(self, action: #selector(onXRangeChanged), for: .valueChanged)

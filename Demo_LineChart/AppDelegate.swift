@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let chart = allCharts.first else { return false }
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = StatisticsViewController(chart: chart)
+        window?.rootViewController = UINavigationController(rootViewController: StatisticsViewController(chart: chart))
         window?.makeKeyAndVisible()
         
         return true
