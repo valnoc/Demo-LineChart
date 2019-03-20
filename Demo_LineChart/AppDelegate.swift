@@ -18,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let allCharts = ChartRepository().loadCharts()
-        guard let chart = allCharts.first else { return false }
+        let vc = ChartListViewController(charts: allCharts)
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = UINavigationController(rootViewController: StatisticsViewController(chart: chart))
+        window?.rootViewController = UINavigationController(rootViewController: vc)
         window?.makeKeyAndVisible()
         
         return true

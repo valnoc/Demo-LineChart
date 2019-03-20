@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B0A5C57224270E0007C2C1E /* ChartListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C56224270E0007C2C1E /* ChartListViewController.swift */; };
+		5B0A5C592242712A007C2C1E /* ChartListViewController+Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C582242712A007C2C1E /* ChartListViewController+Table.swift */; };
 		5B30E6CA224256A300C11CFB /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B30E6C9224256A300C11CFB /* UIImage+Ext.swift */; };
 		5B5D7C5822424E0600362C4A /* StatisticsViewController+Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */; };
 		5BF60A732242273B009E6713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A722242273B009E6713 /* AppDelegate.swift */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B0A5C56224270E0007C2C1E /* ChartListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartListViewController.swift; sourceTree = "<group>"; };
+		5B0A5C582242712A007C2C1E /* ChartListViewController+Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChartListViewController+Table.swift"; sourceTree = "<group>"; };
 		5B30E6C9224256A300C11CFB /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatisticsViewController+Table.swift"; sourceTree = "<group>"; };
 		5BF60A6F2242273B009E6713 /* Demo_LineChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo_LineChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +122,8 @@
 		5BF60A8D22422773009E6713 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				5B0A5C56224270E0007C2C1E /* ChartListViewController.swift */,
+				5B0A5C582242712A007C2C1E /* ChartListViewController+Table.swift */,
 				5BF60A8E22422773009E6713 /* StatisticsViewController.swift */,
 				5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */,
 				5BF60A8F22422773009E6713 /* x range control */,
@@ -219,7 +225,9 @@
 			files = (
 				5B5D7C5822424E0600362C4A /* StatisticsViewController+Table.swift in Sources */,
 				5BF60AA222422773009E6713 /* LineChart+CG.swift in Sources */,
+				5B0A5C57224270E0007C2C1E /* ChartListViewController.swift in Sources */,
 				5BF60A732242273B009E6713 /* AppDelegate.swift in Sources */,
+				5B0A5C592242712A007C2C1E /* ChartListViewController+Table.swift in Sources */,
 				5BF60AA422422773009E6713 /* LineChartLine+CG.swift in Sources */,
 				5BF60A9F22422773009E6713 /* XRangeControl.swift in Sources */,
 				5BF60AA322422773009E6713 /* LineChartView.swift in Sources */,
