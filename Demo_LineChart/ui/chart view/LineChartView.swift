@@ -36,16 +36,12 @@ class LineChartView: UIView {
         let xScale = bounds.width / chartRect.width
         let yScale = bounds.height / chartRect.height
         
-        let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
+        let transform = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
-        for (index, sublayer) in lineLayers.enumerated() {
+        for (line, sublayer) in zip(chart.lines, lineLayers) {
             sublayer.frame = bounds
-            
-            let linePoints = chart.lines[index].points
-            let path = CGMutablePath()
-            path.addLines(between: linePoints, transform: affine)
-            sublayer.path = path
+            sublayer.path = line.path(applying: transform)
         }
     }
     

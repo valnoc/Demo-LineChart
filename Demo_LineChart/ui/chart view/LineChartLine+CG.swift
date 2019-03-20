@@ -14,9 +14,9 @@ extension LineChart.Line {
         return zip(x, y).map({ CGPoint(x: $0.0, y: $0.1) })
     }
     
-    var path: CGPath {
+    func path(applying transform: CGAffineTransform) -> CGPath {
         let path = CGMutablePath()
-        path.addLines(between: points)
+        path.addLines(between: points, transform: transform)
         return path
     }
     
