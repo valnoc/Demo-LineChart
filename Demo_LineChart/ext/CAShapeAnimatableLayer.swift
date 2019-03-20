@@ -1,6 +1,6 @@
 //
-//  LineLayer.swift
-//  Demo-PlotView
+//  CAShapeAnimatableLayer.swift
+//  Demo_LineChart
 //
 //  Created by Valeriy Bezuglyy on 19/03/2019.
 //  Copyright © 2019 Valeriy Bezuglyy. All rights reserved.

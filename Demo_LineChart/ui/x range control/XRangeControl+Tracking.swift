@@ -1,6 +1,6 @@
 //
-//  LineChartXRangeControl+Tracking.swift
-//  Demo-PlotView
+//  XRangeControl+Tracking.swift
+//  Demo_LineChart
 //
 //  Created by Valeriy Bezuglyy on 19/03/2019.
 //  Copyright © 2019 Valeriy Bezuglyy. All rights reserved.
