@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B5D7C5822424E0600362C4A /* StatisticsViewController+Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */; };
 		5BF60A732242273B009E6713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A722242273B009E6713 /* AppDelegate.swift */; };
 		5BF60A7A2242273B009E6713 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF60A792242273B009E6713 /* Assets.xcassets */; };
 		5BF60A7D2242273B009E6713 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BF60A7B2242273B009E6713 /* LaunchScreen.storyboard */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatisticsViewController+Table.swift"; sourceTree = "<group>"; };
 		5BF60A6F2242273B009E6713 /* Demo_LineChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo_LineChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BF60A722242273B009E6713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BF60A792242273B009E6713 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				5BF60A8E22422773009E6713 /* StatisticsViewController.swift */,
+				5B5D7C5722424E0600362C4A /* StatisticsViewController+Table.swift */,
 				5BF60A8F22422773009E6713 /* x range control */,
 				5BF60A9322422773009E6713 /* chart view */,
 			);
@@ -211,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B5D7C5822424E0600362C4A /* StatisticsViewController+Table.swift in Sources */,
 				5BF60AA222422773009E6713 /* LineChart+CG.swift in Sources */,
 				5BF60A732242273B009E6713 /* AppDelegate.swift in Sources */,
 				5BF60AA422422773009E6713 /* LineChartLine+CG.swift in Sources */,
