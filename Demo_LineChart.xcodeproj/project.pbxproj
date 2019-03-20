@@ -133,8 +133,8 @@
 		5BF60A9322422773009E6713 /* chart view */ = {
 			isa = PBXGroup;
 			children = (
-				5BF60A9422422773009E6713 /* LineChart+CG.swift */,
 				5BF60A9522422773009E6713 /* LineChartView.swift */,
+				5BF60A9422422773009E6713 /* LineChart+CG.swift */,
 				5BF60A9622422773009E6713 /* LineChartLine+CG.swift */,
 			);
 			path = "chart view";

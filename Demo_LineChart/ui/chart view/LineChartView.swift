@@ -51,11 +51,11 @@ class LineChartView: UIView {
     
     // MARK: - lines
     func createAllLayers() {
-        guard let line = chart.lines.first else { return }
-        
-        let lineLayer = makeLayer(for: line)
-        layer.addSublayer(lineLayer)
-        lineLayers.append(lineLayer)
+        for line in chart.lines {
+            let lineLayer = makeLayer(for: line)
+            layer.addSublayer(lineLayer)
+            lineLayers.append(lineLayer)
+        }
     }
     
     func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
