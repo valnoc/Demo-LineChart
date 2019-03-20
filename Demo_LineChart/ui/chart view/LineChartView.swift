@@ -10,14 +10,19 @@ import UIKit
 
 class LineChartView: UIView {
     let chart: LineChart
+    fileprivate var linesIndexToEnabled: [Int: Bool] = [:]
     
-    var lineLayers: [CAShapeLayer] = []
+    fileprivate var lineLayers: [CAShapeLayer] = []
     
-    var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
+    fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
     
     init(chart: LineChart) {
         self.chart = chart
         super.init(frame: .zero)
+        
+        for i in 0..<chart.lines.count {
+            linesIndexToEnabled[i] = true
+        }
         
         backgroundColor = .white
         createAllLayers()
@@ -27,11 +32,33 @@ class LineChartView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - api
+    func show(xRangePercents: ClosedRange<CGFloat>) {
+        guard xRangePercents.lowerBound >= 0.0,
+            xRangePercents.upperBound <= 1.0 else { return }
+        self.xRangePercents = xRangePercents
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+    
+    func toggleLine(at index: Int) {
+        guard var value = linesIndexToEnabled[index] else {
+            return
+        }
+        value.toggle()
+        linesIndexToEnabled[index] = value
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+    
     // MARK: - size
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let chartRect = chart.boundingRect(for: xRangePercents)
+        let chartRect = chart.boundingRect(for: xRangePercents,
+                                           includingLinesAt: linesIndexToEnabled
+                                            .filter({$0.value == true})
+                                            .map({$0.key}))
         
         let xScale = bounds.width / chartRect.width
         let yScale = bounds.height / chartRect.height
@@ -39,9 +66,10 @@ class LineChartView: UIView {
         let transform = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
-        for (line, sublayer) in zip(chart.lines, lineLayers) {
+        for (index, (line, sublayer)) in zip(chart.lines, lineLayers).enumerated() {
             sublayer.frame = bounds
             sublayer.path = line.path(applying: transform)
+            sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
         }
     }
     
@@ -63,12 +91,5 @@ class LineChartView: UIView {
         return layer
     }
 
-    // MARK: - scaling the x range
-    func show(xRangePercents: ClosedRange<CGFloat>) {
-        guard xRangePercents.lowerBound >= 0.0,
-            xRangePercents.upperBound <= 1.0 else { return }
-        self.xRangePercents = xRangePercents
-        setNeedsLayout()
-        layoutIfNeeded()
-    }
+
 }

@@ -10,8 +10,12 @@ import Foundation
 import CoreGraphics
 
 extension LineChart {
-    func boundingRect(for xRange: ClosedRange<CGFloat>) -> CGRect {
-        let rects = lines.map({ $0.boundingRect(for: xRange) })
+    func boundingRect(for xRange: ClosedRange<CGFloat>,
+                      includingLinesAt lineIndexes: [Int]) -> CGRect {
+        let rects = lines
+            .enumerated()
+            .filter({ lineIndexes.contains($0.offset) })
+            .map({ $0.element.boundingRect(for: xRange) })
         
         let xMin = rects.map({ $0.minX }).min() ?? 0
         let xMax = rects.map({ $0.maxX }).max() ?? 0

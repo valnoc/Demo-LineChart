@@ -15,6 +15,8 @@ extension StatisticsViewController {
     
     func setupTableView() {
         tableView.dataSource = self
+        tableView.delegate = self
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.chart.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.range.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.name.rawValue)
@@ -37,6 +39,7 @@ extension StatisticsViewController {
                       chartView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
                       chartView.heightAnchor.constraint(equalToConstant: 320)]
         constr.forEach({ $0.isActive = true })
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -57,6 +60,8 @@ extension StatisticsViewController {
                       xRangeControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
                       xRangeControl.heightAnchor.constraint(equalToConstant: 44)]
         constr.forEach({ $0.isActive = true })
+        
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -102,5 +107,15 @@ extension StatisticsViewController: UITableViewDataSource {
             break
         }
         return UITableViewCell(frame: .zero)
+    }
+}
+
+extension StatisticsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let index = indexPath.row - 2
+        chartView.toggleLine(at: index)
+        xRangeControl.chartView.toggleLine(at: index)
     }
 }
