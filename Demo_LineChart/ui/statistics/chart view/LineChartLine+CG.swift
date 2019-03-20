@@ -33,8 +33,7 @@ extension LineChart.Line {
             .filter({ $0.x >= xMinInRange && $0.x <= xMaxInRange })
             .map({ $0.y })
         
-        var yMinInRange = ysInRange.min() ?? 0
-        if yMinInRange > 0 { yMinInRange = 0 }
+        let yMinInRange = ysInRange.min() ?? 0
         let yMaxInRange = ysInRange.max() ?? 0
        
         return CGRect(x: xMinInRange,
