@@ -14,6 +14,7 @@
 		5B4D793E223E83EA007F733C /* LineChartMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D793D223E83EA007F733C /* LineChartMapper.swift */; };
 		5B4D7945223E9577007F733C /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7942223E9576007F733C /* UIColor+Hex.swift */; };
 		5B4D7946223E9577007F733C /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D7944223E9576007F733C /* StatisticsViewController.swift */; };
+		5B4F474D2242204A00E9AEC2 /* CAShapeAnimatableLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4F474C2242204A00E9AEC2 /* CAShapeAnimatableLayer.swift */; };
 		5B50B56B223FA63B0072B622 /* XRangeControlWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B50B56A223FA63B0072B622 /* XRangeControlWindow.swift */; };
 		5B66E8FA2240EC2100C84B36 /* XRangeControl+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B66E8F92240EC2100C84B36 /* XRangeControl+Tracking.swift */; };
 		5BB5AC82223FFCF10009CED8 /* LineChart+CG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5AC81223FFCF10009CED8 /* LineChart+CG.swift */; };
@@ -33,6 +34,7 @@
 		5B4D793D223E83EA007F733C /* LineChartMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartMapper.swift; sourceTree = "<group>"; };
 		5B4D7942223E9576007F733C /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		5B4D7944223E9576007F733C /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		5B4F474C2242204A00E9AEC2 /* CAShapeAnimatableLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAShapeAnimatableLayer.swift; sourceTree = "<group>"; };
 		5B50B56A223FA63B0072B622 /* XRangeControlWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XRangeControlWindow.swift; sourceTree = "<group>"; };
 		5B66E8F92240EC2100C84B36 /* XRangeControl+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XRangeControl+Tracking.swift"; sourceTree = "<group>"; };
 		5BB5AC81223FFCF10009CED8 /* LineChart+CG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineChart+CG.swift"; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		5B4D7941223E9576007F733C /* ext */ = {
 			isa = PBXGroup;
 			children = (
+				5B4F474C2242204A00E9AEC2 /* CAShapeAnimatableLayer.swift */,
 				5B4D7942223E9576007F733C /* UIColor+Hex.swift */,
 			);
 			path = ext;
@@ -214,6 +217,7 @@
 				5B4D7946223E9577007F733C /* StatisticsViewController.swift in Sources */,
 				5BEDE0C0223F98F900A24D8D /* LineChartView.swift in Sources */,
 				5B4D7938223E81DE007F733C /* LineChart.swift in Sources */,
+				5B4F474D2242204A00E9AEC2 /* CAShapeAnimatableLayer.swift in Sources */,
 				5BEDE0C3223F994200A24D8D /* XRangeControl.swift in Sources */,
 				5B4D7945223E9577007F733C /* UIColor+Hex.swift in Sources */,
 				5B4D793E223E83EA007F733C /* LineChartMapper.swift in Sources */,
