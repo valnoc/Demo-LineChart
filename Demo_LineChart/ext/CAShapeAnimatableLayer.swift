@@ -12,7 +12,7 @@ class CAShapeAnimatableLayer: CAShapeLayer {
     override func action(forKey event: String) -> CAAction? {
         if event == "path" {
             let animation = CABasicAnimation(keyPath: event)
-            animation.duration = 0.1
+            animation.duration = 0.15
             animation.timingFunction = CATransaction.animationTimingFunction()
             return animation
         }
