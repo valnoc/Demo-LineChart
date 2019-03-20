@@ -51,7 +51,7 @@ class LineChartView: UIView {
         layoutIfNeeded()
     }
     func isLineEnabled(at index: Int) -> Bool {
-        guard var value = linesIndexToEnabled[index] else {
+        guard let value = linesIndexToEnabled[index] else {
             return false
         }
         return value
@@ -94,6 +94,7 @@ class LineChartView: UIView {
         layer.fillColor = nil
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
         layer.lineJoin = .round
+        layer.masksToBounds = true
         return layer
     }
 
