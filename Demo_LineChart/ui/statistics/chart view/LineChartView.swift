@@ -102,10 +102,7 @@ class LineChartView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let chartRect = chart.boundingRect(for: xRangePercents,
-                                           includingLinesAt: linesIndexToEnabled
-                                            .filter({$0.value == true})
-                                            .map({$0.key}))
+        let chartRect = makeChartRect()
         defer {
             prevChartRect = chartRect
         }
@@ -360,10 +357,7 @@ class LineChartView: UIView {
     @objc
     func handleTap(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
-            let chartRect = chart.boundingRect(for: xRangePercents,
-                                               includingLinesAt: linesIndexToEnabled
-                                                .filter({$0.value == true})
-                                                .map({$0.key}))
+            let chartRect = makeChartRect()
             
             let xScale = bounds.width / chartRect.width
 
@@ -406,6 +400,7 @@ class LineChartView: UIView {
         let selectionLayer = CALayer()
         selectionLayer.frame = bounds
         
+        //---
         let backgroundPath = CGMutablePath()
         backgroundPath.addRoundedRect(in: CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40),
                                       cornerWidth: 1,
@@ -423,7 +418,37 @@ class LineChartView: UIView {
         backgrShape.lineWidth = 1
         selectionLayer.addSublayer(backgrShape)
         
+        //---
+        let enabledLinesIndexes = makeEnabledLinesIndexes()
+        for (index, line) in chart.lines.enumerated() {
+            guard enabledLinesIndexes.contains(index) else { continue }
+            guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
+            let affinedY = point.applying(affine).y
+            
+            let path = CGMutablePath()
+            path.addEllipse(in: CGRect(x: affinedSelectedChartX - 9/2, y: affinedY - 9/2, width: 9, height: 9))
+            
+            let lineDotLayer = makeLayer(for: line)
+            lineDotLayer.frame = bounds
+            lineDotLayer.path = path
+            lineDotLayer.fillColor = UIColor.white.cgColor
+            selectionLayer.addSublayer(lineDotLayer)
+        }
+        
+        //---
         self.selectionLayer = selectionLayer
         layer.addSublayer(selectionLayer)
+    }
+    
+    //MARK: - private
+    func makeChartRect() -> CGRect {
+        return chart.boundingRect(for: xRangePercents,
+                                  includingLinesAt: makeEnabledLinesIndexes())
+    }
+    
+    func makeEnabledLinesIndexes() -> [Int] {
+        return linesIndexToEnabled
+            .filter({$0.value == true})
+            .map({$0.key})
     }
 }
