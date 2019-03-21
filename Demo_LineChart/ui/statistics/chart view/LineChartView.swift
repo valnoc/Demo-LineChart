@@ -22,6 +22,8 @@ class LineChartView: UIView {
     fileprivate var prevMaxYOfAxis: CGFloat
     
     fileprivate var xAxisLayer: CAShapeLayer
+    fileprivate var prevXAxisLayer: CAShapeLayer
+    fileprivate var prevMaxXOfAxis: CGFloat
     fileprivate let xAxisOffset: CGFloat = 19
     fileprivate let xAxisDateFormatter: DateFormatter
     
@@ -37,6 +39,8 @@ class LineChartView: UIView {
         prevMaxYOfAxis = 0
         
         xAxisLayer = CAShapeLayer()
+        prevXAxisLayer = CAShapeLayer()
+        prevMaxXOfAxis = 0
         xAxisDateFormatter = DateFormatter()
         super.init(frame: .zero)
         
@@ -98,10 +102,10 @@ class LineChartView: UIView {
                                             .map({$0.key}))
         
         let xScale = bounds.width / chartRect.width
-        let yScale = (bounds.height - (showAxes ? xAxisOffset : 0)) / chartRect.height
+        let yScale = (bounds.height - (showAxes ? 0 : 0)) / chartRect.height
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
-            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height - (showAxes ? xAxisOffset : 0))
+            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height - (showAxes ? 0 : 0))
         
         for (index, (line, sublayer)) in zip(chart.lines, lineLayers).enumerated() {
             sublayer.frame = bounds
@@ -141,7 +145,7 @@ class LineChartView: UIView {
         return layer
     }
 
-    // MARK: - axis
+    // MARK: - y axis
     func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
         let axisLayer = makeBaseAxisLayer()
 
@@ -165,8 +169,6 @@ class LineChartView: UIView {
                 axisYTemp -= axisYStep
             }
         }
-        
-        axisLayer.frame = bounds
         
         let path = CGMutablePath()
         for y in axisYs {
@@ -233,24 +235,40 @@ class LineChartView: UIView {
     // MARK: - x axis
     func makeXAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
         let axisLayer = makeBaseAxisLayer()
-        axisLayer.frame = bounds
         
+        //
         let axisY = bounds.height - xAxisOffset
         let path = CGMutablePath()
         path.addLines(between: [CGPoint(x: 0, y: axisY),
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
         axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
-        
-        // all x are equal, so thake first array
-        guard let line = chart.lines.first else { return axisLayer }
-        for x in line.x {
-            let date = Date(timeIntervalSince1970: x)
+
+        //
+        let axisXSideOffset = 21 * chartRect.width / bounds.width
+
+        var axisXs: [CGFloat] = []
+
+        let axisMaxX = chartRect.maxX - axisXSideOffset
+
+        do {
+            var axisXTemp = axisMaxX
+            let axisXStep = (axisMaxX - chartRect.minX - axisXSideOffset) / 5
+            while Int(axisXTemp) > Int(chartRect.minX) {
+                axisXs.append(axisXTemp)
+                axisXTemp -= axisXStep
+            }
+        }
+
+        let textY = bounds.height - yAxisLabelOffset
+        for x in axisXs {
             let affinedX = CGPoint(x: x, y: 0).applying(affine).x
+            let date = Date(timeIntervalSince1970: Double(x))
             axisLayer.addSublayer(makeAxisTextLayer(text: xAxisDateFormatter.string(from: date),
                                                     x: affinedX,
-                                                    y: bounds.height - yAxisLabelOffset))
+                                                    y: textY))
         }
+        
         return axisLayer
     }
     
@@ -263,7 +281,7 @@ class LineChartView: UIView {
                                              green: 150 / 255.0,
                                              blue: 156 / 255.0,
                                              alpha: 1).cgColor
-        labelLayer.frame = CGRect(x: x, y: y - textHeight, width: bounds.width, height: textHeight)
+        labelLayer.frame = CGRect(x: x, y: y - textHeight, width: bounds.width, height: 21)
         labelLayer.contentsScale = UIScreen.main.scale
         labelLayer.alignmentMode = .left
         return labelLayer
@@ -278,6 +296,7 @@ class LineChartView: UIView {
                                         alpha: 1).cgColor
         axisLayer.fillColor = nil
         axisLayer.masksToBounds = true
+        axisLayer.frame = bounds
         return axisLayer
     }
 }
