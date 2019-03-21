@@ -123,13 +123,13 @@ class LineChartView: UIView {
         prevMaxYOfAxis = chartRect.maxY
         
         let animation = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration()
+        animation.duration = CATransaction.animationDuration() / 2
         animation.timingFunction = CATransaction.animationTimingFunction()
         prevYAxisLayer.actions = ["position": animation,
                                   "opacity": animation]
         
         let animationNew = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration() / 2
+        animation.duration = CATransaction.animationDuration() / 4
         animation.timingFunction = CATransaction.animationTimingFunction()
         yAxisLayer.actions = ["position": animationNew,
                               "opacity": animationNew]
