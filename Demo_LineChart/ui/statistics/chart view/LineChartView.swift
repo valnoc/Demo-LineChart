@@ -119,9 +119,11 @@ class LineChartView: UIView {
         axisLayer.fillColor = nil
 
         //
+        let axisMaxYTopOffset = (13 + 5 * 2) * chartRect.height / bounds.height
+        
         var axisYs: [CGFloat] = []
         
-        var axisMaxY = chartRect.maxY + 1
+        var axisMaxY = chartRect.maxY + 1 - axisMaxYTopOffset
         var axisMaxYLastDigit: CGFloat = 0
         repeat {
             axisMaxY -= 1
