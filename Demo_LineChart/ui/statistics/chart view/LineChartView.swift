@@ -137,6 +137,7 @@ class LineChartView: UIView {
                 axisYs.append(axisYTemp)
                 axisYTemp -= axisYStep
             }
+            axisYs.append(chartRect.minY)
         }
         
         axisLayer.frame = bounds
