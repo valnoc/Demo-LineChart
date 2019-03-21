@@ -22,6 +22,7 @@ class LineChartView: UIView {
     
     fileprivate var xAxisLayer: CAShapeLayer
     fileprivate let xAxisOffset: CGFloat = 19
+    fileprivate let xAxisDateFormatter: DateFormatter
     
     init(chart: LineChart,
          showAxes: Bool = true) {
@@ -33,6 +34,7 @@ class LineChartView: UIView {
         prevMaxYOfAxis = 0
         
         xAxisLayer = CAShapeLayer()
+        xAxisDateFormatter = DateFormatter()
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -40,6 +42,8 @@ class LineChartView: UIView {
         }
         
         backgroundColor = .white
+        
+        xAxisDateFormatter.dateFormat = "MMM dd"
         
         layer.masksToBounds = true
         setupLineLayers()
@@ -233,11 +237,21 @@ class LineChartView: UIView {
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
         axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
+        
+        // all x are equal, so thake first array
+        guard let line = chart.lines.first else { return axisLayer }
+        for x in line.x {
+            let date = Date(timeIntervalSince1970: x)
+            let affinedX = CGPoint(x: x, y: 0).applying(affine).x
+            axisLayer.addSublayer(makeAxisTextLayer(text: xAxisDateFormatter.string(from: date),
+                                                    x: affinedX,
+                                                    y: bounds.height - 5))
+        }
         return axisLayer
     }
     
     // MARK: - axis
-    func makeAxisTextLayer(text: String, y: CGFloat) -> CATextLayer {
+    func makeAxisTextLayer(text: String, x: CGFloat = 0, y: CGFloat = 13) -> CATextLayer {
         let labelLayer = CATextLayer()
         labelLayer.fontSize = 13
         labelLayer.string = text
@@ -245,7 +259,7 @@ class LineChartView: UIView {
                                              green: 150 / 255.0,
                                              blue: 156 / 255.0,
                                              alpha: 1).cgColor
-        labelLayer.frame = CGRect(x: 0, y: y - 13, width: bounds.width, height: 13)
+        labelLayer.frame = CGRect(x: x, y: y - 13, width: bounds.width, height: 13)
         labelLayer.contentsScale = UIScreen.main.scale
         labelLayer.alignmentMode = .left
         return labelLayer
