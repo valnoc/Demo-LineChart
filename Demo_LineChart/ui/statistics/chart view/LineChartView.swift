@@ -146,6 +146,18 @@ class LineChartView: UIView {
                 CGPoint(x: 0, y: affinedY),
                 CGPoint(x: bounds.width, y: affinedY)
                 ])
+
+            let labelLayer = CATextLayer()
+            labelLayer.fontSize = 13
+            labelLayer.string = "\(Int(y))"
+            labelLayer.foregroundColor = UIColor(red: 144.0 / 255.0,
+                                                 green: 150 / 255.0,
+                                                 blue: 156 / 255.0,
+                                                 alpha: 1).cgColor
+            labelLayer.frame = CGRect(x: 0, y: affinedY - 13 - 5, width: bounds.width, height: 13)
+            labelLayer.contentsScale = UIScreen.main.scale
+            labelLayer.alignmentMode = .left
+            axisLayer.addSublayer(labelLayer)
         }
         axisLayer.path = path
         
