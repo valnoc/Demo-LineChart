@@ -25,15 +25,15 @@ class LineChartMapper {
             var columns: [String: [Double]] = [:]
             for item in objectColumns {
                 guard let key = item.first as? String,
-                    var value = Array(item.dropFirst()) as? [Double] else { continue }
-                value = value.map({ $0 / 1000 })
+                    let value = Array(item.dropFirst()) as? [Double] else { continue }
                 columns[key] = value
             }
             
             //  find name of "x" column
             guard let columnToType = object["types"] as? [String: String],
                 let xKey = columnToType.first(where: { $0.value == "x" }).map({ $0.key }),
-                let xValues = columns[xKey] else { continue }
+                var xValues = columns[xKey] else { continue }
+            xValues = xValues.map({ $0 / 1000 })
             columns.removeValue(forKey: xKey)
             let yValues = columns
             
