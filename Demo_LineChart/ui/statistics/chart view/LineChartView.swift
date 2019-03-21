@@ -461,24 +461,44 @@ class LineChartView: UIView {
             frame.origin.y = date1Label.frame.maxY + 7
             date2Label.frame = frame
 
+            var lineLables: [CATextLayer] = []
+            for (index, line) in chart.lines.enumerated() {
+                guard enabledLinesIndexes.contains(index) else { continue }
+                guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
+                
+                let label = makeAxisTextLayer(text: "\(Int(point.y))")
+                label.font = UIFont.boldSystemFont(ofSize: 8)
+                label.fontSize = 8
+                label.foregroundColor = UIColor(hex: line.colorHex).cgColor
+                
+                var frame = label.frame
+                frame.size = label.preferredFrameSize()
+                frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(index)
+                frame.origin.x = rect.maxX - 10 - frame.size.width
+                label.frame = frame
+                
+                lineLables.append(label)
+            }
+            
             let backgroundPath = CGMutablePath()
             backgroundPath.addRoundedRect(in: rect,
                                           cornerWidth: 1,
                                           cornerHeight: 1)
-            let backgrShape = CAShapeLayer()
-            backgrShape.frame = bounds
-            backgrShape.path = backgroundPath
-            backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
+            let backgroundShape = CAShapeLayer()
+            backgroundShape.frame = bounds
+            backgroundShape.path = backgroundPath
+            backgroundShape.strokeColor = UIColor(red: 244.0 / 255.0,
                                               green: 243.0 / 255.0,
                                               blue: 249.0 / 255.0,
                                               alpha: 1).cgColor
-            backgrShape.fillColor = backgrShape.strokeColor
-            backgrShape.lineWidth = 1
+            backgroundShape.fillColor = backgroundShape.strokeColor
+            backgroundShape.lineWidth = 1
             
-            backgrShape.addSublayer(date1Label)
-            backgrShape.addSublayer(date2Label)
+            backgroundShape.addSublayer(date1Label)
+            backgroundShape.addSublayer(date2Label)
+            lineLables.forEach({ backgroundShape.addSublayer($0) })
             
-            selectionLayer.addSublayer(backgrShape)
+            selectionLayer.addSublayer(backgroundShape)
         }
         
         //---
