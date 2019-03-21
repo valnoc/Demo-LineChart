@@ -34,10 +34,18 @@ class LineChartView: UIView {
     fileprivate var selectionDateFormatter1: DateFormatter
     fileprivate var selectionDateFormatter2: DateFormatter
     
+    fileprivate var linesRenderer: LineChartLinesRenderer
+    fileprivate var yAxisRenderer: LineChartYAxisRenderer
+    fileprivate var xAxisRenderer: LineChartXAxisRenderer
+    
     init(chart: LineChart,
          showAxes: Bool = true) {
         self.chart = chart
         self.showAxes = showAxes
+        
+        linesRenderer = LineChartLinesRenderer()
+        yAxisRenderer = LineChartYAxisRenderer()
+        xAxisRenderer = LineChartXAxisRenderer()
         
         yAxisLayer = CAShapeLayer()
         prevYAxisLayer = CAShapeLayer()
