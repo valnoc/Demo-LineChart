@@ -102,10 +102,10 @@ class LineChartView: UIView {
                                             .map({$0.key}))
         
         let xScale = bounds.width / chartRect.width
-        let yScale = (bounds.height - (showAxes ? 0 : 0)) / chartRect.height
+        let yScale = (bounds.height - (showAxes ? xAxisOffset : 0)) / chartRect.height
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
-            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height - (showAxes ? 0 : 0))
+            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
         for (index, (line, sublayer)) in zip(chart.lines, lineLayers).enumerated() {
             sublayer.frame = bounds
