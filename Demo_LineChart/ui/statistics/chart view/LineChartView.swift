@@ -29,6 +29,9 @@ class LineChartView: UIView {
     
     fileprivate let textHeight: CGFloat = 13
     
+    fileprivate var selectedChartX: Double?
+    fileprivate var selectionLayer: CALayer?
+    
     init(chart: LineChart,
          showAxes: Bool = true) {
         self.chart = chart
@@ -54,6 +57,8 @@ class LineChartView: UIView {
         
         layer.masksToBounds = true
         setupLineLayers()
+        
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,6 +70,7 @@ class LineChartView: UIView {
         guard xRangePercents.lowerBound >= 0.0,
             xRangePercents.upperBound <= 1.0 else { return }
         self.xRangePercents = xRangePercents
+        self.selectedChartX = nil
         setNeedsLayout()
         layoutIfNeeded()
     }
@@ -100,6 +106,9 @@ class LineChartView: UIView {
                                            includingLinesAt: linesIndexToEnabled
                                             .filter({$0.value == true})
                                             .map({$0.key}))
+        defer {
+            prevChartRect = chartRect
+        }
         
         let xScale = bounds.width / chartRect.width
         let yScale = (bounds.height - (showAxes ? xAxisOffset : 0)) / chartRect.height
@@ -113,9 +122,8 @@ class LineChartView: UIView {
             sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
         }
         
-        defer {
-            prevChartRect = chartRect
-        }
+        drawSelectionLayer(chartRect: chartRect, affine: affine)
+        
         guard showAxes else { return }
         animateYAxis(chartRect: chartRect, affine: affine)
         animateXAxis(chartRect: chartRect, affine: affine)
@@ -346,5 +354,76 @@ class LineChartView: UIView {
         axisLayer.masksToBounds = true
         axisLayer.frame = bounds
         return axisLayer
+    }
+    
+    // MARK: - tap
+    @objc
+    func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            let chartRect = chart.boundingRect(for: xRangePercents,
+                                               includingLinesAt: linesIndexToEnabled
+                                                .filter({$0.value == true})
+                                                .map({$0.key}))
+            
+            let xScale = bounds.width / chartRect.width
+
+            let point = sender.location(in: self)
+            let chartPointX = point.x / xScale + chartRect.minX
+            
+            guard let line = chart.lines.first else { return }
+           
+            let leftChartX = line.x.filter({ $0 <= Double(chartPointX) }).first
+            let rightChartX = line.x.filter({ $0 >= Double(chartPointX) }).first
+ 
+            var chartX: Double = -1
+            if let leftChartX = leftChartX,
+                let rightChartX = rightChartX {
+                let leftDistance = abs(Double(chartPointX) - leftChartX)
+                let rightDistance = abs(Double(chartPointX) - rightChartX)
+                if leftDistance < rightDistance {
+                    chartX = leftChartX
+                } else {
+                    chartX = rightChartX
+                }
+            } else if let leftChartX = leftChartX {
+                chartX = leftChartX
+                
+            } else if let rightChartX = rightChartX {
+                chartX = rightChartX
+            }
+            
+            selectedChartX = chartX
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+    
+    func drawSelectionLayer(chartRect: CGRect, affine: CGAffineTransform) {
+        self.selectionLayer?.removeFromSuperlayer()
+        guard let selectedChartX = selectedChartX else { return }
+        let affinedSelectedChartX = CGPoint(x: selectedChartX, y: 0).applying(affine).x
+        
+        let selectionLayer = CALayer()
+        selectionLayer.frame = bounds
+        
+        let backgroundPath = CGMutablePath()
+        backgroundPath.addRoundedRect(in: CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40),
+                                      cornerWidth: 1,
+                                      cornerHeight: 1)
+        backgroundPath.addLines(between: [CGPoint(x: affinedSelectedChartX, y: 0),
+                                          CGPoint(x: affinedSelectedChartX, y: bounds.height - xAxisOffset)])
+        let backgrShape = CAShapeLayer()
+        backgrShape.frame = bounds
+        backgrShape.path = backgroundPath
+        backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
+                                          green: 243.0 / 255.0,
+                                          blue: 249.0 / 255.0,
+                                          alpha: 1).cgColor
+        backgrShape.fillColor = backgrShape.strokeColor
+        backgrShape.lineWidth = 1
+        selectionLayer.addSublayer(backgrShape)
+        
+        self.selectionLayer = selectionLayer
+        layer.addSublayer(selectionLayer)
     }
 }
