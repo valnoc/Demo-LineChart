@@ -17,12 +17,15 @@ class LineChartView: UIView {
     fileprivate var lineLayers: [CAShapeLayer] = []
     
     fileprivate var yAxisLayer: CAShapeLayer
+    fileprivate let yAxisLabelOffset: CGFloat = 5
     fileprivate var prevYAxisLayer: CAShapeLayer
     fileprivate var prevMaxYOfAxis: CGFloat
     
     fileprivate var xAxisLayer: CAShapeLayer
     fileprivate let xAxisOffset: CGFloat = 19
     fileprivate let xAxisDateFormatter: DateFormatter
+    
+    fileprivate let textHeight: CGFloat = 13
     
     init(chart: LineChart,
          showAxes: Bool = true) {
@@ -77,6 +80,7 @@ class LineChartView: UIView {
         setNeedsLayout()
         layoutIfNeeded()
     }
+    
     func isLineEnabled(at index: Int) -> Bool {
         guard let value = linesIndexToEnabled[index] else {
             return false
@@ -142,7 +146,7 @@ class LineChartView: UIView {
         let axisLayer = makeBaseAxisLayer()
 
         //
-        let axisMaxYTopOffset = (13 + 5 * 2) * chartRect.height / bounds.height
+        let axisMaxYTopOffset = (textHeight + yAxisLabelOffset * 2) * chartRect.height / bounds.height
         
         var axisYs: [CGFloat] = []
         
@@ -171,7 +175,7 @@ class LineChartView: UIView {
                 CGPoint(x: 0, y: affinedY),
                 CGPoint(x: bounds.width, y: affinedY)
                 ])
-            axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(y))", y: affinedY - 5))
+            axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(y))", y: affinedY - yAxisLabelOffset))
         }
         axisLayer.path = path
         
@@ -236,7 +240,7 @@ class LineChartView: UIView {
         path.addLines(between: [CGPoint(x: 0, y: axisY),
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
-        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
+        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
         
         // all x are equal, so thake first array
         guard let line = chart.lines.first else { return axisLayer }
@@ -245,21 +249,21 @@ class LineChartView: UIView {
             let affinedX = CGPoint(x: x, y: 0).applying(affine).x
             axisLayer.addSublayer(makeAxisTextLayer(text: xAxisDateFormatter.string(from: date),
                                                     x: affinedX,
-                                                    y: bounds.height - 5))
+                                                    y: bounds.height - yAxisLabelOffset))
         }
         return axisLayer
     }
     
     // MARK: - axis
-    func makeAxisTextLayer(text: String, x: CGFloat = 0, y: CGFloat = 13) -> CATextLayer {
+    func makeAxisTextLayer(text: String, x: CGFloat = 0, y: CGFloat = 0) -> CATextLayer {
         let labelLayer = CATextLayer()
-        labelLayer.fontSize = 13
+        labelLayer.fontSize = textHeight
         labelLayer.string = text
         labelLayer.foregroundColor = UIColor(red: 144.0 / 255.0,
                                              green: 150 / 255.0,
                                              blue: 156 / 255.0,
                                              alpha: 1).cgColor
-        labelLayer.frame = CGRect(x: x, y: y - 13, width: bounds.width, height: 13)
+        labelLayer.frame = CGRect(x: x, y: y - textHeight, width: bounds.width, height: textHeight)
         labelLayer.contentsScale = UIScreen.main.scale
         labelLayer.alignmentMode = .left
         return labelLayer
