@@ -10,7 +10,6 @@ import UIKit
 
 class LineChartView: UIView {
     let chart: LineChart
-    fileprivate var linesIndexToEnabled: [Int: Bool] = [:]
     fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
     fileprivate let showAxes: Bool
     
@@ -59,10 +58,6 @@ class LineChartView: UIView {
         selectionDateFormatter2 = DateFormatter()
         super.init(frame: .zero)
         
-        for i in 0..<chart.lines.count {
-            linesIndexToEnabled[i] = true
-        }
-        
         backgroundColor = .white
         
         xAxisDateFormatter.dateFormat = "MMM dd"
@@ -70,9 +65,11 @@ class LineChartView: UIView {
         selectionDateFormatter2.dateFormat = "YYYY"
         
         layer.masksToBounds = true
-        setupLineLayers()
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -90,23 +87,23 @@ class LineChartView: UIView {
     }
     
     func toggleLine(at index: Int) {
-        guard var value = linesIndexToEnabled[index] else {
+        guard var value = linesRenderer.linesIndexToEnabled[index] else {
             return
         }
         guard !( // not the last true
             value == true &&
-            linesIndexToEnabled.map({$0.value}).filter({$0 == true}).count == 1
+            linesRenderer.linesIndexToEnabled.map({$0.value}).filter({$0 == true}).count == 1
             ) else {
                 return
         }
         value.toggle()
-        linesIndexToEnabled[index] = value
+        linesRenderer.linesIndexToEnabled[index] = value
         setNeedsLayout()
         layoutIfNeeded()
     }
     
     func isLineEnabled(at index: Int) -> Bool {
-        guard let value = linesIndexToEnabled[index] else {
+        guard let value = linesRenderer.linesIndexToEnabled[index] else {
             return false
         }
         return value
@@ -127,11 +124,10 @@ class LineChartView: UIView {
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
-        for (index, (line, sublayer)) in zip(chart.lines, lineLayers).enumerated() {
-            sublayer.frame = bounds
-            sublayer.path = line.path(applying: affine)
-            sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
-        }
+        linesRenderer.layoutLines(chart: chart,
+                                  viewLayer: layer,
+                                  chartRect: chartRect,
+                                  affine: affine)
         
         drawSelectionLayer(chartRect: chartRect, affine: affine)
         
@@ -140,30 +136,6 @@ class LineChartView: UIView {
         animateXAxis(chartRect: chartRect, affine: affine)
     }
     
-    // MARK: - lines
-    func setupLineLayers() {
-        for line in chart.lines {
-            let lineLayer = makeLayer(for: line)
-            layer.addSublayer(lineLayer)
-            lineLayers.append(lineLayer)
-        }
-    }
-    
-    func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
-        let layer = CAShapeLayer()
-        layer.lineWidth = 2
-        layer.fillColor = nil
-        layer.strokeColor = UIColor(hex: line.colorHex).cgColor
-        layer.lineJoin = .round
-        layer.masksToBounds = true
-        
-        let animation = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration() / 2
-        animation.timingFunction = CATransaction.animationTimingFunction()
-        layer.actions = ["path": animation]
-        return layer
-    }
-
     // MARK: - y axis
     func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
         let axisLayer = makeBaseAxisLayer()
@@ -441,7 +413,7 @@ class LineChartView: UIView {
             let path = CGMutablePath()
             path.addEllipse(in: CGRect(x: affinedSelectedChartX - 9/2, y: affinedY - 9/2, width: 9, height: 9))
             
-            let lineDotLayer = makeLayer(for: line)
+            let lineDotLayer = linesRenderer.makeLayer(for: line)
             lineDotLayer.frame = bounds
             lineDotLayer.path = path
             lineDotLayer.fillColor = UIColor.white.cgColor
@@ -525,7 +497,7 @@ class LineChartView: UIView {
     }
     
     func makeEnabledLinesIndexes() -> [Int] {
-        return linesIndexToEnabled
+        return linesRenderer.linesIndexToEnabled
             .filter({$0.value == true})
             .map({$0.key})
     }
