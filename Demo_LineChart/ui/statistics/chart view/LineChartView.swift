@@ -245,28 +245,35 @@ class LineChartView: UIView {
         axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
 
         //
-        let axisXSideOffset = 21 * chartRect.width / bounds.width
+        let labelWidth: CGFloat = 42
+        let axisXSideOffset = labelWidth * chartRect.width / bounds.width
 
         var axisXs: [CGFloat] = []
 
         let axisMaxX = chartRect.maxX - axisXSideOffset
+        let axisMinX = chartRect.minX + axisXSideOffset
 
         do {
             var axisXTemp = axisMaxX
-            let axisXStep = (axisMaxX - chartRect.minX - axisXSideOffset) / 5
-            while Int(axisXTemp) > Int(chartRect.minX) {
+            let axisXStep = (axisMaxX - axisMinX) / 5
+            while Int(axisXTemp) > Int(axisMinX) {
                 axisXs.append(axisXTemp)
                 axisXTemp -= axisXStep
             }
+            axisXs.append(axisMinX)
         }
 
         let textY = bounds.height - yAxisLabelOffset
         for x in axisXs {
-            let affinedX = CGPoint(x: x, y: 0).applying(affine).x
+            let affinedX = CGPoint(x: x, y: 0).applying(affine).x - labelWidth / 2
             let date = Date(timeIntervalSince1970: Double(x))
-            axisLayer.addSublayer(makeAxisTextLayer(text: xAxisDateFormatter.string(from: date),
-                                                    x: affinedX,
-                                                    y: textY))
+            let label = makeAxisTextLayer(text: xAxisDateFormatter.string(from: date),
+                                         x: affinedX,
+                                         y: textY)
+            var frame = label.frame
+            frame.size.width = labelWidth
+            label.frame = frame
+            axisLayer.addSublayer(label)
         }
         
         return axisLayer
