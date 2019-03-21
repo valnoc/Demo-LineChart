@@ -16,7 +16,6 @@ extension StatisticsViewController {
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.bounces = false
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.chart.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.range.rawValue)
@@ -135,11 +134,12 @@ extension StatisticsViewController: UITableViewDelegate {
         
         if indexPath.section == 0 {
             let index = indexPath.row - 2
-            chartView.toggleLine(at: index)
-            xRangeControl.chartView.toggleLine(at: index)
+            if index > -1 {
+                chartView.toggleLine(at: index)
+                xRangeControl.chartView.toggleLine(at: index)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
         }
-        
-        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
