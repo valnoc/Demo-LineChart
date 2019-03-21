@@ -144,7 +144,6 @@ class LineChartView: UIView {
                                         blue: 241.0 / 255.0,
                                         alpha: 1).cgColor
         yAxisLayer.fillColor = nil
-        
         layer.addSublayer(yAxisLayer)
     }
 }

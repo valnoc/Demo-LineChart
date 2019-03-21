@@ -146,4 +146,11 @@ extension StatisticsViewController: UITableViewDelegate {
         if section == 0 { return "FOLLOWERS" }
         return nil
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
+        if indexPath.row == 0 || indexPath.row == 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.width, bottom: 0, right: 0)
+        }
+    }
 }
