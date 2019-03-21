@@ -87,26 +87,13 @@ class LineChartView: UIView {
     }
     
     func toggleLine(at index: Int) {
-        guard var value = linesRenderer.linesIndexToEnabled[index] else {
-            return
-        }
-        guard !( // not the last true
-            value == true &&
-            linesRenderer.linesIndexToEnabled.map({$0.value}).filter({$0 == true}).count == 1
-            ) else {
-                return
-        }
-        value.toggle()
-        linesRenderer.linesIndexToEnabled[index] = value
+        linesRenderer.toggleLine(at: index)
         setNeedsLayout()
         layoutIfNeeded()
     }
     
     func isLineEnabled(at index: Int) -> Bool {
-        guard let value = linesRenderer.linesIndexToEnabled[index] else {
-            return false
-        }
-        return value
+        return linesRenderer.isLineEnabled(at: index)
     }
     
     // MARK: - size
@@ -404,9 +391,7 @@ class LineChartView: UIView {
         }
         
         //---
-        let enabledLinesIndexes = makeEnabledLinesIndexes()
-        for (index, line) in chart.lines.enumerated() {
-            guard enabledLinesIndexes.contains(index) else { continue }
+        for line in linesRenderer.enabledLines(chart.lines) {
             guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
             let affinedY = point.applying(affine).y
             
@@ -442,8 +427,7 @@ class LineChartView: UIView {
             date2Label.frame = frame
 
             var lineLables: [CATextLayer] = []
-            for (index, line) in chart.lines.enumerated() {
-                guard enabledLinesIndexes.contains(index) else { continue }
+            for line in linesRenderer.enabledLines(chart.lines) {
                 guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
                 
                 let label = makeAxisTextLayer(text: "\(Int(point.y))")
@@ -493,12 +477,6 @@ class LineChartView: UIView {
     //MARK: - private
     func makeChartRect() -> CGRect {
         return chart.boundingRect(for: xRangePercents,
-                                  includingLinesAt: makeEnabledLinesIndexes())
-    }
-    
-    func makeEnabledLinesIndexes() -> [Int] {
-        return linesRenderer.linesIndexToEnabled
-            .filter({$0.value == true})
-            .map({$0.key})
+                                  includingLinesAt: linesRenderer.enabledLinesIndexes())
     }
 }

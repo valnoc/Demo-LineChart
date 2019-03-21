@@ -10,8 +10,9 @@ import UIKit
 
 class LineChartLinesRenderer {
     fileprivate var lineLayers: [CAShapeLayer] = []
-    var linesIndexToEnabled: [Int: Bool] = [:]
+    fileprivate var linesIndexToEnabled: [Int: Bool] = [:]
     
+    //MARK: - layout
     func layoutLines(chart: LineChart,
                      viewLayer: CALayer,
                      chartRect: CGRect,
@@ -57,5 +58,41 @@ class LineChartLinesRenderer {
         animation.timingFunction = CATransaction.animationTimingFunction()
         layer.actions = ["path": animation]
         return layer
+    }
+    
+    //MARK: - toggle
+    func toggleLine(at index: Int) {
+        guard var value = linesIndexToEnabled[index] else {
+            return
+        }
+        guard !( // not the last true
+            value == true &&
+                enabledLinesIndexes().count == 1
+            ) else {
+                return
+        }
+        value.toggle()
+        linesIndexToEnabled[index] = value
+    }
+    
+    func isLineEnabled(at index: Int) -> Bool {
+        guard let value = linesIndexToEnabled[index] else {
+            return false
+        }
+        return value
+    }
+    
+    func enabledLinesIndexes() -> [Int] {
+        return linesIndexToEnabled
+            .filter({$0.value == true})
+            .map({$0.key})
+    }
+    
+    func enabledLines(_ lines: [LineChart.Line]) -> [LineChart.Line] {
+        let indexes = enabledLinesIndexes()
+        return lines
+            .enumerated()
+            .filter({ indexes.contains($0.offset) })
+            .map({$0.element})
     }
 }
