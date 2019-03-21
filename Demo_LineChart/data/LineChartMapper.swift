@@ -25,7 +25,8 @@ class LineChartMapper {
             var columns: [String: [Double]] = [:]
             for item in objectColumns {
                 guard let key = item.first as? String,
-                    let value = Array(item.dropFirst()) as? [Double] else { continue }
+                    var value = Array(item.dropFirst()) as? [Double] else { continue }
+                value = value.map({ $0 / 1000 })
                 columns[key] = value
             }
             
