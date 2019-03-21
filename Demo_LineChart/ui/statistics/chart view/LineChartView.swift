@@ -96,8 +96,8 @@ class LineChartView: UIView {
         
         do {
             var axisYTemp = axisMaxY
-            let axisYStep = axisMaxY / 5
-            while axisYTemp >= 0 {
+            let axisYStep = (axisMaxY - chartRect.minY) / 5
+            while axisYTemp >= chartRect.minY {
                 axisYs.append(axisYTemp)
                 axisYTemp -= axisYStep
             }
