@@ -18,6 +18,7 @@ class LineChartView: UIView {
     
     fileprivate var yAxisLayer: CAShapeLayer
     fileprivate var prevYAxisLayer: CAShapeLayer
+    fileprivate var prevMaxYOfAxis: CGFloat
     
     init(chart: LineChart,
          showAxes: Bool = true) {
@@ -26,6 +27,7 @@ class LineChartView: UIView {
         
         yAxisLayer = CAShapeLayer()
         prevYAxisLayer = CAShapeLayer()
+        prevMaxYOfAxis = 0
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -93,14 +95,18 @@ class LineChartView: UIView {
         prevYAxisLayer = yAxisLayer
         yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
         
+        let directionFraction = CGFloat(prevMaxYOfAxis > chartRect.maxY ? 1.5 : 0.5)
+        
         yAxisLayer.opacity = 0.0
         var yAxisPosition = yAxisLayer.position
-        yAxisPosition.y = yAxisPosition.y * 1.5
+        yAxisPosition.y = yAxisPosition.y * directionFraction
         yAxisLayer.position = yAxisPosition
         yAxisPosition.y = yAxisLayer.frame.height / 2
         
         var prevYAxisPosition = prevYAxisLayer.position
-        prevYAxisPosition.y = prevYAxisPosition.y * 0.5
+        prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
+        
+        prevMaxYOfAxis = chartRect.maxY
         
         layer.insertSublayer(yAxisLayer, below: lineLayers.first)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
