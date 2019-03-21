@@ -30,7 +30,6 @@ class LineChartView: UIView {
         
         backgroundColor = .white
         
-        setupAxisLayer()
         setupLineLayers()
     }
     
@@ -75,45 +74,19 @@ class LineChartView: UIView {
         let xScale = bounds.width / chartRect.width
         let yScale = bounds.height / chartRect.height
         
-        let transform = CGAffineTransform(scaleX: xScale, y: -yScale)
+        let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
         for (index, (line, sublayer)) in zip(chart.lines, lineLayers).enumerated() {
             sublayer.frame = bounds
-            sublayer.path = line.path(applying: transform)
+            sublayer.path = line.path(applying: affine)
             sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
         }
         
         guard showAxes else { return }
-        var axisYs: [CGFloat] = []
-        
-        var axisMaxY = chartRect.maxY + 1
-        var axisMaxYLastDigit: CGFloat = 0
-        repeat {
-            axisMaxY -= 1
-            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
-        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
-        
-        do {
-            var axisYTemp = axisMaxY
-            let axisYStep = (axisMaxY - chartRect.minY) / 5
-            while axisYTemp >= chartRect.minY {
-                axisYs.append(axisYTemp)
-                axisYTemp -= axisYStep
-            }
-        }
-        
-        yAxisLayer.frame = bounds
-        
-        let path = CGMutablePath()
-        for y in axisYs {
-            let affinedY = CGPoint(x: 0, y: y).applying(transform).y
-            path.addLines(between: [
-                CGPoint(x: 0, y: affinedY),
-                CGPoint(x: bounds.width, y: affinedY)
-                ])
-        }
-        yAxisLayer.path = path
+        yAxisLayer.removeFromSuperlayer()
+        yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
+        layer.insertSublayer(yAxisLayer, below: lineLayers.first)
     }
     
     // MARK: - lines
@@ -136,14 +109,47 @@ class LineChartView: UIView {
     }
 
     // MARK: - axis
-    func setupAxisLayer() {
-        guard showAxes else { return }
-        yAxisLayer.lineWidth = 1
-        yAxisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
-                                        green: 241.0 / 255.0,
-                                        blue: 241.0 / 255.0,
-                                        alpha: 1).cgColor
-        yAxisLayer.fillColor = nil
-        layer.addSublayer(yAxisLayer)
+    func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
+        let axisLayer = CAShapeLayer()
+        axisLayer.lineWidth = 1
+        axisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
+                                         green: 241.0 / 255.0,
+                                         blue: 241.0 / 255.0,
+                                         alpha: 1).cgColor
+        axisLayer.fillColor = nil
+
+        //
+        var axisYs: [CGFloat] = []
+        
+        var axisMaxY = chartRect.maxY + 1
+        var axisMaxYLastDigit: CGFloat = 0
+        repeat {
+            axisMaxY -= 1
+            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
+        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
+        
+        do {
+            var axisYTemp = axisMaxY
+            let axisYStep = (axisMaxY - chartRect.minY) / 5
+            while axisYTemp >= chartRect.minY {
+                axisYs.append(axisYTemp)
+                axisYTemp -= axisYStep
+            }
+        }
+        
+        axisLayer.frame = bounds
+        
+        let path = CGMutablePath()
+        for y in axisYs {
+            let affinedY = CGPoint(x: 0, y: y).applying(affine).y
+            path.addLines(between: [
+                CGPoint(x: 0, y: affinedY),
+                CGPoint(x: bounds.width, y: affinedY)
+                ])
+        }
+        axisLayer.path = path
+        
+        
+        return axisLayer
     }
 }
