@@ -32,7 +32,7 @@ class XRangeControl : UIControl {
     let overlay: CAShapeLayer
     
     init(chart: LineChart) {
-        self.chartView = LineChartView(chart: chart)
+        self.chartView = LineChartView(chart: chart, showAxes: false)
         windowView = XRangeControlWindow()
         overlay = CAShapeLayer()
         

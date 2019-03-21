@@ -11,13 +11,17 @@ import UIKit
 class LineChartView: UIView {
     let chart: LineChart
     fileprivate var linesIndexToEnabled: [Int: Bool] = [:]
+    fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
+    fileprivate let showAxes: Bool
     
     fileprivate var lineLayers: [CAShapeLayer] = []
+    fileprivate var yAxisLayer: CAShapeLayer
     
-    fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
-    
-    init(chart: LineChart) {
+    init(chart: LineChart,
+         showAxes: Bool = true) {
         self.chart = chart
+        self.showAxes = showAxes
+        yAxisLayer = CAShapeLayer()
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -25,7 +29,9 @@ class LineChartView: UIView {
         }
         
         backgroundColor = .white
-        createAllLayers()
+        
+        setupAxisLayer()
+        setupLineLayers()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -77,10 +83,41 @@ class LineChartView: UIView {
             sublayer.path = line.path(applying: transform)
             sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
         }
+        
+        guard showAxes else { return }
+        var axisYs: [CGFloat] = []
+        
+        var axisMaxY = chartRect.maxY + 1
+        var axisMaxYLastDigit: CGFloat = 0
+        repeat {
+            axisMaxY -= 1
+            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
+        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
+        
+        do {
+            var axisYTemp = axisMaxY
+            let axisYStep = axisMaxY / 5
+            while axisYTemp >= 0 {
+                axisYs.append(axisYTemp)
+                axisYTemp -= axisYStep
+            }
+        }
+        
+        yAxisLayer.frame = bounds
+        
+        let path = CGMutablePath()
+        for y in axisYs {
+            let affinedY = CGPoint(x: 0, y: y).applying(transform).y
+            path.addLines(between: [
+                CGPoint(x: 0, y: affinedY),
+                CGPoint(x: bounds.width, y: affinedY)
+                ])
+        }
+        yAxisLayer.path = path
     }
     
     // MARK: - lines
-    func createAllLayers() {
+    func setupLineLayers() {
         for line in chart.lines {
             let lineLayer = makeLayer(for: line)
             layer.addSublayer(lineLayer)
@@ -98,5 +135,16 @@ class LineChartView: UIView {
         return layer
     }
 
-
+    // MARK: - axis
+    func setupAxisLayer() {
+        guard showAxes else { return }
+        yAxisLayer.lineWidth = 1
+        yAxisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
+                                        green: 241.0 / 255.0,
+                                        blue: 241.0 / 255.0,
+                                        alpha: 1).cgColor
+        yAxisLayer.fillColor = nil
+        
+        layer.addSublayer(yAxisLayer)
+    }
 }
