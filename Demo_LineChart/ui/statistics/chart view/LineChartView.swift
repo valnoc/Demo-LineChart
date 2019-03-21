@@ -31,6 +31,8 @@ class LineChartView: UIView {
     
     fileprivate var selectedChartX: Double?
     fileprivate var selectionLayer: CALayer?
+    fileprivate var selectionDateFormatter1: DateFormatter
+    fileprivate var selectionDateFormatter2: DateFormatter
     
     init(chart: LineChart,
          showAxes: Bool = true) {
@@ -45,6 +47,8 @@ class LineChartView: UIView {
         xAxisLayer = CAShapeLayer()
         prevXAxisLayer = CAShapeLayer()
         xAxisDateFormatter = DateFormatter()
+        selectionDateFormatter1 = DateFormatter()
+        selectionDateFormatter2 = DateFormatter()
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -54,6 +58,8 @@ class LineChartView: UIView {
         backgroundColor = .white
         
         xAxisDateFormatter.dateFormat = "MMM dd"
+        selectionDateFormatter1.dateFormat = "MMM dd"
+        selectionDateFormatter2.dateFormat = "YYYY"
         
         layer.masksToBounds = true
         setupLineLayers()
@@ -436,8 +442,27 @@ class LineChartView: UIView {
         
         //---
         do {
+            let rect = CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40)
+            let date = Date(timeIntervalSince1970: selectedChartX)
+            
+            let date1Label = makeAxisTextLayer(text: selectionDateFormatter1.string(from: date))
+            date1Label.font = UIFont.boldSystemFont(ofSize: 8)
+            date1Label.fontSize = 8
+            var frame = date1Label.frame
+            frame.origin.x = rect.minX + 10
+            frame.origin.y = rect.minY + 8
+            frame.size = date1Label.preferredFrameSize()
+            date1Label.frame = frame
+            
+            let date2Label = makeAxisTextLayer(text: selectionDateFormatter2.string(from: date))
+            date2Label.fontSize = 8
+            frame = date2Label.frame
+            frame.origin.x = date1Label.frame.minX
+            frame.origin.y = date1Label.frame.maxY + 7
+            date2Label.frame = frame
+
             let backgroundPath = CGMutablePath()
-            backgroundPath.addRoundedRect(in: CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40),
+            backgroundPath.addRoundedRect(in: rect,
                                           cornerWidth: 1,
                                           cornerHeight: 1)
             let backgrShape = CAShapeLayer()
@@ -449,6 +474,10 @@ class LineChartView: UIView {
                                               alpha: 1).cgColor
             backgrShape.fillColor = backgrShape.strokeColor
             backgrShape.lineWidth = 1
+            
+            backgrShape.addSublayer(date1Label)
+            backgrShape.addSublayer(date2Label)
+            
             selectionLayer.addSublayer(backgrShape)
         }
         
