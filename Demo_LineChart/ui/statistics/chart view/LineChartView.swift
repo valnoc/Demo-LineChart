@@ -232,7 +232,7 @@ class LineChartView: UIView {
         path.addLines(between: [CGPoint(x: 0, y: axisY),
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
-        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.midY))", y: axisY - 5))
+        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
         return axisLayer
     }
     
