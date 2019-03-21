@@ -57,6 +57,12 @@ class LineChartView: UIView {
         guard var value = linesIndexToEnabled[index] else {
             return
         }
+        guard !( // not the last true
+            value == true &&
+            linesIndexToEnabled.map({$0.value}).filter({$0 == true}).count == 1
+            ) else {
+                return
+        }
         value.toggle()
         linesIndexToEnabled[index] = value
         setNeedsLayout()
