@@ -19,11 +19,11 @@ class LineChartView: UIView {
     fileprivate var yAxisLayer: CAShapeLayer
     fileprivate let yAxisLabelOffset: CGFloat = 5
     fileprivate var prevYAxisLayer: CAShapeLayer
-    fileprivate var prevMaxYOfAxis: CGFloat
+    
+    fileprivate var prevChartRect: CGRect
     
     fileprivate var xAxisLayer: CAShapeLayer
     fileprivate var prevXAxisLayer: CAShapeLayer
-    fileprivate var prevMaxXOfAxis: CGFloat
     fileprivate let xAxisOffset: CGFloat = 19
     fileprivate let xAxisDateFormatter: DateFormatter
     
@@ -36,11 +36,11 @@ class LineChartView: UIView {
         
         yAxisLayer = CAShapeLayer()
         prevYAxisLayer = CAShapeLayer()
-        prevMaxYOfAxis = 0
+        
+        prevChartRect = CGRect.zero
         
         xAxisLayer = CAShapeLayer()
         prevXAxisLayer = CAShapeLayer()
-        prevMaxXOfAxis = 0
         xAxisDateFormatter = DateFormatter()
         super.init(frame: .zero)
         
@@ -113,12 +113,12 @@ class LineChartView: UIView {
             sublayer.opacity = linesIndexToEnabled[index] == true ? 1: 0
         }
         
+        defer {
+            prevChartRect = chartRect
+        }
         guard showAxes else { return }
         animateYAxis(chartRect: chartRect, affine: affine)
-        
-        xAxisLayer.removeFromSuperlayer()
-        xAxisLayer = makeXAxisLayer(chartRect: chartRect, affine: affine)
-        layer.addSublayer(xAxisLayer)
+        animateXAxis(chartRect: chartRect, affine: affine)
     }
     
     // MARK: - lines
@@ -185,14 +185,12 @@ class LineChartView: UIView {
     }
     
     func animateYAxis(chartRect: CGRect, affine: CGAffineTransform) {
+        guard prevChartRect.maxY != chartRect.maxY || prevChartRect.minY != chartRect.minY else { return }
         var directionFraction: CGFloat = 1.0
-        if prevMaxYOfAxis > chartRect.maxY {
+        if prevChartRect.maxY > chartRect.maxY {
             directionFraction = 1.5
-        } else if prevMaxYOfAxis < chartRect.maxY {
+        } else {
             directionFraction = 0.5
-        }
-        guard directionFraction != 1.0 else {
-            return
         }
         
         prevYAxisLayer.removeFromSuperlayer()
@@ -207,8 +205,6 @@ class LineChartView: UIView {
         
         var prevYAxisPosition = prevYAxisLayer.position
         prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
-        
-        prevMaxYOfAxis = chartRect.maxY
         
         let animation = CABasicAnimation()
         animation.duration = CATransaction.animationDuration() / 2
@@ -277,6 +273,51 @@ class LineChartView: UIView {
         }
         
         return axisLayer
+    }
+    
+    func animateXAxis(chartRect: CGRect, affine: CGAffineTransform) {
+        guard prevChartRect.maxX != chartRect.maxX || prevChartRect.minX != chartRect.minX else { return }
+        
+        var directionFraction: CGFloat = 1.0
+        if prevChartRect.maxX > chartRect.maxX {
+            directionFraction = 0.5
+        } else {
+            directionFraction = 1.5
+        }
+
+        prevXAxisLayer.removeFromSuperlayer()
+        prevXAxisLayer = xAxisLayer
+        xAxisLayer = makeXAxisLayer(chartRect: chartRect, affine: affine)
+
+        xAxisLayer.opacity = 0.0
+        var xAxisPosition = xAxisLayer.position
+        xAxisPosition.x = xAxisPosition.x * directionFraction
+        xAxisLayer.position = xAxisPosition
+        xAxisPosition.x = xAxisLayer.frame.height / 2
+
+        var prevXAxisPosition = prevXAxisLayer.position
+        prevXAxisPosition.x = prevXAxisPosition.x * (2 - directionFraction)
+
+        let animation = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration() / 2
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        prevXAxisLayer.actions = ["position": animation,
+                                  "opacity": animation]
+
+        let animationNew = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration() / 4
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        xAxisLayer.actions = ["position": animationNew,
+                              "opacity": animationNew]
+
+        layer.insertSublayer(xAxisLayer, below: lineLayers.first)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
+            guard let __self = self else { return }
+            __self.prevXAxisLayer.opacity = 0.0
+            __self.prevXAxisLayer.position = prevXAxisPosition
+            __self.xAxisLayer.opacity = 1.0
+            __self.xAxisLayer.position = xAxisPosition
+        }
     }
     
     // MARK: - axis
