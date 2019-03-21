@@ -401,22 +401,21 @@ class LineChartView: UIView {
         selectionLayer.frame = bounds
         
         //---
-        let backgroundPath = CGMutablePath()
-        backgroundPath.addRoundedRect(in: CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40),
-                                      cornerWidth: 1,
-                                      cornerHeight: 1)
-        backgroundPath.addLines(between: [CGPoint(x: affinedSelectedChartX, y: 0),
-                                          CGPoint(x: affinedSelectedChartX, y: bounds.height - xAxisOffset)])
-        let backgrShape = CAShapeLayer()
-        backgrShape.frame = bounds
-        backgrShape.path = backgroundPath
-        backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
-                                          green: 243.0 / 255.0,
-                                          blue: 249.0 / 255.0,
-                                          alpha: 1).cgColor
-        backgrShape.fillColor = backgrShape.strokeColor
-        backgrShape.lineWidth = 1
-        selectionLayer.addSublayer(backgrShape)
+        do {
+            let backgroundPath = CGMutablePath()
+            backgroundPath.addLines(between: [CGPoint(x: affinedSelectedChartX, y: 0),
+                                              CGPoint(x: affinedSelectedChartX, y: bounds.height - xAxisOffset)])
+            let backgrShape = CAShapeLayer()
+            backgrShape.frame = bounds
+            backgrShape.path = backgroundPath
+            backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
+                                              green: 243.0 / 255.0,
+                                              blue: 249.0 / 255.0,
+                                              alpha: 1).cgColor
+            backgrShape.fillColor = backgrShape.strokeColor
+            backgrShape.lineWidth = 1
+            selectionLayer.addSublayer(backgrShape)
+        }
         
         //---
         let enabledLinesIndexes = makeEnabledLinesIndexes()
@@ -433,6 +432,24 @@ class LineChartView: UIView {
             lineDotLayer.path = path
             lineDotLayer.fillColor = UIColor.white.cgColor
             selectionLayer.addSublayer(lineDotLayer)
+        }
+        
+        //---
+        do {
+            let backgroundPath = CGMutablePath()
+            backgroundPath.addRoundedRect(in: CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40),
+                                          cornerWidth: 1,
+                                          cornerHeight: 1)
+            let backgrShape = CAShapeLayer()
+            backgrShape.frame = bounds
+            backgrShape.path = backgroundPath
+            backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
+                                              green: 243.0 / 255.0,
+                                              blue: 249.0 / 255.0,
+                                              alpha: 1).cgColor
+            backgrShape.fillColor = backgrShape.strokeColor
+            backgrShape.lineWidth = 1
+            selectionLayer.addSublayer(backgrShape)
         }
         
         //---
