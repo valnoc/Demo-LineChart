@@ -20,6 +20,9 @@ class LineChartView: UIView {
     fileprivate var prevYAxisLayer: CAShapeLayer
     fileprivate var prevMaxYOfAxis: CGFloat
     
+    fileprivate var xAxisLayer: CAShapeLayer
+    fileprivate let xAxisOffset: CGFloat = 19
+    
     init(chart: LineChart,
          showAxes: Bool = true) {
         self.chart = chart
@@ -28,6 +31,8 @@ class LineChartView: UIView {
         yAxisLayer = CAShapeLayer()
         prevYAxisLayer = CAShapeLayer()
         prevMaxYOfAxis = 0
+        
+        xAxisLayer = CAShapeLayer()
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -97,16 +102,89 @@ class LineChartView: UIView {
         }
         
         guard showAxes else { return }
+        animateYAxis(chartRect: chartRect, affine: affine)
+        
+        xAxisLayer.removeFromSuperlayer()
+        xAxisLayer = makeXAxisLayer(chartRect: chartRect, affine: affine)
+        layer.addSublayer(xAxisLayer)
+    }
+    
+    // MARK: - lines
+    func setupLineLayers() {
+        for line in chart.lines {
+            let lineLayer = makeLayer(for: line)
+            layer.addSublayer(lineLayer)
+            lineLayers.append(lineLayer)
+        }
+    }
+    
+    func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
+        let layer = CAShapeLayer()
+        layer.lineWidth = 2
+        layer.fillColor = nil
+        layer.strokeColor = UIColor(hex: line.colorHex).cgColor
+        layer.lineJoin = .round
+        layer.masksToBounds = true
+        
+        let animation = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration() / 2
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        layer.actions = ["path": animation]
+        return layer
+    }
+
+    // MARK: - axis
+    func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
+        let axisLayer = makeBaseAxisLayer()
+
+        //
+        let axisMaxYTopOffset = (13 + 5 * 2) * chartRect.height / bounds.height
+        
+        var axisYs: [CGFloat] = []
+        
+        var axisMaxY = chartRect.maxY + 1 - axisMaxYTopOffset
+        var axisMaxYLastDigit: CGFloat = 0
+        repeat {
+            axisMaxY -= 1
+            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
+        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
+        
+        do {
+            var axisYTemp = axisMaxY
+            let axisYStep = (axisMaxY - chartRect.minY) / 5
+            while Int(axisYTemp) > Int(chartRect.minY) {
+                axisYs.append(axisYTemp)
+                axisYTemp -= axisYStep
+            }
+        }
+        
+        axisLayer.frame = bounds
+        
+        let path = CGMutablePath()
+        for y in axisYs {
+            let affinedY = CGPoint(x: 0, y: y).applying(affine).y
+            path.addLines(between: [
+                CGPoint(x: 0, y: affinedY),
+                CGPoint(x: bounds.width, y: affinedY)
+                ])
+            axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(y))", y: affinedY - 5))
+        }
+        axisLayer.path = path
+        
+        return axisLayer
+    }
+    
+    func animateYAxis(chartRect: CGRect, affine: CGAffineTransform) {
         var directionFraction: CGFloat = 1.0
         if prevMaxYOfAxis > chartRect.maxY {
-           directionFraction = 1.5
+            directionFraction = 1.5
         } else if prevMaxYOfAxis < chartRect.maxY {
-           directionFraction = 0.5
+            directionFraction = 0.5
         }
         guard directionFraction != 1.0 else {
             return
         }
-
+        
         prevYAxisLayer.removeFromSuperlayer()
         prevYAxisLayer = yAxisLayer
         yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
@@ -144,87 +222,44 @@ class LineChartView: UIView {
         }
     }
     
-    // MARK: - lines
-    func setupLineLayers() {
-        for line in chart.lines {
-            let lineLayer = makeLayer(for: line)
-            layer.addSublayer(lineLayer)
-            lineLayers.append(lineLayer)
-        }
+    // MARK: - x axis
+    func makeXAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
+        let axisLayer = makeBaseAxisLayer()
+        axisLayer.frame = bounds
+        
+        let axisY = bounds.height - xAxisOffset
+        let path = CGMutablePath()
+        path.addLines(between: [CGPoint(x: 0, y: axisY),
+                                CGPoint(x: bounds.width, y: axisY)])
+        axisLayer.path = path
+        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.midY))", y: axisY - 5))
+        return axisLayer
     }
     
-    func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
-        let layer = CAShapeLayer()
-        layer.lineWidth = 2
-        layer.fillColor = nil
-        layer.strokeColor = UIColor(hex: line.colorHex).cgColor
-        layer.lineJoin = .round
-        layer.masksToBounds = true
-        
-        let animation = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration() / 2
-        animation.timingFunction = CATransaction.animationTimingFunction()
-        layer.actions = ["path": animation]
-        return layer
-    }
-
     // MARK: - axis
-    func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
+    func makeAxisTextLayer(text: String, y: CGFloat) -> CATextLayer {
+        let labelLayer = CATextLayer()
+        labelLayer.fontSize = 13
+        labelLayer.string = text
+        labelLayer.foregroundColor = UIColor(red: 144.0 / 255.0,
+                                             green: 150 / 255.0,
+                                             blue: 156 / 255.0,
+                                             alpha: 1).cgColor
+        labelLayer.frame = CGRect(x: 0, y: y - 13, width: bounds.width, height: 13)
+        labelLayer.contentsScale = UIScreen.main.scale
+        labelLayer.alignmentMode = .left
+        return labelLayer
+    }
+    
+    func makeBaseAxisLayer() -> CAShapeLayer {
         let axisLayer = CAShapeLayer()
         axisLayer.lineWidth = 1
         axisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
-                                         green: 241.0 / 255.0,
-                                         blue: 241.0 / 255.0,
-                                         alpha: 1).cgColor
+                                        green: 241.0 / 255.0,
+                                        blue: 241.0 / 255.0,
+                                        alpha: 1).cgColor
         axisLayer.fillColor = nil
         axisLayer.masksToBounds = true
-
-        //
-        let axisMaxYTopOffset = (13 + 5 * 2) * chartRect.height / bounds.height
-        
-        var axisYs: [CGFloat] = []
-        
-        var axisMaxY = chartRect.maxY + 1 - axisMaxYTopOffset
-        var axisMaxYLastDigit: CGFloat = 0
-        repeat {
-            axisMaxY -= 1
-            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
-        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
-        
-        do {
-            var axisYTemp = axisMaxY
-            let axisYStep = (axisMaxY - chartRect.minY) / 5
-            while axisYTemp >= chartRect.minY {
-                axisYs.append(axisYTemp)
-                axisYTemp -= axisYStep
-            }
-            axisYs.append(chartRect.minY)
-        }
-        
-        axisLayer.frame = bounds
-        
-        let path = CGMutablePath()
-        for y in axisYs {
-            let affinedY = CGPoint(x: 0, y: y).applying(affine).y
-            path.addLines(between: [
-                CGPoint(x: 0, y: affinedY),
-                CGPoint(x: bounds.width, y: affinedY)
-                ])
-
-            let labelLayer = CATextLayer()
-            labelLayer.fontSize = 13
-            labelLayer.string = "\(Int(y))"
-            labelLayer.foregroundColor = UIColor(red: 144.0 / 255.0,
-                                                 green: 150 / 255.0,
-                                                 blue: 156 / 255.0,
-                                                 alpha: 1).cgColor
-            labelLayer.frame = CGRect(x: 0, y: affinedY - 13 - 5, width: bounds.width, height: 13)
-            labelLayer.contentsScale = UIScreen.main.scale
-            labelLayer.alignmentMode = .left
-            axisLayer.addSublayer(labelLayer)
-        }
-        axisLayer.path = path
-        
         return axisLayer
     }
 }
