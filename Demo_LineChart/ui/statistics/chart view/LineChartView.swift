@@ -15,13 +15,17 @@ class LineChartView: UIView {
     fileprivate let showAxes: Bool
     
     fileprivate var lineLayers: [CAShapeLayer] = []
+    
     fileprivate var yAxisLayer: CAShapeLayer
+    fileprivate var prevYAxisLayer: CAShapeLayer
     
     init(chart: LineChart,
          showAxes: Bool = true) {
         self.chart = chart
         self.showAxes = showAxes
+        
         yAxisLayer = CAShapeLayer()
+        prevYAxisLayer = CAShapeLayer()
         super.init(frame: .zero)
         
         for i in 0..<chart.lines.count {
@@ -30,6 +34,7 @@ class LineChartView: UIView {
         
         backgroundColor = .white
         
+        layer.masksToBounds = true
         setupLineLayers()
     }
     
@@ -84,9 +89,29 @@ class LineChartView: UIView {
         }
         
         guard showAxes else { return }
-        yAxisLayer.removeFromSuperlayer()
+        prevYAxisLayer.removeFromSuperlayer()
+        prevYAxisLayer = yAxisLayer
         yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
+        
+        yAxisLayer.opacity = 0.0
+        var yAxisPosition = yAxisLayer.position
+        yAxisPosition.y = yAxisPosition.y * 1.5
+        yAxisLayer.position = yAxisPosition
+        yAxisPosition.y = yAxisLayer.frame.height / 2
+        
+        var prevYAxisPosition = prevYAxisLayer.position
+        prevYAxisPosition.y = prevYAxisPosition.y * 0.5
+        
         layer.insertSublayer(yAxisLayer, below: lineLayers.first)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+            guard let __self = self else { return }
+            __self.prevYAxisLayer.opacity = 0.0
+            __self.prevYAxisLayer.position = prevYAxisPosition
+            
+            __self.yAxisLayer.opacity = 1.0
+            __self.yAxisLayer.position = yAxisPosition
+        }
+        
     }
     
     // MARK: - lines
@@ -110,13 +135,14 @@ class LineChartView: UIView {
 
     // MARK: - axis
     func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
-        let axisLayer = CAShapeLayer()
+        let axisLayer = CAShapeAnimatableLayer()
         axisLayer.lineWidth = 1
         axisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
                                          green: 241.0 / 255.0,
                                          blue: 241.0 / 255.0,
                                          alpha: 1).cgColor
         axisLayer.fillColor = nil
+        axisLayer.masksToBounds = true
 
         //
         let axisMaxYTopOffset = (13 + 5 * 2) * chartRect.height / bounds.height
@@ -163,7 +189,6 @@ class LineChartView: UIView {
             axisLayer.addSublayer(labelLayer)
         }
         axisLayer.path = path
-        
         
         return axisLayer
     }

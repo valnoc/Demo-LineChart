@@ -10,7 +10,7 @@ import UIKit
 
 class CAShapeAnimatableLayer: CAShapeLayer {
     override func action(forKey event: String) -> CAAction? {
-        if event == "path" {
+        if event == "path" || event == "position" || event == "opacity" {
             let animation = CABasicAnimation(keyPath: event)
             animation.duration = 0.15
             animation.timingFunction = CATransaction.animationTimingFunction()
