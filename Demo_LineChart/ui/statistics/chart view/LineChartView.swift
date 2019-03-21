@@ -442,7 +442,7 @@ class LineChartView: UIView {
         
         //---
         do {
-            let rect = CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40)
+            var rect = CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40)
             let date = Date(timeIntervalSince1970: selectedChartX)
             
             let date1Label = makeAxisTextLayer(text: selectionDateFormatter1.string(from: date))
@@ -473,11 +473,15 @@ class LineChartView: UIView {
                 
                 var frame = label.frame
                 frame.size = label.preferredFrameSize()
-                frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(index)
+                frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(lineLables.count)
                 frame.origin.x = rect.maxX - 10 - frame.size.width
                 label.frame = frame
                 
                 lineLables.append(label)
+            }
+            
+            if lineLables.count > 2 {
+                rect.size.height = lineLables.last!.frame.maxY + 8
             }
             
             let backgroundPath = CGMutablePath()
