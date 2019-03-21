@@ -91,11 +91,19 @@ class LineChartView: UIView {
         }
         
         guard showAxes else { return }
+        var directionFraction: CGFloat = 1.0
+        if prevMaxYOfAxis > chartRect.maxY {
+           directionFraction = 1.5
+        } else if prevMaxYOfAxis < chartRect.maxY {
+           directionFraction = 0.5
+        }
+        guard directionFraction != 1.0 else {
+            return
+        }
+
         prevYAxisLayer.removeFromSuperlayer()
         prevYAxisLayer = yAxisLayer
         yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
-        
-        let directionFraction = CGFloat(prevMaxYOfAxis > chartRect.maxY ? 1.5 : 0.5)
         
         yAxisLayer.opacity = 0.0
         var yAxisPosition = yAxisLayer.position
@@ -108,16 +116,26 @@ class LineChartView: UIView {
         
         prevMaxYOfAxis = chartRect.maxY
         
+        let animation = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration()
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        prevYAxisLayer.actions = ["position": animation,
+                                  "opacity": animation]
+        
+        let animationNew = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration() / 2
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        yAxisLayer.actions = ["position": animationNew,
+                              "opacity": animationNew]
+        
         layer.insertSublayer(yAxisLayer, below: lineLayers.first)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
             __self.prevYAxisLayer.opacity = 0.0
             __self.prevYAxisLayer.position = prevYAxisPosition
-            
             __self.yAxisLayer.opacity = 1.0
             __self.yAxisLayer.position = yAxisPosition
         }
-        
     }
     
     // MARK: - lines
@@ -130,18 +148,23 @@ class LineChartView: UIView {
     }
     
     func makeLayer(for line: LineChart.Line) -> CAShapeLayer {
-        let layer = CAShapeAnimatableLayer()
+        let layer = CAShapeLayer()
         layer.lineWidth = 2
         layer.fillColor = nil
         layer.strokeColor = UIColor(hex: line.colorHex).cgColor
         layer.lineJoin = .round
         layer.masksToBounds = true
+        
+        let animation = CABasicAnimation()
+        animation.duration = CATransaction.animationDuration() / 2
+        animation.timingFunction = CATransaction.animationTimingFunction()
+        layer.actions = ["path": animation]
         return layer
     }
 
     // MARK: - axis
     func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
-        let axisLayer = CAShapeAnimatableLayer()
+        let axisLayer = CAShapeLayer()
         axisLayer.lineWidth = 1
         axisLayer.strokeColor = UIColor(red: 241.0 / 255.0,
                                          green: 241.0 / 255.0,

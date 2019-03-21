@@ -22,7 +22,6 @@
 		5BF60A7A2242273B009E6713 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF60A792242273B009E6713 /* Assets.xcassets */; };
 		5BF60A7D2242273B009E6713 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BF60A7B2242273B009E6713 /* LaunchScreen.storyboard */; };
 		5BF60A9722422773009E6713 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A8522422773009E6713 /* UIColor+Hex.swift */; };
-		5BF60A9822422773009E6713 /* CAShapeAnimatableLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A8622422773009E6713 /* CAShapeAnimatableLayer.swift */; };
 		5BF60A9922422773009E6713 /* ChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A8822422773009E6713 /* ChartRepository.swift */; };
 		5BF60A9A22422773009E6713 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF60A8922422773009E6713 /* LineChart.swift */; };
 		5BF60A9B22422773009E6713 /* chart_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5BF60A8A22422773009E6713 /* chart_data.json */; };
@@ -48,7 +47,6 @@
 		5BF60A7C2242273B009E6713 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5BF60A7E2242273B009E6713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BF60A8522422773009E6713 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
-		5BF60A8622422773009E6713 /* CAShapeAnimatableLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAShapeAnimatableLayer.swift; sourceTree = "<group>"; };
 		5BF60A8822422773009E6713 /* ChartRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartRepository.swift; sourceTree = "<group>"; };
 		5BF60A8922422773009E6713 /* LineChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		5BF60A8A22422773009E6713 /* chart_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chart_data.json; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 			children = (
 				5BF60A8522422773009E6713 /* UIColor+Hex.swift */,
 				5B30E6C9224256A300C11CFB /* UIImage+Ext.swift */,
-				5BF60A8622422773009E6713 /* CAShapeAnimatableLayer.swift */,
 			);
 			path = ext;
 			sourceTree = "<group>";
@@ -255,7 +252,6 @@
 				5BF60A9922422773009E6713 /* ChartRepository.swift in Sources */,
 				5B0A5C6F22427283007C2C1E /* StatisticsViewController+Table.swift in Sources */,
 				5B0A5C6822427283007C2C1E /* StatisticsViewController.swift in Sources */,
-				5BF60A9822422773009E6713 /* CAShapeAnimatableLayer.swift in Sources */,
 				5BF60A9A22422773009E6713 /* LineChart.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
