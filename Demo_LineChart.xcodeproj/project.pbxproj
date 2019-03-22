@@ -12,6 +12,7 @@
 		5B0535C22244BEDF00420AA2 /* LineChartYAxisDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0535BE2244BEDF00420AA2 /* LineChartYAxisDrawer.swift */; };
 		5B0535C32244BEDF00420AA2 /* LineChartLinesDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0535BF2244BEDF00420AA2 /* LineChartLinesDrawer.swift */; };
 		5B0535C52244C3DF00420AA2 /* CALayer+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0535C42244C3DF00420AA2 /* CALayer+Ext.swift */; };
+		5B0535C72244F63200420AA2 /* LineChartSelectionDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0535C62244F63200420AA2 /* LineChartSelectionDrawer.swift */; };
 		5B0A5C6822427283007C2C1E /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5B22427283007C2C1E /* StatisticsViewController.swift */; };
 		5B0A5C6922427283007C2C1E /* XRangeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5D22427283007C2C1E /* XRangeControl.swift */; };
 		5B0A5C6A22427283007C2C1E /* XRangeControl+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5E22427283007C2C1E /* XRangeControl+Tracking.swift */; };
@@ -40,6 +41,7 @@
 		5B0535BE2244BEDF00420AA2 /* LineChartYAxisDrawer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartYAxisDrawer.swift; sourceTree = "<group>"; };
 		5B0535BF2244BEDF00420AA2 /* LineChartLinesDrawer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartLinesDrawer.swift; sourceTree = "<group>"; };
 		5B0535C42244C3DF00420AA2 /* CALayer+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Ext.swift"; sourceTree = "<group>"; };
+		5B0535C62244F63200420AA2 /* LineChartSelectionDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartSelectionDrawer.swift; sourceTree = "<group>"; };
 		5B0A5C5B22427283007C2C1E /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		5B0A5C5D22427283007C2C1E /* XRangeControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRangeControl.swift; sourceTree = "<group>"; };
 		5B0A5C5E22427283007C2C1E /* XRangeControl+Tracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRangeControl+Tracking.swift"; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				5B0535BF2244BEDF00420AA2 /* LineChartLinesDrawer.swift */,
 				5B0535BC2244BEDF00420AA2 /* LineChartXAxisDrawer.swift */,
 				5B0535BE2244BEDF00420AA2 /* LineChartYAxisDrawer.swift */,
+				5B0535C62244F63200420AA2 /* LineChartSelectionDrawer.swift */,
 				5B0535C42244C3DF00420AA2 /* CALayer+Ext.swift */,
 			);
 			path = drawers;
@@ -270,6 +273,7 @@
 				5B0535C32244BEDF00420AA2 /* LineChartLinesDrawer.swift in Sources */,
 				5B0535C12244BEDF00420AA2 /* LineChartLabelDrawer.swift in Sources */,
 				5BF60A732242273B009E6713 /* AppDelegate.swift in Sources */,
+				5B0535C72244F63200420AA2 /* LineChartSelectionDrawer.swift in Sources */,
 				5B0A5C7122427283007C2C1E /* ChartListViewController.swift in Sources */,
 				5BA3A31922441FC0009E3535 /* LineChartLine+CG.swift in Sources */,
 				5BF60A9C22422773009E6713 /* LineChartMapper.swift in Sources */,
