@@ -1,5 +1,5 @@
 //
-//  LineChartXAxisRenderer.swift
+//  LineChartXAxisDrawer.swift
 //  Demo_LineChart
 //
 //  Created by Valeriy Bezuglyy on 21/03/2019.

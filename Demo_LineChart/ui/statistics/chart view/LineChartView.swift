@@ -31,18 +31,18 @@ class LineChartView: UIView {
     fileprivate var selectionDateFormatter1: DateFormatter
     fileprivate var selectionDateFormatter2: DateFormatter
     
-    fileprivate var linesRenderer: LineChartLinesRenderer
-    fileprivate var yAxisRenderer: LineChartYAxisRenderer
-    fileprivate var xAxisRenderer: LineChartXAxisRenderer
+    fileprivate var linesDrawer: LineChartLinesDrawer
+    fileprivate var yAxisDrawer: LineChartYAxisDrawer
+    fileprivate var xAxisDrawer: LineChartXAxisDrawer
     
     init(chart: LineChart,
          showAxes: Bool = true) {
         self.chart = chart
         self.showAxes = showAxes
         
-        linesRenderer = LineChartLinesRenderer()
-        yAxisRenderer = LineChartYAxisRenderer()
-        xAxisRenderer = LineChartXAxisRenderer()
+        linesDrawer = LineChartLinesDrawer()
+        yAxisDrawer = LineChartYAxisDrawer()
+        xAxisDrawer = LineChartXAxisDrawer()
         
         yAxisLayer = CAShapeLayer()
         prevYAxisLayer = CAShapeLayer()
@@ -85,13 +85,13 @@ class LineChartView: UIView {
     }
     
     func toggleLine(at index: Int) {
-        linesRenderer.toggleLine(at: index)
+        linesDrawer.toggleLine(at: index)
         setNeedsLayout()
         layoutIfNeeded()
     }
     
     func isLineEnabled(at index: Int) -> Bool {
-        return linesRenderer.isLineEnabled(at: index)
+        return linesDrawer.isLineEnabled(at: index)
     }
     
     // MARK: - size
@@ -114,7 +114,7 @@ class LineChartView: UIView {
             animateXAxis(chartRect: chartRect, affine: affine)
         }
         
-        linesRenderer.layoutLines(chart: chart,
+        linesDrawer.layoutLines(chart: chart,
                                   viewLayer: layer,
                                   chartRect: chartRect,
                                   affine: affine)
@@ -390,14 +390,14 @@ class LineChartView: UIView {
         }
         
         //---
-        for line in linesRenderer.enabledLines(chart.lines) {
+        for line in linesDrawer.enabledLines(chart.lines) {
             guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
             let affinedY = point.applying(affine).y
             
             let path = CGMutablePath()
             path.addEllipse(in: CGRect(x: affinedSelectedChartX - 9/2, y: affinedY - 9/2, width: 9, height: 9))
             
-            let lineDotLayer = linesRenderer.makeLayer(for: line)
+            let lineDotLayer = linesDrawer.makeLayer(for: line)
             lineDotLayer.frame = bounds
             lineDotLayer.path = path
             lineDotLayer.fillColor = UIColor.white.cgColor
@@ -426,7 +426,7 @@ class LineChartView: UIView {
             date2Label.frame = frame
 
             var lineLables: [CATextLayer] = []
-            for line in linesRenderer.enabledLines(chart.lines) {
+            for line in linesDrawer.enabledLines(chart.lines) {
                 guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
                 
                 let label = makeAxisTextLayer(text: "\(Int(point.y))")
@@ -476,6 +476,6 @@ class LineChartView: UIView {
     //MARK: - private
     func makeChartRect() -> CGRect {
         return chart.boundingRect(for: xRangePercents,
-                                  includingLinesAt: linesRenderer.enabledLinesIndexes())
+                                  includingLinesAt: linesDrawer.enabledLinesIndexes())
     }
 }

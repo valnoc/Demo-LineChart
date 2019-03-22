@@ -1,5 +1,5 @@
 //
-//  LineChartYAxisRenderer.swift
+//  LineChartYAxisDrawer.swift
 //  Demo_LineChart
 //
 //  Created by Valeriy Bezuglyy on 21/03/2019.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LineChartYAxisRenderer {
+class LineChartYAxisDrawer {
     fileprivate let labelDrawer = LineChartLabelDrawer()
 
     fileprivate var yAxisLayer: CAShapeLayer = CAShapeLayer()

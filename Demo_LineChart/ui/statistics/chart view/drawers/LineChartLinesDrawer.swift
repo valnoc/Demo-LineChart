@@ -1,5 +1,5 @@
 //
-//  LineChartLinesRenderer.swift
+//  LineChartLinesDrawer.swift
 //  Demo_LineChart
 //
 //  Created by Valeriy Bezuglyy on 21/03/2019.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LineChartLinesRenderer {
+class LineChartLinesDrawer {
     fileprivate var lineLayers: [CAShapeLayer] = []
     fileprivate var linesIndexToEnabled: [Int: Bool] = [:]
     
