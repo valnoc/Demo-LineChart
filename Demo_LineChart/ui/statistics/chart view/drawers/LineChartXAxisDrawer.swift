@@ -25,8 +25,7 @@ class LineChartXAxisDrawer {
     func layoutAxis(viewLayer: CALayer,
                     chartRect: CGRect,
                     prevChartRect: CGRect,
-                    affine: CGAffineTransform,
-                    bottomOffset: CGFloat) {
+                    affine: CGAffineTransform) {
         guard prevChartRect.maxX != chartRect.maxX || prevChartRect.minX != chartRect.minX else { return }
         
         prevAxisLayer.removeFromSuperlayer()
@@ -34,8 +33,7 @@ class LineChartXAxisDrawer {
         
         axisLayer = makeXAxisLayer(bounds: viewLayer.bounds,
                                    chartRect: chartRect,
-                                   affine: affine,
-                                   bottomOffset: bottomOffset)
+                                   affine: affine)
         viewLayer.insertSublayer(axisLayer, below: viewLayer.sublayers?.first)
         
         animateLayersChange(chartRect: chartRect,
@@ -91,8 +89,7 @@ class LineChartXAxisDrawer {
     // MARK: -
     fileprivate func makeXAxisLayer(bounds: CGRect,
                                     chartRect: CGRect,
-                                    affine: CGAffineTransform,
-                                    bottomOffset: CGFloat) -> CAShapeLayer {
+                                    affine: CGAffineTransform) -> CAShapeLayer {
         let axisLayer = makeBaseAxisLayer()
         axisLayer.frame = bounds
         
