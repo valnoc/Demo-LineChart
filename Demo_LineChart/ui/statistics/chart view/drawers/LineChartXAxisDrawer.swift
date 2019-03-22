@@ -102,10 +102,10 @@ class LineChartXAxisDrawer {
         for x in xs {
             let date = Date(timeIntervalSince1970: Double(x))
             let label = labelDrawer.makeTextLayer(text: xAxisDateFormatter.string(from: date))
-            let offset = (bottomOffset - label.frame.height) / 2
             label.origin = CGPoint(x: x, y: chartRect.minY)
                 .applying(affine)
-                .applying(CGAffineTransform(translationX: 0, y: -offset))
+                .applying(CGAffineTransform(translationX: -label.bounds.width / 2,
+                                            y: -(bottomOffset - label.bounds.height) / 2))
             
             axisLayer.addSublayer(label)
         }
@@ -137,6 +137,7 @@ class LineChartXAxisDrawer {
             xs.append(temp)
             temp -= step
         }
+        xs.append(minX)
         
         return xs
     }
@@ -144,10 +145,9 @@ class LineChartXAxisDrawer {
     fileprivate func calculateMinMaxX(chartRect: CGRect,
                                    affine: CGAffineTransform) -> (CGFloat, CGFloat) {
         let maxTextWidth: CGFloat = 44
-        let axisRightOffset = maxTextWidth / -affine.d
-        let offsetHalf = axisRightOffset / 2
-        let min = chartRect.minX + offsetHalf
-        let max = chartRect.maxX - offsetHalf
+        let axisRightOffset = maxTextWidth / affine.a
+        let min = chartRect.minX + axisRightOffset / 2
+        let max = chartRect.maxX - axisRightOffset / 2
         return (min.rounded(),
                 max.rounded())
     }
