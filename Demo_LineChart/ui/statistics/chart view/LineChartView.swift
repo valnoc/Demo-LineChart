@@ -13,10 +13,6 @@ class LineChartView: UIView {
     fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
     fileprivate let showAxes: Bool
     
-    fileprivate var yAxisLayer: CAShapeLayer
-    fileprivate let yAxisLabelOffset: CGFloat = 5
-    fileprivate var prevYAxisLayer: CAShapeLayer
-    
     fileprivate var prevChartRect: CGRect
     
     fileprivate var xAxisLayer: CAShapeLayer
@@ -43,9 +39,6 @@ class LineChartView: UIView {
         linesDrawer = LineChartLinesDrawer()
         yAxisDrawer = LineChartYAxisDrawer()
         xAxisDrawer = LineChartXAxisDrawer()
-        
-        yAxisLayer = CAShapeLayer()
-        prevYAxisLayer = CAShapeLayer()
         
         prevChartRect = CGRect.zero
         
@@ -110,7 +103,10 @@ class LineChartView: UIView {
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
         if showAxes {
-            animateYAxis(chartRect: chartRect, affine: affine)
+            yAxisDrawer.layoutAxis(viewLayer: layer,
+                                   chartRect: chartRect,
+                                   prevChartRect: prevChartRect,
+                                   affine: affine)
             animateXAxis(chartRect: chartRect, affine: affine)
         }
         
@@ -120,89 +116,6 @@ class LineChartView: UIView {
                                   affine: affine)
         
         drawSelectionLayer(chartRect: chartRect, affine: affine)
-    }
-    
-    // MARK: - y axis
-    func makeYAxisLayer(chartRect: CGRect, affine: CGAffineTransform) -> CAShapeLayer {
-        let axisLayer = makeBaseAxisLayer()
-
-        //
-        let axisMaxYTopOffset = (textHeight + yAxisLabelOffset * 2) * chartRect.height / bounds.height
-        
-        var axisYs: [CGFloat] = []
-        
-        var axisMaxY = chartRect.maxY + 1 - axisMaxYTopOffset
-        var axisMaxYLastDigit: CGFloat = 0
-        repeat {
-            axisMaxY -= 1
-            axisMaxYLastDigit = CGFloat(Int(axisMaxY)).truncatingRemainder(dividingBy: 10)
-        } while axisMaxYLastDigit != 5 && axisMaxYLastDigit != 0
-        
-        do {
-            var axisYTemp = axisMaxY
-            let axisYStep = (axisMaxY - chartRect.minY) / 5
-            while Int(axisYTemp) > Int(chartRect.minY) {
-                axisYs.append(axisYTemp)
-                axisYTemp -= axisYStep
-            }
-        }
-        
-        let path = CGMutablePath()
-        for y in axisYs {
-            let affinedY = CGPoint(x: 0, y: y).applying(affine).y
-            path.addLines(between: [
-                CGPoint(x: 0, y: affinedY),
-                CGPoint(x: bounds.width, y: affinedY)
-                ])
-            axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(y))", y: affinedY - yAxisLabelOffset))
-        }
-        axisLayer.path = path
-        
-        return axisLayer
-    }
-    
-    func animateYAxis(chartRect: CGRect, affine: CGAffineTransform) {
-        guard prevChartRect.maxY != chartRect.maxY || prevChartRect.minY != chartRect.minY else { return }
-        var directionFraction: CGFloat = 1.0
-        if prevChartRect.maxY > chartRect.maxY {
-            directionFraction = 1.5
-        } else {
-            directionFraction = 0.5
-        }
-        
-        prevYAxisLayer.removeFromSuperlayer()
-        prevYAxisLayer = yAxisLayer
-        yAxisLayer = makeYAxisLayer(chartRect: chartRect, affine: affine)
-        
-        yAxisLayer.opacity = 0.0
-        var yAxisPosition = yAxisLayer.position
-        yAxisPosition.y = yAxisPosition.y * directionFraction
-        yAxisLayer.position = yAxisPosition
-        yAxisPosition.y = yAxisLayer.frame.height / 2
-        
-        var prevYAxisPosition = prevYAxisLayer.position
-        prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
-        
-        let animation = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration() / 2
-        animation.timingFunction = CATransaction.animationTimingFunction()
-        prevYAxisLayer.actions = ["position": animation,
-                                  "opacity": animation]
-        
-        let animationNew = CABasicAnimation()
-        animation.duration = CATransaction.animationDuration() / 4
-        animation.timingFunction = CATransaction.animationTimingFunction()
-        yAxisLayer.actions = ["position": animationNew,
-                              "opacity": animationNew]
-        
-        layer.insertSublayer(yAxisLayer, below: layer.sublayers?.first)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
-            guard let __self = self else { return }
-            __self.prevYAxisLayer.opacity = 0.0
-            __self.prevYAxisLayer.position = prevYAxisPosition
-            __self.yAxisLayer.opacity = 1.0
-            __self.yAxisLayer.position = yAxisPosition
-        }
     }
     
     // MARK: - x axis
@@ -215,8 +128,8 @@ class LineChartView: UIView {
         path.addLines(between: [CGPoint(x: 0, y: axisY),
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
-        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
-
+//        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
+axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
         //
         let labelWidth: CGFloat = 42
         let axisXSideOffset = labelWidth * chartRect.width / bounds.width
@@ -236,7 +149,8 @@ class LineChartView: UIView {
             axisXs.append(axisMinX)
         }
 
-        let textY = bounds.height - yAxisLabelOffset
+//        let textY = bounds.height - yAxisLabelOffset
+        let textY = bounds.height - 5
         for x in axisXs {
             let affinedX = CGPoint(x: x, y: 0).applying(affine).x - labelWidth / 2
             let date = Date(timeIntervalSince1970: Double(x))

@@ -16,8 +16,7 @@ class LineChartYAxisDrawer {
     fileprivate var prevYAxisLayer: CAShapeLayer = CAShapeLayer()
     
     //MARK: - layout
-    func layoutAxis(chart: LineChart,
-                    viewLayer: CALayer,
+    func layoutAxis(viewLayer: CALayer,
                     chartRect: CGRect,
                     prevChartRect: CGRect,
                     affine: CGAffineTransform) {
@@ -103,7 +102,7 @@ class LineChartYAxisDrawer {
             let label = labelDrawer.makeTextLayer(text: "\(Int(y))")
             label.origin = CGPoint(x: chartRect.minX, y: y)
                 .applying(affine)
-                .applying(CGAffineTransform(translationX: 0, y: yAxisLabelOffset))
+                .applying(CGAffineTransform(translationX: 0, y: -yAxisLabelOffset - label.bounds.height))
             
             axisLayer.addSublayer(label)
         }
