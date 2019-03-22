@@ -37,6 +37,11 @@ class LineChartYAxisDrawer {
     
     func animateLayersChange(chartRect: CGRect,
                              prevChartRect: CGRect) {
+        setupAnimation()
+        
+        yAxisLayer.opacity = 0.0
+        prevYAxisLayer.opacity = 1.0
+        
         var directionFraction: CGFloat = 1.0
         if prevChartRect.maxY > chartRect.maxY {
             directionFraction = 1.5
@@ -44,15 +49,25 @@ class LineChartYAxisDrawer {
             directionFraction = 0.5
         }
         
-        yAxisLayer.opacity = 0.0
         var yAxisPosition = yAxisLayer.position
         yAxisPosition.y = yAxisPosition.y * directionFraction
         yAxisLayer.position = yAxisPosition
+
         yAxisPosition.y = yAxisLayer.frame.height / 2
-        
+       
         var prevYAxisPosition = prevYAxisLayer.position
         prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
+            guard let __self = self else { return }
+            __self.prevYAxisLayer.opacity = 0.0
+            __self.prevYAxisLayer.position = prevYAxisPosition
+            __self.yAxisLayer.opacity = 1.0
+            __self.yAxisLayer.position = yAxisPosition
+        }
+    }
+    
+    func setupAnimation() {
         let animation = CABasicAnimation()
         animation.duration = CATransaction.animationDuration() / 2
         animation.timingFunction = CATransaction.animationTimingFunction()
@@ -64,14 +79,6 @@ class LineChartYAxisDrawer {
         animation.timingFunction = CATransaction.animationTimingFunction()
         yAxisLayer.actions = ["position": animationNew,
                               "opacity": animationNew]
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
-            guard let __self = self else { return }
-            __self.prevYAxisLayer.opacity = 0.0
-            __self.prevYAxisLayer.position = prevYAxisPosition
-            __self.yAxisLayer.opacity = 1.0
-            __self.yAxisLayer.position = yAxisPosition
-        }
     }
     
     // MARK: -
