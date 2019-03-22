@@ -69,22 +69,10 @@ class LineChartSelectionDrawer {
         let selectionLayer = CALayer()
         selectionLayer.frame = bounds
         
-        //---
-        do {
-            let backgroundPath = CGMutablePath()
-            backgroundPath.addLines(between: [CGPoint(x: affinedSelectedChartX, y: 0),
-                                              CGPoint(x: affinedSelectedChartX, y: bounds.height - 19)])
-            let backgrShape = CAShapeLayer()
-            backgrShape.frame = bounds
-            backgrShape.path = backgroundPath
-            backgrShape.strokeColor = UIColor(red: 244.0 / 255.0,
-                                              green: 243.0 / 255.0,
-                                              blue: 249.0 / 255.0,
-                                              alpha: 1).cgColor
-            backgrShape.fillColor = backgrShape.strokeColor
-            backgrShape.lineWidth = 1
-            selectionLayer.addSublayer(backgrShape)
-        }
+        drawVerticalLine(selectionLayer: selectionLayer,
+                         x: selectedChartX,
+                         chartRect: chartRect,
+                         affine: affine)
         
         //---
         for line in lines {
@@ -167,5 +155,27 @@ class LineChartSelectionDrawer {
         //---
         self.selectionLayer = selectionLayer
         viewLayer.addSublayer(selectionLayer)
+    }
+    
+    fileprivate func drawVerticalLine(selectionLayer: CALayer,
+                                      x: Double,
+                                      chartRect: CGRect,
+                                      affine: CGAffineTransform) {
+        let points = [CGPoint(x: CGFloat(x), y: chartRect.minY),
+                      CGPoint(x: CGFloat(x), y: chartRect.maxY)]
+        
+        let path = CGMutablePath()
+        path.addLines(between: points, transform: affine)
+        
+        let layer = CAShapeLayer()
+        layer.frame = selectionLayer.bounds
+        layer.path = path
+        layer.strokeColor = UIColor(red: 244.0 / 255.0,
+                                    green: 243.0 / 255.0,
+                                    blue: 249.0 / 255.0,
+                                    alpha: 1).cgColor
+        layer.fillColor = layer.strokeColor
+        layer.lineWidth = 1
+        selectionLayer.addSublayer(layer)
     }
 }
