@@ -13,8 +13,6 @@ class LineChartView: UIView {
     fileprivate var xRangePercents: ClosedRange<CGFloat> = 0.0...1.0
     fileprivate let showAxes: Bool
     
-    fileprivate var lineLayers: [CAShapeLayer] = []
-    
     fileprivate var yAxisLayer: CAShapeLayer
     fileprivate let yAxisLabelOffset: CGFloat = 5
     fileprivate var prevYAxisLayer: CAShapeLayer
@@ -111,16 +109,17 @@ class LineChartView: UIView {
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
         
+        if showAxes {
+            animateYAxis(chartRect: chartRect, affine: affine)
+            animateXAxis(chartRect: chartRect, affine: affine)
+        }
+        
         linesRenderer.layoutLines(chart: chart,
                                   viewLayer: layer,
                                   chartRect: chartRect,
                                   affine: affine)
         
         drawSelectionLayer(chartRect: chartRect, affine: affine)
-        
-        guard showAxes else { return }
-        animateYAxis(chartRect: chartRect, affine: affine)
-        animateXAxis(chartRect: chartRect, affine: affine)
     }
     
     // MARK: - y axis
@@ -196,7 +195,7 @@ class LineChartView: UIView {
         yAxisLayer.actions = ["position": animationNew,
                               "opacity": animationNew]
         
-        layer.insertSublayer(yAxisLayer, below: lineLayers.first)
+        layer.insertSublayer(yAxisLayer, below: layer.sublayers?.first)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
             __self.prevYAxisLayer.opacity = 0.0
@@ -288,7 +287,7 @@ class LineChartView: UIView {
         xAxisLayer.actions = ["position": animationNew,
                               "opacity": animationNew]
 
-        layer.insertSublayer(xAxisLayer, below: lineLayers.first)
+        layer.insertSublayer(xAxisLayer, below: layer.sublayers?.first)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
             __self.prevXAxisLayer.opacity = 0.0
