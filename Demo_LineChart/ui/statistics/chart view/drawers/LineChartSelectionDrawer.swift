@@ -148,7 +148,7 @@ class LineChartSelectionDrawer {
         let size = CGSize(width: 94, height: 40)
         var origin = CGPoint(x: CGFloat(x), y: chartRect.maxY)
             .applying(affine)
-            .applying(CGAffineTransform(translationX: -size.width / 2, y: 0))       
+            .applying(CGAffineTransform(translationX: -size.width / 2, y: 0))
         
         let minX: CGFloat = 0
         let maxX: CGFloat = selectionLayer.bounds.width - size.width
@@ -168,10 +168,9 @@ class LineChartSelectionDrawer {
         
         //
         let yearLabel = labelDrawer.makeTextLayer(text: yearFormatter.string(from: date),
-                                                  font: UIFont.boldSystemFont(ofSize: 8),
                                                   fontSize: 8)
-        dayLabel.origin = CGPoint(x: dayLabel.frame.minX,
-                                  y: dayLabel.frame.maxY + 8)
+        yearLabel.origin = CGPoint(x: dayLabel.frame.minX,
+                                   y: dayLabel.frame.maxY + 8)
         
         //
         var lineLables: [CATextLayer] = []
