@@ -29,7 +29,7 @@ class LineChartLinesDrawer {
         }
     }
     
-    fileprivate func setupLineLayers(chart: LineChart,
+    func setupLineLayers(chart: LineChart,
                          viewLayer: CALayer) {
         lineLayers.forEach({ $0.removeFromSuperlayer() })
         linesIndexToEnabled.removeAll()

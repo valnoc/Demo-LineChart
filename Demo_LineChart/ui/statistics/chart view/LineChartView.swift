@@ -59,6 +59,7 @@ class LineChartView: UIView {
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         
+        linesDrawer.setupLineLayers(chart: chart, viewLayer: layer)
         setNeedsLayout()
         layoutIfNeeded()
     }
@@ -90,6 +91,8 @@ class LineChartView: UIView {
     // MARK: - size
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        guard bounds.size != .zero else { return }
         
         let chartRect = makeChartRect()
         defer {
@@ -129,7 +132,7 @@ class LineChartView: UIView {
                                 CGPoint(x: bounds.width, y: axisY)])
         axisLayer.path = path
 //        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
-axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
+        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
         //
         let labelWidth: CGFloat = 42
         let axisXSideOffset = labelWidth * chartRect.width / bounds.width
