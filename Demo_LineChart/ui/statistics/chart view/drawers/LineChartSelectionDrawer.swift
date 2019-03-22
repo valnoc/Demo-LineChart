@@ -80,69 +80,12 @@ class LineChartSelectionDrawer {
                       chartRect: chartRect,
                       affine: affine)
 
-        
-        //---
-        do {
-            var rect = CGRect(x: affinedSelectedChartX - 94/2, y: 0, width: 94, height: 40)
-            let date = Date(timeIntervalSince1970: selectedChartX)
-            
-            let dayLabel = labelDrawer.makeTextLayer(text: dayFormatter.string(from: date),
-                                                     font: UIFont.boldSystemFont(ofSize: 8),
-                                                     fontSize: 8)
-            dayLabel.origin = CGPoint(x: rect.minX + 10,
-                                      y: rect.minY + 8)
-            
-            let yearLabel = labelDrawer.makeTextLayer(text: yearFormatter.string(from: date),
-                                                      font: UIFont.boldSystemFont(ofSize: 8),
-                                                      fontSize: 8)
-            dayLabel.origin = CGPoint(x: dayLabel.frame.minX,
-                                      y: dayLabel.frame.maxY + 8)
-            
-            var lineLables: [CATextLayer] = []
-            for line in lines{
-                guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
-                
-                let label = labelDrawer.makeTextLayer(text: "\(Int(point.y))",
-                                          font: UIFont.boldSystemFont(ofSize: 8),
-                                          fontSize: 8,
-                                          color: UIColor(hex: line.colorHex))
-                label.origin = CGPoint(x: rect.maxX - 10 - label.frame.size.width,
-                                          y: rect.minY + 8 + (7 + label.frame.size.height) * CGFloat(lineLables.count))
-                var frame = label.frame
-                frame.size = label.preferredFrameSize()
-                frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(lineLables.count)
-                frame.origin.x = rect.maxX - 10 - frame.size.width
-                label.frame = frame
-                
-                lineLables.append(label)
-            }
-            
-            if lineLables.count > 2 {
-                rect.size.height = lineLables.last!.frame.maxY + 8
-            }
-            
-            let backgroundPath = CGMutablePath()
-            backgroundPath.addRoundedRect(in: rect,
-                                          cornerWidth: 1,
-                                          cornerHeight: 1)
-            let backgroundShape = CAShapeLayer()
-            backgroundShape.frame = bounds
-            backgroundShape.path = backgroundPath
-            backgroundShape.strokeColor = UIColor(red: 244.0 / 255.0,
-                                                  green: 243.0 / 255.0,
-                                                  blue: 249.0 / 255.0,
-                                                  alpha: 1).cgColor
-            backgroundShape.fillColor = backgroundShape.strokeColor
-            backgroundShape.lineWidth = 1
-            
-            backgroundShape.addSublayer(dayLabel)
-            backgroundShape.addSublayer(yearLabel)
-            lineLables.forEach({ backgroundShape.addSublayer($0) })
-            
-            selectionLayer.addSublayer(backgroundShape)
-        }
-        
-        //---
+        drawInfo(selectionLayer: selectionLayer,
+                 x: selectedChartX,
+                 lines: lines,
+                 chartRect: chartRect,
+                 affine: affine)
+
         self.selectionLayer = selectionLayer
         viewLayer.addSublayer(selectionLayer)
     }
@@ -195,5 +138,84 @@ class LineChartSelectionDrawer {
             
             selectionLayer.addSublayer(lineDotLayer)
         }
+    }
+    
+    fileprivate func drawInfo(selectionLayer: CALayer,
+                                   x: Double,
+                                   lines: [LineChart.Line],
+                                   chartRect: CGRect,
+                                   affine: CGAffineTransform) {
+        var origin = CGPoint(x: x, y: 0).applying(affine)
+        let size = CGSize(width: 94, height: 40)
+        
+        let minX: CGFloat = 0
+        let maxX: CGFloat = selectionLayer.bounds.width - size.width
+        if origin.x < minX { origin.x = minX }
+        if origin.x > maxX { origin.x = maxX }
+        
+        var rect = CGRect(origin: origin, size: size)
+
+        let date = Date(timeIntervalSince1970: x)
+        
+        //
+        let dayLabel = labelDrawer.makeTextLayer(text: dayFormatter.string(from: date),
+                                                 font: UIFont.boldSystemFont(ofSize: 8),
+                                                 fontSize: 8)
+        dayLabel.origin = CGPoint(x: rect.minX + 10,
+                                  y: rect.minY + 8)
+        
+        //
+        let yearLabel = labelDrawer.makeTextLayer(text: yearFormatter.string(from: date),
+                                                  font: UIFont.boldSystemFont(ofSize: 8),
+                                                  fontSize: 8)
+        dayLabel.origin = CGPoint(x: dayLabel.frame.minX,
+                                  y: dayLabel.frame.maxY + 8)
+        
+        //
+        var lineLables: [CATextLayer] = []
+        for line in lines{
+            guard let point = line.points.filter({ $0.x == CGFloat(x) }).first else { continue }
+            
+            let label = labelDrawer.makeTextLayer(text: "\(Int(point.y))",
+                font: UIFont.boldSystemFont(ofSize: 8),
+                fontSize: 8,
+                color: UIColor(hex: line.colorHex))
+            label.origin = CGPoint(x: rect.maxX - 10 - label.frame.size.width,
+                                   y: rect.minY + 8 + (7 + label.frame.size.height) * CGFloat(lineLables.count))
+            var frame = label.frame
+            frame.size = label.preferredFrameSize()
+            frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(lineLables.count)
+            frame.origin.x = rect.maxX - 10 - frame.size.width
+            label.frame = frame
+            
+            lineLables.append(label)
+        }
+        
+        if lineLables.count > 2 {
+            rect.size.height = lineLables.last!.frame.maxY + 8
+        }
+        
+        //
+        let backgroundPath = CGMutablePath()
+        backgroundPath.addRoundedRect(in: rect,
+                                      cornerWidth: 1,
+                                      cornerHeight: 1)
+        let backgroundShape = CAShapeLayer()
+        backgroundShape.frame = selectionLayer.bounds
+        backgroundShape.path = backgroundPath
+        backgroundShape.strokeColor = UIColor(red: 244.0 / 255.0,
+                                              green: 243.0 / 255.0,
+                                              blue: 249.0 / 255.0,
+                                              alpha: 1).cgColor
+        backgroundShape.fillColor = backgroundShape.strokeColor
+        backgroundShape.lineWidth = 1
+        
+        //
+        backgroundShape.addSublayer(dayLabel)
+        backgroundShape.addSublayer(yearLabel)
+        lineLables.forEach({ backgroundShape.addSublayer($0) })
+        
+        //
+        selectionLayer.addSublayer(backgroundShape)
     }
 }
