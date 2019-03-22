@@ -117,18 +117,19 @@ class LineChartSelectionDrawer {
             let yearLabel = labelDrawer.makeTextLayer(text: yearFormatter.string(from: date),
                                                       font: UIFont.boldSystemFont(ofSize: 8),
                                                       fontSize: 8)
-            dayLabel.origin = CGPoint(x: dayLabel.frame.x,
+            dayLabel.origin = CGPoint(x: dayLabel.frame.minX,
                                       y: dayLabel.frame.maxY + 8)
             
             var lineLables: [CATextLayer] = []
             for line in lines{
                 guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
                 
-                let label = makeAxisTextLayer(text: "\(Int(point.y))")
-                label.font = UIFont.boldSystemFont(ofSize: 8)
-                label.fontSize = 8
-                label.foregroundColor = UIColor(hex: line.colorHex).cgColor
-                
+                let label = labelDrawer.makeTextLayer(text: "\(Int(point.y))",
+                                          font: UIFont.boldSystemFont(ofSize: 8),
+                                          fontSize: 8,
+                                          color: UIColor(hex: line.colorHex))
+                label.origin = CGPoint(x: rect.maxX - 10 - label.frame.size.width,
+                                          y: rect.minY + 8 + (7 + label.frame.size.height) * CGFloat(lineLables.count))
                 var frame = label.frame
                 frame.size = label.preferredFrameSize()
                 frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(lineLables.count)
@@ -156,8 +157,8 @@ class LineChartSelectionDrawer {
             backgroundShape.fillColor = backgroundShape.strokeColor
             backgroundShape.lineWidth = 1
             
-            backgroundShape.addSublayer(date1Label)
-            backgroundShape.addSublayer(date2Label)
+            backgroundShape.addSublayer(dayLabel)
+            backgroundShape.addSublayer(yearLabel)
             lineLables.forEach({ backgroundShape.addSublayer($0) })
             
             selectionLayer.addSublayer(backgroundShape)
@@ -165,6 +166,6 @@ class LineChartSelectionDrawer {
         
         //---
         self.selectionLayer = selectionLayer
-        layer.addSublayer(selectionLayer)
+        viewLayer.addSublayer(selectionLayer)
     }
 }

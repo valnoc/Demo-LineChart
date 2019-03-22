@@ -86,7 +86,8 @@ class LineChartView: UIView {
         let yScale = (bounds.height - (showAxes ? xAxisBottomOffset : 0)) / chartRect.height
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
-            .translatedBy(x: -chartRect.minX, y: -chartRect.minY - chartRect.height)
+            .translatedBy(x: -chartRect.minX,
+                          y: -chartRect.minY - chartRect.height)
         
         if showAxes {
             yAxisDrawer.layoutAxis(viewLayer: layer,
