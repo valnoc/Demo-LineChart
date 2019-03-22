@@ -129,22 +129,21 @@ class LineChartYAxisDrawer {
     fileprivate func calculateMaxY(chartRect: CGRect,
                                    affine: CGAffineTransform) -> CGFloat {
         let textHeight: CGFloat = 13
-        let axisTopOffset = CGPoint(x: 0,
-                                    y: (textHeight + yAxisLabelOffset * 2))
-            .applying(affine)
-            .y
+        let axisTopOffset = (textHeight + yAxisLabelOffset * 2) / -affine.d
         
-        var maxY = chartRect.maxY - axisTopOffset + 1
-        var maxYLastDigit: CGFloat = 0
-        
+        var maxY = (chartRect.maxY - axisTopOffset + 1).rounded()
+        var maxYLastDigit: Int = 0
+
         repeat {
             maxY -= 1
-            maxYLastDigit = maxY
+            maxYLastDigit = Int(
+                maxY
                 .rounded()
                 .truncatingRemainder(dividingBy: 10)
+            )
         } while maxYLastDigit != 5 && maxYLastDigit != 0
         
-        return maxY
+        return maxY.rounded()
     }
     
     fileprivate func makeBaseAxisLayer() -> CAShapeLayer {
