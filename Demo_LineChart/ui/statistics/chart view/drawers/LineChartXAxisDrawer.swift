@@ -27,7 +27,7 @@ class LineChartXAxisDrawer {
                     prevChartRect: CGRect,
                     affine: CGAffineTransform,
                     bottomOffset: CGFloat) {
-        guard prevChartRect.maxY != chartRect.maxY || prevChartRect.minY != chartRect.minY else { return }
+        guard prevChartRect.maxX != chartRect.maxX || prevChartRect.minX != chartRect.minX else { return }
         
         prevAxisLayer.removeFromSuperlayer()
         prevAxisLayer = axisLayer
