@@ -82,8 +82,7 @@ class LineChartView: UIView {
             prevChartRect = chartRect
         }
         
-        let xScale = bounds.width / chartRect.width
-        let yScale = (bounds.height - (showAxes ? xAxisBottomOffset : 0)) / chartRect.height
+        let (xScale, yScale) = makeXYScale(chartRect)
         
         let affine = CGAffineTransform(scaleX: xScale, y: -yScale)
             .translatedBy(x: -chartRect.minX,
@@ -116,7 +115,7 @@ class LineChartView: UIView {
         if sender.state == .ended {
             let chartRect = makeChartRect()
             
-            let (xScale, _) = makeXYScale()
+            let (xScale, _) = makeXYScale(chartRect)
             let point = sender.location(in: self)
             let chartPointX = point.x / xScale + chartRect.minX
             
@@ -133,7 +132,9 @@ class LineChartView: UIView {
                                   includingLinesAt: linesDrawer.enabledLinesIndexes())
     }
     
-    func makeXYScale() -> (CGFloat, CGFloat) {
-        return (1, 1)
+    func makeXYScale(_ chartRect: CGRect) -> (CGFloat, CGFloat) {
+        let xScale = bounds.width / chartRect.width
+        let yScale = (bounds.height - (showAxes ? xAxisBottomOffset : 0)) / chartRect.height
+        return (xScale, yScale)
     }
 }
