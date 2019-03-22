@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B0535BA2244BD8000420AA2 /* LineChartLabelDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0535B92244BD8000420AA2 /* LineChartLabelDrawer.swift */; };
 		5B0A5C6822427283007C2C1E /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5B22427283007C2C1E /* StatisticsViewController.swift */; };
 		5B0A5C6922427283007C2C1E /* XRangeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5D22427283007C2C1E /* XRangeControl.swift */; };
 		5B0A5C6A22427283007C2C1E /* XRangeControl+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A5C5E22427283007C2C1E /* XRangeControl+Tracking.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B0535B92244BD8000420AA2 /* LineChartLabelDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartLabelDrawer.swift; sourceTree = "<group>"; };
 		5B0A5C5B22427283007C2C1E /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		5B0A5C5D22427283007C2C1E /* XRangeControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRangeControl.swift; sourceTree = "<group>"; };
 		5B0A5C5E22427283007C2C1E /* XRangeControl+Tracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRangeControl+Tracking.swift"; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				5BA3A31322441FC0009E3535 /* LineChartLinesRenderer.swift */,
 				5BA3A31A22441FDB009E3535 /* LineChartYAxisRenderer.swift */,
 				5BA3A31C22441FED009E3535 /* LineChartXAxisRenderer.swift */,
+				5B0535B92244BD8000420AA2 /* LineChartLabelDrawer.swift */,
 			);
 			path = renderers;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				5B0A5C6B22427283007C2C1E /* XRangeControlWindow.swift in Sources */,
 				5BF60A9722422773009E6713 /* UIColor+Hex.swift in Sources */,
 				5B0A5C6A22427283007C2C1E /* XRangeControl+Tracking.swift in Sources */,
+				5B0535BA2244BD8000420AA2 /* LineChartLabelDrawer.swift in Sources */,
 				5B30E6CA224256A300C11CFB /* UIImage+Ext.swift in Sources */,
 				5BA3A31D22441FED009E3535 /* LineChartXAxisRenderer.swift in Sources */,
 				5BA3A31722441FC0009E3535 /* LineChartLinesRenderer.swift in Sources */,
