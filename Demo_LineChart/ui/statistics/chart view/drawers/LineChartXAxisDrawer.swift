@@ -104,11 +104,12 @@ class LineChartXAxisDrawer {
         
         for x in xs {
             let date = Date(timeIntervalSince1970: Double(x))
-            let label = labelDrawer.makeTextLayer(text: dateFormatter.string(from: date))
+            let label = labelDrawer.makeTextLayer(text: dateFormatter.string(from: date), fontSize: 8)
             label.origin = CGPoint(x: x, y: chartRect.minY)
                 .applying(affine)
+            label.origin = label.origin
                 .applying(CGAffineTransform(translationX: -label.bounds.width / 2,
-                                            y: -(bottomOffset - label.bounds.height) / 2))
+                                            y: (bounds.height - label.frame.maxY) / 2))
             
             axisLayer.addSublayer(label)
         }
@@ -129,7 +130,7 @@ class LineChartXAxisDrawer {
         axisLayer.path = path
         
         //
-        let label = labelDrawer.makeTextLayer(text: "\(Int(chartRect.minY))")
+        let label = labelDrawer.makeTextLayer(text: "\(Int(chartRect.minY))", fontSize: 8)
         label.origin = CGPoint(x: chartRect.minX, y: chartRect.minY)
             .applying(affine)
             .applying(CGAffineTransform(translationX: 0, y: -axisLabelOffset - label.bounds.height))

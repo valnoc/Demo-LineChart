@@ -99,7 +99,7 @@ class LineChartYAxisDrawer {
             path.addLines(between: points,
                           transform: affine)
             
-            let label = labelDrawer.makeTextLayer(text: "\(Int(y))")
+            let label = labelDrawer.makeTextLayer(text: "\(Int(y))", fontSize: 8)
             label.origin = CGPoint(x: chartRect.minX, y: y)
                 .applying(affine)
                 .applying(CGAffineTransform(translationX: 0, y: -axisLabelOffset - label.bounds.height))
@@ -128,7 +128,7 @@ class LineChartYAxisDrawer {
     
     fileprivate func calculateMinMaxY(chartRect: CGRect,
                                    affine: CGAffineTransform) -> (CGFloat, CGFloat) {
-        let textHeight: CGFloat = 13
+        let textHeight: CGFloat = 8
         let axisTopOffset = (textHeight + axisLabelOffset * 2) / -affine.d
         
         var maxY = (chartRect.maxY - axisTopOffset + 1).rounded()
