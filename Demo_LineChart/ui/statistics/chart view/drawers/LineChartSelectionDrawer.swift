@@ -74,22 +74,12 @@ class LineChartSelectionDrawer {
                          chartRect: chartRect,
                          affine: affine)
         
-        //---
-        for line in lines {
-            guard let point = line.points.filter({ $0.x == CGFloat(selectedChartX) }).first else { continue }
-            let affinedY = point.applying(affine).y
-            
-            let path = CGMutablePath()
-            path.addEllipse(in: CGRect(x: affinedSelectedChartX - 9/2, y: affinedY - 9/2, width: 9, height: 9))
-            
-            let lineDotLayer = CAShapeLayer()
-            lineDotLayer.lineWidth = 2
-            lineDotLayer.fillColor = UIColor.white.cgColor
-            lineDotLayer.strokeColor = UIColor(hex: line.colorHex).cgColor
-            lineDotLayer.frame = bounds
-            lineDotLayer.path = path
-            selectionLayer.addSublayer(lineDotLayer)
-        }
+        drawLinesDots(selectionLayer: selectionLayer,
+                      x: selectedChartX,
+                      lines: lines,
+                      chartRect: chartRect,
+                      affine: affine)
+
         
         //---
         do {
@@ -177,5 +167,33 @@ class LineChartSelectionDrawer {
         layer.fillColor = layer.strokeColor
         layer.lineWidth = 1
         selectionLayer.addSublayer(layer)
+    }
+    
+    fileprivate func drawLinesDots(selectionLayer: CALayer,
+                                      x: Double,
+                                      lines: [LineChart.Line],
+                                      chartRect: CGRect,
+                                      affine: CGAffineTransform) {
+        for line in lines {
+            guard let point = line.points.filter({ $0.x == CGFloat(x) }).first else { continue }
+            
+            let rect = CGRect(x: point.x - 9/2,
+                              y: point.y - 9/2,
+                              width: 9,
+                              height: 9)
+                .applying(affine)
+            
+            let path = CGMutablePath()
+            path.addEllipse(in: rect)
+            
+            let lineDotLayer = CAShapeLayer()
+            lineDotLayer.lineWidth = 2
+            lineDotLayer.fillColor = UIColor.white.cgColor
+            lineDotLayer.strokeColor = UIColor(hex: line.colorHex).cgColor
+            lineDotLayer.frame = selectionLayer.bounds
+            lineDotLayer.path = path
+            
+            selectionLayer.addSublayer(lineDotLayer)
+        }
     }
 }
