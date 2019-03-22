@@ -69,7 +69,7 @@ extension StatisticsViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.name.rawValue) else {
             return UITableViewCell(frame: .zero)
         }
-
+        
         cell.textLabel?.text = line.name
         cell.textLabel?.font = UIFont.systemFont(ofSize: 13)
         
@@ -94,16 +94,16 @@ extension StatisticsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            switch indexPath.row {
-            case 0:
-                return makeChartCell()
-            case 1:
-                return makeRangeCell()
-            default:
-                let index = indexPath.row - 2
-                return makeNameCell(chartView.chart.lines[index],
-                                    isEnabled: chartView.isLineEnabled(at: index))
-            }
+        switch indexPath.row {
+        case 0:
+            return makeChartCell()
+        case 1:
+            return makeRangeCell()
+        default:
+            let index = indexPath.row - 2
+            return makeNameCell(chartView.chart.lines[index],
+                                isEnabled: chartView.isLineEnabled(at: index))
+        }
     }
 }
 
