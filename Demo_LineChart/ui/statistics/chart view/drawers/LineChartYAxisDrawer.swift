@@ -89,30 +89,42 @@ class LineChartYAxisDrawer {
         axisLayer.frame = bounds
         
         //
-        var ys: [CGFloat] = []
-        let maxY = calculateMaxY(chartRect: chartRect, affine: affine)
-        
-        do {
-            var axisYTemp = maxY
-            let axisYStep = (maxY - chartRect.minY) / 5
-            while Int(axisYTemp) > Int(chartRect.minY) {
-                ys.append(axisYTemp)
-                axisYTemp -= axisYStep
-            }
-        }
+        let ys = calculateYs(chartRect: chartRect, affine: affine)
         
         let path = CGMutablePath()
         for y in ys {
-            let affinedY = CGPoint(x: 0, y: y).applying(affine).y
-            path.addLines(between: [
-                CGPoint(x: 0, y: affinedY),
-                CGPoint(x: bounds.width, y: affinedY)
-                ])
-            axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(y))", y: affinedY - yAxisLabelOffset))
+            let points = [
+                CGPoint(x: chartRect.minX, y: y),
+                CGPoint(x: chartRect.maxX, y: y)
+            ]
+            path.addLines(between: points,
+                          transform: affine)
+            
+            let label = labelDrawer.makeTextLayer(text: "\(Int(y))")
+            label.origin = CGPoint(x: chartRect.minX, y: y)
+                .applying(affine)
+                .applying(CGAffineTransform(translationX: 0, y: yAxisLabelOffset))
+            
+            axisLayer.addSublayer(label)
         }
         axisLayer.path = path
         
         return axisLayer
+    }
+    
+    fileprivate func calculateYs(chartRect: CGRect,
+                                 affine: CGAffineTransform) -> [CGFloat] {
+        let maxY = calculateMaxY(chartRect: chartRect, affine: affine)
+        var ys: [CGFloat] = []
+        
+        var axisYTemp = maxY
+        let axisYStep = (maxY - chartRect.minY) / 5
+        while Int(axisYTemp) > Int(chartRect.minY) {
+            ys.append(axisYTemp)
+            axisYTemp -= axisYStep
+        }
+        
+        return ys
     }
     
     fileprivate func calculateMaxY(chartRect: CGRect,

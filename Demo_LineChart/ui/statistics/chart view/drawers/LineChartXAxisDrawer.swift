@@ -8,6 +8,6 @@
 
 import Foundation
 
-class LineChartXAxisRenderer {
+class LineChartXAxisDrawer {
     
 }
