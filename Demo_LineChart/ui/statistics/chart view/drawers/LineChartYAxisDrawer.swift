@@ -48,21 +48,21 @@ class LineChartYAxisDrawer {
             directionFraction = 0.5
         }
         
-        var yAxisPosition = axisLayer.position
-        yAxisPosition.y = yAxisPosition.y * directionFraction
-        axisLayer.position = yAxisPosition
+        var axisPosition = axisLayer.position
+        axisPosition.y = axisPosition.y * directionFraction
+        axisLayer.position = axisPosition
         
-        yAxisPosition.y = axisLayer.frame.height / 2
+        axisPosition.y = axisLayer.frame.height / 2
         
-        var prevYAxisPosition = prevAxisLayer.position
-        prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
+        var prevAxisPosition = prevAxisLayer.position
+        prevAxisPosition.y = prevAxisPosition.y * (2 - directionFraction)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
             __self.prevAxisLayer.opacity = 0.0
-            __self.prevAxisLayer.position = prevYAxisPosition
+            __self.prevAxisLayer.position = prevAxisPosition
             __self.axisLayer.opacity = 1.0
-            __self.axisLayer.position = yAxisPosition
+            __self.axisLayer.position = axisPosition
         }
     }
     

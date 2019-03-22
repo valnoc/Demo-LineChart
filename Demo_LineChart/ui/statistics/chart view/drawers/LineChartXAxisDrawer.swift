@@ -15,7 +15,7 @@ class LineChartXAxisDrawer {
     fileprivate let axisLabelOffset: CGFloat = 5
     fileprivate var prevAxisLayer: CAShapeLayer = CAShapeLayer()
     
-    fileprivate var xAxisDateFormatter: DateFormatter = {
+    fileprivate var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM dd"
         return formatter
@@ -50,27 +50,27 @@ class LineChartXAxisDrawer {
         prevAxisLayer.opacity = 1.0
         
         var directionFraction: CGFloat = 1.0
-        if prevChartRect.maxY > chartRect.maxY {
+        if prevChartRect.maxX > chartRect.maxX {
             directionFraction = 0.5
         } else {
             directionFraction = 1.5
         }
         
-        var yAxisPosition = axisLayer.position
-        yAxisPosition.y = yAxisPosition.y * directionFraction
-        axisLayer.position = yAxisPosition
+        var axisPosition = axisLayer.position
+        axisPosition.x = axisPosition.x * directionFraction
+        axisLayer.position = axisPosition
         
-        yAxisPosition.y = axisLayer.frame.height / 2
+        axisPosition.x = axisLayer.frame.width / 2
         
-        var prevYAxisPosition = prevAxisLayer.position
-        prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
+        var prevAxisPosition = prevAxisLayer.position
+        prevAxisPosition.x = prevAxisPosition.x * (2 - directionFraction)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
             __self.prevAxisLayer.opacity = 0.0
-            __self.prevAxisLayer.position = prevYAxisPosition
+            __self.prevAxisLayer.position = prevAxisPosition
             __self.axisLayer.opacity = 1.0
-            __self.axisLayer.position = yAxisPosition
+            __self.axisLayer.position = axisPosition
         }
     }
     
@@ -96,12 +96,15 @@ class LineChartXAxisDrawer {
         let axisLayer = makeBaseAxisLayer()
         axisLayer.frame = bounds
         
+        drawXAxisWithYMin(axisLayer: axisLayer,
+                          chartRect: chartRect,
+                          affine: affine)
         //
         let xs = calculateXs(chartRect: chartRect, affine: affine)
         
         for x in xs {
             let date = Date(timeIntervalSince1970: Double(x))
-            let label = labelDrawer.makeTextLayer(text: xAxisDateFormatter.string(from: date))
+            let label = labelDrawer.makeTextLayer(text: dateFormatter.string(from: date))
             label.origin = CGPoint(x: x, y: chartRect.minY)
                 .applying(affine)
                 .applying(CGAffineTransform(translationX: -label.bounds.width / 2,
@@ -112,18 +115,25 @@ class LineChartXAxisDrawer {
 
         
         return axisLayer
+    }
+    
+    fileprivate func drawXAxisWithYMin(axisLayer: CAShapeLayer,
+                                       chartRect: CGRect,
+                                       affine: CGAffineTransform) {
+        let points = [CGPoint(x: chartRect.minX, y: chartRect.minY),
+                      CGPoint(x: chartRect.maxX, y: chartRect.minY)]
+
+        let path = CGMutablePath()
+        path.addLines(between: points,
+                      transform: affine)
+        axisLayer.path = path
         
         //
-//        let axisY = bounds.height - xAxisOffset
-//        let path = CGMutablePath()
-//        path.addLines(between: [CGPoint(x: 0, y: axisY),
-//                                CGPoint(x: bounds.width, y: axisY)])
-//        axisLayer.path = path
-//        //        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - yAxisLabelOffset))
-//        axisLayer.addSublayer(makeAxisTextLayer(text: "\(Int(chartRect.minY))", y: axisY - 5))
-        //
-        
-        //        let textY = bounds.height - yAxisLabelOffset
+        let label = labelDrawer.makeTextLayer(text: "\(Int(chartRect.minY))")
+        label.origin = CGPoint(x: chartRect.minX, y: chartRect.minY)
+            .applying(affine)
+            .applying(CGAffineTransform(translationX: 0, y: -axisLabelOffset - label.bounds.height))
+        axisLayer.addSublayer(label)
     }
     
     fileprivate func calculateXs(chartRect: CGRect,
