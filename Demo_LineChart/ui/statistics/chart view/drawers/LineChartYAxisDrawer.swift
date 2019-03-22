@@ -113,21 +113,21 @@ class LineChartYAxisDrawer {
     
     fileprivate func calculateYs(chartRect: CGRect,
                                  affine: CGAffineTransform) -> [CGFloat] {
-        let maxY = calculateMaxY(chartRect: chartRect, affine: affine)
+        let (minY, maxY) = calculateMinMaxY(chartRect: chartRect, affine: affine)
         var ys: [CGFloat] = []
         
-        var axisYTemp = maxY
-        let axisYStep = (maxY - chartRect.minY) / 5
-        while Int(axisYTemp) > Int(chartRect.minY) {
-            ys.append(axisYTemp)
-            axisYTemp -= axisYStep
+        var temp = maxY
+        let step = (maxY - minY) / 5
+        while Int(temp) > Int(minY) {
+            ys.append(temp)
+            temp -= step
         }
         
         return ys
     }
     
-    fileprivate func calculateMaxY(chartRect: CGRect,
-                                   affine: CGAffineTransform) -> CGFloat {
+    fileprivate func calculateMinMaxY(chartRect: CGRect,
+                                   affine: CGAffineTransform) -> (CGFloat, CGFloat) {
         let textHeight: CGFloat = 13
         let axisTopOffset = (textHeight + axisLabelOffset * 2) / -affine.d
         
@@ -143,7 +143,7 @@ class LineChartYAxisDrawer {
             )
         } while maxYLastDigit != 5 && maxYLastDigit != 0
         
-        return maxY.rounded()
+        return (chartRect.minY, maxY.rounded())
     }
     
     fileprivate func makeBaseAxisLayer() -> CAShapeLayer {
