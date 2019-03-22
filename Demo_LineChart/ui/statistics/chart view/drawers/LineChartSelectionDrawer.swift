@@ -120,11 +120,11 @@ class LineChartSelectionDrawer {
         for line in lines {
             guard let point = line.points.filter({ $0.x == CGFloat(x) }).first else { continue }
             
-            let rect = CGRect(x: point.x - 9/2,
-                              y: point.y - 9/2,
+            let affinedPoint = point.applying(affine)
+            let rect = CGRect(x: affinedPoint.x - 9/2,
+                              y: affinedPoint.y - 9/2,
                               width: 9,
                               height: 9)
-                .applying(affine)
             
             let path = CGMutablePath()
             path.addEllipse(in: rect)
