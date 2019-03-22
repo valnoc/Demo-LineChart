@@ -145,8 +145,10 @@ class LineChartSelectionDrawer {
                                    lines: [LineChart.Line],
                                    chartRect: CGRect,
                                    affine: CGAffineTransform) {
-        var origin = CGPoint(x: x, y: 0).applying(affine)
         let size = CGSize(width: 94, height: 40)
+        var origin = CGPoint(x: CGFloat(x), y: chartRect.maxY)
+            .applying(affine)
+            .applying(CGAffineTransform(translationX: -size.width / 2, y: 0))       
         
         let minX: CGFloat = 0
         let maxX: CGFloat = selectionLayer.bounds.width - size.width
