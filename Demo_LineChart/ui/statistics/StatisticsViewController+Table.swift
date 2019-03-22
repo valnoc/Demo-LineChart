@@ -10,7 +10,7 @@ import UIKit
 
 extension StatisticsViewController {
     enum Cell: String {
-        case chart, range, name, night
+        case chart, range, name
     }
     
     func setupTableView() {
@@ -20,7 +20,6 @@ extension StatisticsViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.chart.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.range.rawValue)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.name.rawValue)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Cell.night.rawValue)
     }
     
     func makeChartCell() -> UITableViewCell {
@@ -83,35 +82,18 @@ extension StatisticsViewController {
         
         return cell
     }
-    
-    func makeNightModeCell() -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.night.rawValue) else {
-            return UITableViewCell(frame: .zero)
-        }
-        
-        cell.textLabel?.text = "Switch to Night Mode"
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
-        cell.textLabel?.textColor = UIColor(red: 0, green: 78.0 / 255.0, blue: 221.0 / 255.0, alpha: 1)
-        
-        cell.textLabel?.textAlignment = .center
-        
-        return cell
-    }
 }
 
 extension StatisticsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return chartView.chart.lines.isEmpty ? 0: 2
+        return chartView.chart.lines.isEmpty ? 0: 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 { return 2 + chartView.chart.lines.count }
-        return 1
+        return 2 + chartView.chart.lines.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
             switch indexPath.row {
             case 0:
                 return makeChartCell()
@@ -122,9 +104,6 @@ extension StatisticsViewController: UITableViewDataSource {
                 return makeNameCell(chartView.chart.lines[index],
                                     isEnabled: chartView.isLineEnabled(at: index))
             }
-        default:
-            return makeNightModeCell()
-        }
     }
 }
 
