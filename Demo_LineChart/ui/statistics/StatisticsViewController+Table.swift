@@ -111,13 +111,11 @@ extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 0 {
-            let index = indexPath.row - 2
-            if index > -1 {
-                chartView.toggleLine(at: index)
-                xRangeControl.chartView.toggleLine(at: index)
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-            }
+        let index = indexPath.row - 2
+        if index > -1 {
+            chartView.toggleLine(at: index)
+            xRangeControl.chartView.toggleLine(at: index)
+            tableView.reloadData()
         }
     }
     
