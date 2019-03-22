@@ -110,7 +110,12 @@ class LineChartView: UIView {
                                    chartRect: chartRect,
                                    prevChartRect: prevChartRect,
                                    affine: affine)
-            animateXAxis(chartRect: chartRect, affine: affine)
+            xAxisDrawer.layoutAxis(viewLayer: layer,
+                                   chartRect: chartRect,
+                                   prevChartRect: prevChartRect,
+                                   affine: affine,
+                                   bottomOffset: xAxisOffset)
+//            animateXAxis(chartRect: chartRect, affine: affine)
         }
         
         linesDrawer.layoutLines(chart: chart,

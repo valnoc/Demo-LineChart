@@ -78,10 +78,10 @@
 		5B0535BB2244BEDF00420AA2 /* drawers */ = {
 			isa = PBXGroup;
 			children = (
-				5B0535BC2244BEDF00420AA2 /* LineChartXAxisDrawer.swift */,
 				5B0535BD2244BEDF00420AA2 /* LineChartLabelDrawer.swift */,
-				5B0535BE2244BEDF00420AA2 /* LineChartYAxisDrawer.swift */,
 				5B0535BF2244BEDF00420AA2 /* LineChartLinesDrawer.swift */,
+				5B0535BC2244BEDF00420AA2 /* LineChartXAxisDrawer.swift */,
+				5B0535BE2244BEDF00420AA2 /* LineChartYAxisDrawer.swift */,
 				5B0535C42244C3DF00420AA2 /* CALayer+Ext.swift */,
 			);
 			path = drawers;

@@ -11,9 +11,9 @@ import UIKit
 class LineChartYAxisDrawer {
     fileprivate let labelDrawer = LineChartLabelDrawer()
     
-    fileprivate var yAxisLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate let yAxisLabelOffset: CGFloat = 5
-    fileprivate var prevYAxisLayer: CAShapeLayer = CAShapeLayer()
+    fileprivate var axisLayer: CAShapeLayer = CAShapeLayer()
+    fileprivate let axisLabelOffset: CGFloat = 5
+    fileprivate var prevAxisLayer: CAShapeLayer = CAShapeLayer()
     
     //MARK: - layout
     func layoutAxis(viewLayer: CALayer,
@@ -22,13 +22,13 @@ class LineChartYAxisDrawer {
                     affine: CGAffineTransform) {
         guard prevChartRect.maxY != chartRect.maxY || prevChartRect.minY != chartRect.minY else { return }
         
-        prevYAxisLayer.removeFromSuperlayer()
-        prevYAxisLayer = yAxisLayer
+        prevAxisLayer.removeFromSuperlayer()
+        prevAxisLayer = axisLayer
         
-        yAxisLayer = makeYAxisLayer(bounds: viewLayer.bounds,
+        axisLayer = makeYAxisLayer(bounds: viewLayer.bounds,
                                     chartRect: chartRect,
                                     affine: affine)
-        viewLayer.insertSublayer(yAxisLayer, below: viewLayer.sublayers?.first)
+        viewLayer.insertSublayer(axisLayer, below: viewLayer.sublayers?.first)
         
         animateLayersChange(chartRect: chartRect,
                             prevChartRect: prevChartRect)
@@ -38,8 +38,8 @@ class LineChartYAxisDrawer {
                                          prevChartRect: CGRect) {
         setupAnimation()
         
-        yAxisLayer.opacity = 0.0
-        prevYAxisLayer.opacity = 1.0
+        axisLayer.opacity = 0.0
+        prevAxisLayer.opacity = 1.0
         
         var directionFraction: CGFloat = 1.0
         if prevChartRect.maxY > chartRect.maxY {
@@ -48,21 +48,21 @@ class LineChartYAxisDrawer {
             directionFraction = 0.5
         }
         
-        var yAxisPosition = yAxisLayer.position
+        var yAxisPosition = axisLayer.position
         yAxisPosition.y = yAxisPosition.y * directionFraction
-        yAxisLayer.position = yAxisPosition
+        axisLayer.position = yAxisPosition
         
-        yAxisPosition.y = yAxisLayer.frame.height / 2
+        yAxisPosition.y = axisLayer.frame.height / 2
         
-        var prevYAxisPosition = prevYAxisLayer.position
+        var prevYAxisPosition = prevAxisLayer.position
         prevYAxisPosition.y = prevYAxisPosition.y * (2 - directionFraction)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             guard let __self = self else { return }
-            __self.prevYAxisLayer.opacity = 0.0
-            __self.prevYAxisLayer.position = prevYAxisPosition
-            __self.yAxisLayer.opacity = 1.0
-            __self.yAxisLayer.position = yAxisPosition
+            __self.prevAxisLayer.opacity = 0.0
+            __self.prevAxisLayer.position = prevYAxisPosition
+            __self.axisLayer.opacity = 1.0
+            __self.axisLayer.position = yAxisPosition
         }
     }
     
@@ -70,13 +70,13 @@ class LineChartYAxisDrawer {
         let animation = CABasicAnimation()
         animation.duration = CATransaction.animationDuration() / 2
         animation.timingFunction = CATransaction.animationTimingFunction()
-        prevYAxisLayer.actions = ["position": animation,
+        prevAxisLayer.actions = ["position": animation,
                                   "opacity": animation]
         
         let animationNew = CABasicAnimation()
         animation.duration = CATransaction.animationDuration() / 4
         animation.timingFunction = CATransaction.animationTimingFunction()
-        yAxisLayer.actions = ["position": animationNew,
+        axisLayer.actions = ["position": animationNew,
                               "opacity": animationNew]
     }
     
@@ -102,7 +102,7 @@ class LineChartYAxisDrawer {
             let label = labelDrawer.makeTextLayer(text: "\(Int(y))")
             label.origin = CGPoint(x: chartRect.minX, y: y)
                 .applying(affine)
-                .applying(CGAffineTransform(translationX: 0, y: -yAxisLabelOffset - label.bounds.height))
+                .applying(CGAffineTransform(translationX: 0, y: -axisLabelOffset - label.bounds.height))
             
             axisLayer.addSublayer(label)
         }
@@ -129,7 +129,7 @@ class LineChartYAxisDrawer {
     fileprivate func calculateMaxY(chartRect: CGRect,
                                    affine: CGAffineTransform) -> CGFloat {
         let textHeight: CGFloat = 13
-        let axisTopOffset = (textHeight + yAxisLabelOffset * 2) / -affine.d
+        let axisTopOffset = (textHeight + axisLabelOffset * 2) / -affine.d
         
         var maxY = (chartRect.maxY - axisTopOffset + 1).rounded()
         var maxYLastDigit: Int = 0
