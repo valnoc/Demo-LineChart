@@ -62,7 +62,6 @@ class LineChartSelectionDrawer {
                      affine: CGAffineTransform) {
         self.selectionLayer?.removeFromSuperlayer()
         guard let selectedChartX = selectedChartX else { return }
-        let affinedSelectedChartX = CGPoint(x: selectedChartX, y: 0).applying(affine).x
         
         let bounds = viewLayer.bounds
         
@@ -145,32 +144,16 @@ class LineChartSelectionDrawer {
                                    lines: [LineChart.Line],
                                    chartRect: CGRect,
                                    affine: CGAffineTransform) {
-        let size = CGSize(width: 94, height: 40)
-        var origin = CGPoint(x: CGFloat(x), y: chartRect.maxY)
-            .applying(affine)
-            .applying(CGAffineTransform(translationX: -size.width / 2, y: 0))
-        
-        let minX: CGFloat = 0
-        let maxX: CGFloat = selectionLayer.bounds.width - size.width
-        if origin.x < minX { origin.x = minX }
-        if origin.x > maxX { origin.x = maxX }
-        
-        var rect = CGRect(origin: origin, size: size)
-
         let date = Date(timeIntervalSince1970: x)
         
         //
         let dayLabel = labelDrawer.makeTextLayer(text: dayFormatter.string(from: date),
                                                  font: UIFont.boldSystemFont(ofSize: 8),
                                                  fontSize: 8)
-        dayLabel.origin = CGPoint(x: rect.minX + 10,
-                                  y: rect.minY + 8)
         
         //
         let yearLabel = labelDrawer.makeTextLayer(text: yearFormatter.string(from: date),
                                                   fontSize: 8)
-        yearLabel.origin = CGPoint(x: dayLabel.frame.minX,
-                                   y: dayLabel.frame.maxY + 8)
         
         //
         var lineLables: [CATextLayer] = []
@@ -181,19 +164,49 @@ class LineChartSelectionDrawer {
                 font: UIFont.boldSystemFont(ofSize: 8),
                 fontSize: 8,
                 color: UIColor(hex: line.colorHex))
-            label.origin = CGPoint(x: rect.maxX - 10 - label.frame.size.width,
-                                   y: rect.minY + 8 + (7 + label.frame.size.height) * CGFloat(lineLables.count))
-            var frame = label.frame
-            frame.size = label.preferredFrameSize()
-            frame.origin.y = rect.minY + 8 + (7 + frame.size.height) * CGFloat(lineLables.count)
-            frame.origin.x = rect.maxX - 10 - frame.size.width
-            label.frame = frame
-            
             lineLables.append(label)
         }
         
-        if lineLables.count > 2 {
-            rect.size.height = lineLables.last!.frame.maxY + 8
+        var rect = CGRect.zero
+        if !lineLables.isEmpty {
+            let vertInset: CGFloat = 8
+            let horInset: CGFloat = 10
+            
+            let height = max(
+                vertInset + dayLabel.bounds.height + vertInset + yearLabel.bounds.height + vertInset,
+                vertInset + lineLables.reduce(0, { $0 + $1.bounds.height + vertInset })
+                )
+            
+            var widthsArray: [CGFloat] = []
+            for (index, label) in lineLables.enumerated() {
+                var value = horInset + label.bounds.width + horInset
+                if index == 0 { value += 20 + dayLabel.bounds.size.width }
+                if index == 1 { value += 20 + yearLabel.bounds.size.width }
+                widthsArray.append(value)
+            }
+            let width = widthsArray.max() ?? 0
+            
+            let size = CGSize(width: width, height: height)
+            var origin = CGPoint(x: CGFloat(x), y: chartRect.maxY)
+                .applying(affine)
+                .applying(CGAffineTransform(translationX: -size.width / 2, y: 0))
+            
+            let minX: CGFloat = 0
+            let maxX: CGFloat = selectionLayer.bounds.width - size.width
+            if origin.x < minX { origin.x = minX }
+            if origin.x > maxX { origin.x = maxX }
+            
+            rect = CGRect(origin: origin, size: size)
+            
+            dayLabel.origin = CGPoint(x: rect.minX + horInset, y: rect.minY + vertInset)
+            yearLabel.origin = CGPoint(x: dayLabel.frame.minX, y: dayLabel.frame.maxY + vertInset)
+            
+            var lastMaxY = vertInset
+            for label in lineLables {
+                label.origin = CGPoint(x: rect.maxX - horInset - label.frame.width,
+                                       y: lastMaxY)
+                lastMaxY += vertInset + label.frame.height
+            }
         }
         
         //
