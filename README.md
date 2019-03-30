@@ -2,6 +2,8 @@
 
 This is a demo project created to show a variant of line chart implementation.
 
+![Demo Video](https://github.com/valnoc/Demo-LineChart/blob/master/demo-linechart.gif)
+
 #### Requirements:
 - several datasets to show different situations
 - "zooming" on a part of line chart via specialized control (x range control)
